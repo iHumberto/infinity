@@ -12,10 +12,10 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 <div align="center">
 
-<img src="screenshots/Screenshot_01.png"    alt="Screenshot 01" width="500px" />
-<img src="screenshots/Screenshot_02.png"    alt="Screenshot 02" width="500px" />
-<img src="screenshots/Screenshot_03.png"    alt="Screenshot 03" width="500px" />
-<img src="screenshots/Screenshot_04.png"    alt="Screenshot 04" width="500px" />
+<img src="screenshots/Screenshot_01.png"    alt="Screenshot 01" width="500px" /></br>
+<img src="screenshots/Screenshot_02.png"    alt="Screenshot 02" width="500px" /></br>
+<img src="screenshots/Screenshot_03.png"    alt="Screenshot 03" width="500px" /></br>
+<img src="screenshots/Screenshot_04.png"    alt="Screenshot 04" width="500px" /></br>
 <img src="screenshots/Screenshot_05.png"    alt="Screenshot 05" width="500px" />
 
 </div>
