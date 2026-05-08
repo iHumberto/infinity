@@ -1213,7 +1213,7 @@ const SlideshowManager = {
                     finalItemIds = finalItemIds.concat(neededServerIds);
                 } else console.log("No random items fetched.");
             } else if (missingCount > 0) console.log(`Random fallback disabled. Slideshow has ${finalItemIds.length} items.`);
-            if (finalItemIds.length > 1) finalItemIds = SlideUtils.shuffleArray(finalItemIds);
+            finalItemIds = SlideUtils.shuffleArray(finalItemIds);
             if (finalItemIds.length > neededCount) { console.log(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`); finalItemIds = finalItemIds.slice(0, neededCount); }
             console.log(`Final item count: ${finalItemIds.length}.`);
             STATE.slideshow.itemIds = finalItemIds; STATE.slideshow.totalItems = finalItemIds.length;
