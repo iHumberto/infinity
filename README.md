@@ -12,11 +12,11 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 <div align="center">
 
-<img src="screenshots/Screenshot_01.png"    alt="Screenshot 01" width="800px" /></br>
-<img src="screenshots/Screenshot_02.png"    alt="Screenshot 02" width="800px" /></br>
-<img src="screenshots/Screenshot_03.png"    alt="Screenshot 03" width="800px" /></br>
-<img src="screenshots/Screenshot_04.png"    alt="Screenshot 04" width="800px" /></br>
-<img src="screenshots/Screenshot_05.png"    alt="Screenshot 05" width="800px" />
+<img src="screenshots/Screenshot_01.png"    alt="Home slideshow 01" width="800px" /></br>
+<img src="screenshots/Screenshot_02.png"    alt="Home slideshow 02" width="800px" /></br>
+<img src="screenshots/Screenshot_03.png"    alt="Home Next Recent Movies Continue Watching" width="800px" /></br>
+<img src="screenshots/Screenshot_04.png"    alt="Movie page" width="800px" /></br>
+<img src="screenshots/Screenshot_05.png"    alt="Series page" width="800px" />
 
 </div>
 
