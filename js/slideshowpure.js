@@ -26,7 +26,7 @@ const CONFIG = {
     fadeTransitionDuration: 500,
     hideLogo: false,
     showTitle: true,
-    slideshowItems: 8,
+    slideshowItems: 16,
     enableRandom: false,
     slideAnimationEnabled: true,
 };
