@@ -10,7 +10,7 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 ## Screenshots
 
-[](screenshots/ScreenShot_01.png)
+[imagem-01](screenshots/ScreenShot_01.png)
 
 
 ## Licença
