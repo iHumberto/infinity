@@ -1,6 +1,7 @@
 ![Project Stage][Static-Badge]
 ![Maintenance][maintenance-shield]
 <a href="https://forgejo.humbertof.dev/Humberto/infinity/">![Repository][repo-shield]</a>
+![license-shield](LICENSE)
 
 
 # Infinity
@@ -40,3 +41,4 @@ Este projeto é licenciado sob a [GNU GPL v3](LICENSE).
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [Static-Badge]: https://img.shields.io/badge/status-developing-blue?style=plastic&logo=forgejo
 [repo-shield]: https://img.shields.io/badge/forgejo-repo-green?logo=forgejo
+[license-shield]: https://img.shields.io/badge/License-GNU_GPL_v3-brightgreen?style=flat&logo=gnuprivacyguard
