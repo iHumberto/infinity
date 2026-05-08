@@ -9,5 +9,6 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
-[project-stage-shield]: https://img.shields.io/badge/project%20stage-production%20ready-brightgreen.svg
+[project-stage-shield]: https://img.shields.io/badge/build-developing-blue?style=plastic&logo=forgejo&link=https%3A%2F%2Fforgejo.humbertof.dev%2FHumberto%2Finfinity%2F
+
 [repo-shield]: https://img.shields.io/badge/forgejo-repo-green?logo=forgejo
