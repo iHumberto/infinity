@@ -9,7 +9,7 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 ## Ajustes
 
-- Ajuste na inicilização do cronômetro do sldeshow;
+- Ajuste na inicialização do cronômetro do slideshow;
 - Correção dos `dots` que marcam a quantidade de itens no slideshow;
 - Correção na transparência nas páginas de filmes e séries;
 
