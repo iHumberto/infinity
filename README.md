@@ -1,6 +1,6 @@
 ![Project Stage][Static-Badge]
 ![Maintenance][maintenance-shield]
-<a href="https://forgejo.humbertof.dev/Humberto/infinity" target="_blank">![Repository][repo-shield]</a>
+![Repository][repo-shield]
 
 
 # Infinity
@@ -10,4 +10,4 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [Static-Badge]: https://img.shields.io/badge/build-developing-blue?style=plastic&logo=forgejo&link=https%3A%2F%2Fforgejo.humbertof.dev%2FHumberto%2Finfinity%2F
-[repo-shield]: https://img.shields.io/badge/forgejo-repo-green?logo=forgejo
+[repo-shield]: https://img.shields.io/badge/forgejo-repo-green?logo=forgejo&link=https%3A%2F%2Fforgejo.humbertof.dev%2FHumberto%2Finfinity%2F
