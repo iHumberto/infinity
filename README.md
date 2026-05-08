@@ -3,7 +3,7 @@
 <a href="https://forgejo.humbertof.dev/Humberto/infinity" target="_blank">![Repository][repo-shield]</a>
 
 
-#Infinity
+# Infinity
 
 Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do tema <a href="https://github.com/prism2001/finity"> Finity</a>.
 
