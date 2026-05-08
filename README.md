@@ -8,6 +8,10 @@
 Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do tema <a href="https://github.com/prism2001/finity"> Finity</a>.
 
 
+## Screenshots
+
+[](screenshots/ScreenShot_01.png)
+
 
 ## Licença
 
