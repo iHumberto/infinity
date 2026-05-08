@@ -16,7 +16,7 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 ## Modificações
 
 - Aumento na quantidade de itens no slideshow (de 8 para 16);
-- Alteração da fonta para a Kodchasan;
+- Alteração da fonte para a Kodchasan;
 - Slideshow clicável (clicar em um item do slideshow direciona para a página do item na biblioteca);
 
 
