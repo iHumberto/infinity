@@ -28,7 +28,7 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 
 ## Instalação
 
-Para usar este tema basta colar os scripts e css abaixo em seu index.html do jellyfin (inserir obrigatóriamente no _*final*_ do cabeçalho antes de `</head>`):
+Para usar este tema basta colar os scripts e css abaixo em seu index.html do jellyfin (inserir obrigatoriamente no _*final*_ do cabeçalho antes de `</head>`):
 
 ```
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
