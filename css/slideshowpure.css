@@ -340,6 +340,7 @@
   -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
   display: -webkit-box;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
@@ -676,7 +677,7 @@
   .dots-container { scale: 0.6; top: calc(50% + 18vh); }
   #slideshow-pause-button { right: calc(3% + 70px * 0.85); top: calc(50% + 18vh); transform: scale(0.85); left: auto; }
   .info-container { top: calc(50% + 0vh); left: 5vw; }
-  .plot-container { top: calc(50% + 12vh); left: 5vw; max-width: 45vw; -webkit-line-clamp: 2; } /* Adjust plot width/clamp */
+  .plot-container { top: calc(50% + 12vh); left: 5vw; max-width: 45vw; -webkit-line-clamp: 2; line-clamp: 2;} /* Adjust plot width/clamp */
   .genre { top: calc(50% + 10.5vh); left: 5vw; }
   .logo-container { height: 30%; top: 10%; left: 5vw; bottom: auto; }
   .logo { position: relative; bottom: auto; top: auto; }
@@ -685,7 +686,7 @@
 
 @media only screen and (max-width: 767px) and (orientation: portrait) {
   .plot-container { left: 50%; top: calc(50% + 12vh); width: 90vw; transform: translateX(-50%); height: auto; max-height: 15vh; max-width: 90vw; }
-  .plot { position: relative; max-width: 100%; text-align: center; height: auto; -webkit-line-clamp: 3; }
+  .plot { position: relative; max-width: 100%; text-align: center; height: auto; -webkit-line-clamp: 3; line-clamp: 3;}
   .gradient-overlay { background: rgb(0 0 0 / 0.25); pointer-events: none; }
   .dots-container { left: 50%; transform: translateX(-50%) scale(0.8); background-color: #ffffff00; top: calc(50% + 20vh); }
   .dot.active { transform: scale(1.6); }
