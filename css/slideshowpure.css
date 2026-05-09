@@ -597,6 +597,8 @@ pointer-events: none;
   align-items: center;
 }
 .tomato-logo {
+  display: var(--display-tomato-logo) !important;
+  margin-right: 1px;
 }
 .critic-logo {
   display: var(--display-critic-rating) !important;
