@@ -6,7 +6,7 @@
 
 # Infinity
 
-Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do tema <a href="https://github.com/prism2001/finity"> Finity</a>.
+Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do tema <a href="https://github.com/prism2001/finity"> Finity</a>.
 
 ## Ajustes
 
