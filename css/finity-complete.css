@@ -815,6 +815,10 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     margin-top: 20vh !important; /* Move episodes section down into the black area */
 }
 
+.overview.detail-clamp-text {
+    margin-top: 10vh !important; /* Move episodes section down into the black area */
+}
+
 #childrenContent .itemsContainer.vertical-list, 
 #childrenContent .itemsContainer.vertical-wrap, 
 #childrenCollapsible .childrenItemsContainer {
