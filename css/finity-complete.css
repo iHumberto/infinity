@@ -806,7 +806,9 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 /* ======================================== */
 
 /* --- Grid Container --- */
-#childrenContent .itemsContainer.vertical-list, #childrenCollapsible .childrenItemsContainer {
+#childrenContent .itemsContainer.vertical-list, 
+#childrenContent .itemsContainer.vertical-wrap, 
+#childrenCollapsible .childrenItemsContainer {
 	display: flex !important;
 	flex-wrap: nowrap !important;
 	overflow-x: auto !important;
@@ -815,6 +817,9 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 	padding: 10px 0 !important;
 	margin-right: 0 !important;
 	padding-left: 0 !important;
+    width: 94vw !important; /* Occupy almost the entire screen width */
+    margin-left: calc(-1 * var(--detail-page-side-padding)) !important;
+    padding-left: var(--detail-page-side-padding) !important;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
@@ -822,11 +827,13 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 }
 
 #childrenContent .itemsContainer.vertical-list::-webkit-scrollbar,
+#childrenContent .itemsContainer.vertical-wrap::-webkit-scrollbar,
 #childrenCollapsible .childrenItemsContainer::-webkit-scrollbar {
     height: 6px;
 }
 
 #childrenContent .itemsContainer.vertical-list::-webkit-scrollbar-thumb,
+#childrenContent .itemsContainer.vertical-wrap::-webkit-scrollbar-thumb,
 #childrenCollapsible .childrenItemsContainer::-webkit-scrollbar-thumb {
     background: var(--theme-accent-color-alpha-med);
     border-radius: 10px;
@@ -834,20 +841,25 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* Ensure seasons (cards) have a fixed width in the slider */
 #childrenContent .itemsContainer.vertical-list .card, 
+#childrenContent .itemsContainer.vertical-wrap .card, 
 #childrenCollapsible .childrenItemsContainer .card {
     flex: 0 0 auto !important;
     width: var(--overflow-portrait-width) !important;
     min-width: 160px !important; /* Minimum width for season posters */
 }
 
-/* Maintain grid layout for episodes if they are listItems (episodes are typically listed vertically or in a grid) */
+/* Maintain grid layout for episodes if they are listItems */
 #childrenContent .itemsContainer.vertical-list:has(.listItem),
+#childrenContent .itemsContainer.vertical-wrap:has(.listItem),
 #childrenContent .itemsContainer.vertical-list:not(:has(.card)) {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(var(--episode-grid-min-item-width), 1fr)) !important;
     overflow-x: hidden !important;
     flex-wrap: wrap !important;
     gap: var(--episode-grid-gap) !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
 }
 
 /* --- Individual Episode Item --- */
