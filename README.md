@@ -1,7 +1,7 @@
 ![Project Stage][Static-Badge]
 ![Maintenance][maintenance-shield]
 <a href="https://forgejo.humbertof.dev/Humberto/infinity/">![Repository][repo-shield]</a>
-<embed type="pĺain/text" src="/LICENSE">![license-shield]
+![License][license-shield]
 
 
 # Infinity
