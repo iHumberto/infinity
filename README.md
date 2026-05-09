@@ -15,7 +15,7 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 - Correção na transparência nas páginas de filmes e séries;
 - Imagem de Fundo (Backdrop): 
   * Alteração das variáveis `--detail-page-backdrop-offset` para 0 e `--detail-page-backdrop-width` para 100vw. Isso faz com que a imagem ocupe toda a largura da tela, eliminando a  barra preta na esquerda.
-  * Substituí o desfoque por um gradiente escuro sólido `(rgba(0,0,0,0.8)` na esquerda sumindo até transparente na direita). Isso garante que o texto continue legível sobre a imagem.
+  * Substituí o desfoque por um gradiente escuro sólido `(rgba(0,0,0,0.8)` na esquerda sumindo até transparente na direita. Isso garante que o texto continue legível sobre a imagem.
 - Painel de Texto:
   * Ajuste da máscara lateral `(.backgroundContainer.withBackdrop)` para cobrir a área onde os textos ficam (definida em 70vw).
 
@@ -25,6 +25,8 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 - Aumento na quantidade de itens no slideshow (de 8 para 16);
 - Alteração da fonte para a Kodchasan;
 - Slideshow clicável (clicar em um item do slideshow direciona para a página do item na biblioteca);
+- A página de séries agora exibe as temporadas em um slide, ocupando a maior parte da tela (lateralmente). O slide é navegável pelas setas do teclado, ou através de touch em monitores/telas compatíveis. Há também um ajuste para que o slide não sobreponha o backdrop;
+- A página das temporadas agora exibe os episódios em um grid que ocupa 94% da área da tela (lateralmente), assim mais episódios são exibidos por linha. Há também um ajuste na `<div>` que contém os episódios para que eles não sobreponham o backdrop. 
 
 ## Instalação
 
@@ -74,7 +76,7 @@ Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do
 <img src="screenshots/Screenshot_02.png"    title="Home - slideshow 02" width="75%"/></br>
 <img src="screenshots/Screenshot_03.png"    title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
 <img src="screenshots/Screenshot_04.png"    title="Movie page" width="75%"/></br>
-<img src="screenshots/Screenshot_05.png"    title="Series page" width="75%"/>
+<img src="screenshots/Screenshot_05.png"    title="New series page, with slide seasons" width="75%"/>
 
 </div>
 
