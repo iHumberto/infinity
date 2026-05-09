@@ -96,8 +96,8 @@ body {
   --detail-page-primary-width: 60%; /* Width of the primary content area on desktop detail pages */
   --detail-page-backdrop-offset: 0; /* Offset for the backdrop image */
   --detail-page-backdrop-width: 100vw; /* Width of the backdrop container */
-  --detail-page-mask-offset: 16%; /* Start mask slightly before backdrop */
-  --detail-page-mask-width: 85vw; /* Make mask slightly wider than backdrop */
+  --detail-page-mask-offset: 0; /* Start mask at the left edge */
+  --detail-page-mask-width: 60vw; /* Width for the side panel */
   --detail-page-content-offset: -50vh; /* Vertical offset for content */
   --overflow-card-margin-left: 0vw; /* Left margin for the first overflow card */
   --overflow-portrait-width: 7.5vw; /* Width for portrait overflow cards */
@@ -427,10 +427,10 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .layout-desktop .detailPagePrimaryContainer {
   background-color: var(--transparent-bg) !important;
   display: block;
-  left: 0 !important;
+  left: var(--detail-page-side-padding);
   z-index: 2; /* Above backdrop/mask */
   position: relative;
-  width: 100% !important;
+  width: var(--detail-page-primary-width);
 }
 
 .mainDetailButtons { /* Container for main action buttons (Play, Favorite, etc.) */
@@ -438,31 +438,24 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   align-items: center;
   margin: 0em 0 1.5em 0 !important;
   position: relative;
-  left: 0;
+  left: -18px;
   width: 100%; /* Ensure buttons container takes full width in the column */
 }
 
 .layout-desktop .detailPageContent {
-  background: rgba(0, 0, 0, 0.4) !important;
-  backdrop-filter: blur(20px) !important;
-  -webkit-backdrop-filter: blur(20px) !important;
-  border-radius: var(--theme-roundness-large);
-  padding: 40px !important;
-  margin-left: var(--detail-page-side-padding);
-  width: var(--detail-page-primary-width);
-}
-
-.layout-desktop .detailPagePrimaryContent {
-  width: 100%;
   padding-left: 0;
 }
 
+.layout-desktop .detailPagePrimaryContent {
+  width: var(--detail-page-primary-width);
+  padding-left: 0.75vw;
+}
+
 .layout-desktop .detailPageSecondaryContainer {
-  background-color: var(--transparent-bg) !important;
-  padding-top: 20px !important;
-  padding-left: 0 !important;
+  background-color: var(--transparent-bg);
+  padding-top: 0 !important; /* remove padding between buttons and description on a show page */
+  padding-left: var(--detail-page-secondary-side-padding);
   z-index: 2;
-  width: 100% !important;
 }
 
 .layout-desktop .itemDetailsGroup {
@@ -498,8 +491,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 }
 
 .layout-desktop .backgroundContainer.withBackdrop {
-  background: url("https://raw.githubusercontent.com/iHumberto/finity/main/assets/mask.png");
-  background-size: cover;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 70%, rgba(0, 0, 0, 0) 100%);
   height: 100vh;
   left: var(--detail-page-mask-offset);
   position: absolute;
