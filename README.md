@@ -33,8 +33,8 @@ Para usar este tema basta colar os scripts e css abaixo em seu index.html do jel
 ```
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/slideshowpure.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/finity-complete.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/slideshowpure.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css">
 <script defer src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/slideshowpure.js"></script>
 <script async src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableTitles.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableSlideshow.js"></script>"
