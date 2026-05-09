@@ -810,9 +810,9 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     margin-top: 10vh !important; /* Move seasons section down into the black area */
 }
 
-/* --- Grid Episodes Container --- */
+/* --- Grid Episode Container --- */
 #childrenContent .itemsContainer.vertical-list {
-    margin-top: 10vh !important; /* Move seasons section down into the black area */
+    margin-top: 20vh !important; /* Move episodes section down into the black area */
 }
 
 #childrenContent .itemsContainer.vertical-list, 
