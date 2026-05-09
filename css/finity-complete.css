@@ -861,9 +861,9 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     overflow-x: hidden !important;
     flex-wrap: wrap !important;
     gap: var(--episode-grid-gap) !important;
-    width: 100% !important;
-    margin-left: 0 !important;
-    padding-left: 0 !important;
+    width: 94vw !important; /* Occupy almost the entire screen width */
+    margin-left: calc(-1 * var(--detail-page-side-padding)) !important;
+    padding-left: var(--detail-page-side-padding) !important;
 }
 
 /* --- Individual Episode Item --- */
