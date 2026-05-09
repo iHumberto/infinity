@@ -26,6 +26,45 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 - Alteração da fonte para a Kodchasan;
 - Slideshow clicável (clicar em um item do slideshow direciona para a página do item na biblioteca);
 
+## Instalação
+
+Para usar este tema basta colar os scripts e css abaixo em seu index.html do jellyfin (inserir obrigatóriamente no _*final*_ do cabeçalho antes de `</head>`):
+
+```
+<script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/slideshowpure.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/finity-complete.css">
+<script defer src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/slideshowpure.js"></script>
+<script async src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableTitles.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableSlideshow.js"></script>"
+```
+
+Você também precisará criar um arquivo `list.txt` no _*mesmo diretório*_ do `index.html` e popular este arquivo inserindo _*apenas*_ os IDs das mídias que deseja no slideshow.
+
+<img src="screenshots/Screenshot_06.png"    title="Home - slideshow 01" width="auto"/>
+
+```
+Arquivo1id
+Arquivo2id
+.
+.
+.
+Arquivo16id
+```
+
+Se quiser automatizar esse processo e manter o slideshow sempre atualizado com as mídias mais recentes, você pode usar o [Script Runner](https://github.com/iHumberto/jellyfin-plugin-scriptrunner) e criar um script customizado que busque as mídias mais recentes e atualize o arquivo com os ids. 
+
+## Dica
+
+Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do seu `docker-compose.yaml` e colocar dentro dessa pasta o `index.html` modificado e o arquivo `list.txt`. Depois basta referenciar esses arquivos para dentro do seu container docker
+
+<img src="screenshots/Screenshot_07.png"    title="Home - slideshow 01" width="auto"/>
+
+```
+- ./custom/index.html:/jellyfin/jellyfin-web/index.html
+- ./custom/list.txt:/jellyfin/jellyfin-web/list.txt
+```
 
 ## Screenshots
 
