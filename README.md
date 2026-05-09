@@ -77,6 +77,7 @@ Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do
 <img src="screenshots/Screenshot_03.png"    title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
 <img src="screenshots/Screenshot_04.png"    title="Movie page" width="75%"/></br>
 <img src="screenshots/Screenshot_05.png"    title="New series page, with slide seasons" width="75%"/>
+<img src="screenshots/Screenshot_08.png"    title="New series page, with bigger grid episodes" width="75%"/>
 
 </div>
 
