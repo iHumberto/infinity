@@ -811,7 +811,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 }
 
 /* --- Grid Episodes Container --- */
-.itemsContainer .padded-right .vertical-list {
+.itemsContainer.vertical-list{
     margin-top: 10vh !important; /* Move seasons section down into the black area */
 }
 
