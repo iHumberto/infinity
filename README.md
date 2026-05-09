@@ -25,9 +25,9 @@ Repositório dedicado aos arquivos do projeo Infity, uma versão customizada do 
 
 <div align="center">
 
-<img src="screenshots/Screenshot_01.png"    title="Home slideshow 01" width="75%"/>
-<img src="screenshots/Screenshot_02.png"    title="Home slideshow 02" width="75%"/></br>
-<img src="screenshots/Screenshot_03.png"    title="Home Next Recent Movies Continue Watching" width="75%"/>
+<img src="screenshots/Screenshot_01.png"    title="Home - slideshow 01" width="75%"/>
+<img src="screenshots/Screenshot_02.png"    title="Home - slideshow 02" width="75%"/></br>
+<img src="screenshots/Screenshot_03.png"    title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
 <img src="screenshots/Screenshot_04.png"    title="Movie page" width="75%"/></br>
 <img src="screenshots/Screenshot_05.png"    title="Series page" width="75%"/>
 
