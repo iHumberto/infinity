@@ -42,7 +42,7 @@ Para usar este tema basta colar os scripts e css abaixo em seu index.html do jel
 
 Você também precisará criar um arquivo `list.txt` no _*mesmo diretório*_ do `index.html` e popular este arquivo inserindo _*apenas*_ os IDs das mídias que deseja no slideshow.
 
-<img src="screenshots/Screenshot_06.png"    title="Home - slideshow 01" width="auto"/>
+<img src="screenshots/Screenshot_06.png"    title="URL media id" width="auto"/>
 
 ```
 Arquivo1id
@@ -59,7 +59,7 @@ Se quiser automatizar esse processo e manter o slideshow sempre atualizado com a
 
 Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do seu `docker-compose.yaml` e colocar dentro dessa pasta o `index.html` modificado e o arquivo `list.txt`. Depois basta referenciar esses arquivos para dentro do seu container docker
 
-<img src="screenshots/Screenshot_07.png"    title="Home - slideshow 01" width="auto"/>
+<img src="screenshots/Screenshot_07.png"    title="Directory tip" width="auto"/>
 
 ```
 - ./custom/index.html:/jellyfin/jellyfin-web/index.html
