@@ -6,7 +6,7 @@
 
 # Infinity
 
-Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do tema <a href="https://github.com/prism2001/finity"> Finity</a>.
+Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do tema [Finity](https://github.com/prism2001/finity).
 
 ## Ajustes
 
@@ -14,10 +14,10 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 - Correção dos `dots` que marcam a quantidade de itens no slideshow;
 - Correção na transparência nas páginas de filmes e séries;
 - Imagem de Fundo (Backdrop): 
-  * Alteração das variáveis --detail-page-backdrop-offset para 0 e --detail-page-backdrop-width para 100vw. Isso faz com que a imagem ocupe toda a largura da tela, eliminando a  barra preta na esquerda.
-  * Substituí o desfoque por um gradiente escuro sólido (rgba(0,0,0,0.8) na esquerda sumindo até transparente na direita). Isso garante que o texto continue legível sobre a imagem.
+  * Alteração das variáveis `--detail-page-backdrop-offset` para 0 e `--detail-page-backdrop-width` para 100vw. Isso faz com que a imagem ocupe toda a largura da tela, eliminando a  barra preta na esquerda.
+  * Substituí o desfoque por um gradiente escuro sólido `(rgba(0,0,0,0.8)` na esquerda sumindo até transparente na direita). Isso garante que o texto continue legível sobre a imagem.
 - Painel de Texto:
-  * Ajuste da máscara lateral (.backgroundContainer.withBackdrop) para cobrir a área onde os textos ficam (definida em 70vw).
+  * Ajuste da máscara lateral `(.backgroundContainer.withBackdrop)` para cobrir a área onde os textos ficam (definida em 70vw).
 
 
 ## Modificações
