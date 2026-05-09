@@ -807,7 +807,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Grid Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 8vh !important; /* Move seasons section down into the black area */
+    margin-top: 10vh !important; /* Move seasons section down into the black area */
 }
 
 #childrenContent .itemsContainer.vertical-list, 
