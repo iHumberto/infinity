@@ -807,7 +807,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Slide Season Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 10vh !important; /* Move seasons section down into the black area */
+    margin-top: 2vh !important; /* Move seasons section down into the black area */
 }
 
 /* --- Grid Episode Container --- */
