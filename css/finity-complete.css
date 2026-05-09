@@ -1404,6 +1404,5 @@ html.layout-desktop [dir="rtl"] .detailRibbon {
       top: -25vh !important;
     }
 
-
-
-
+    /* Required external libraries for markdown rendering and sanitization in slideshow overview */
+/* index.html must include marked and DOMPurify before slideshowpure.js */
