@@ -431,7 +431,6 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   z-index: 2; /* Above backdrop/mask */
   position: relative;
   width: var(--detail-page-primary-width);
-  min-height: 50vh; /* Ensures content below (seasons/episodes) starts after the backdrop area */
 }
 
 .mainDetailButtons { /* Container for main action buttons (Play, Favorite, etc.) */
@@ -506,6 +505,12 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   margin-top: var(--detail-page-content-offset);
   position: relative;
   z-index: 2; /* Ensure content is above mask */
+}
+
+.layout-desktop .detailPageWrapperContainer::before {
+  content: "";
+  display: block;
+  height: 50vh; /* Compensates for the -50vh margin-top, pushing content to the bottom of the backdrop */
 }
 
 /* --- Element Hiding on Detail Page --- */
@@ -809,6 +814,8 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 /* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
     margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
+    width: 100% !important;
+    display: block !important;
 }
 
 #childrenContent .itemsContainer.vertical-list, 
