@@ -805,18 +805,9 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 /* === EPISODE GRID VIEW === */
 /* ======================================== */
 
-/* --- Slide Season Container --- */
+/* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 2vh !important; /* Move seasons section down into the black area */
-}
-
-/* --- Grid Episode Container --- */
-#childrenContent .itemsContainer.vertical-list {
-    margin-top: 20vh !important; /* Move episodes section down into the black area */
-}
-
-.overview.detail-clamp-text {
-    margin-top: 10vh !important; /* Move episodes section down into the black area */
+    margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
 }
 
 #childrenContent .itemsContainer.vertical-list, 
@@ -829,7 +820,6 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 	gap: 15px; /* Consistent gap for slider */
 	padding: 10px 0 !important;
 	margin-right: 0 !important;
-	padding-left: 0 !important;
     width: 94vw !important; /* Occupy almost the entire screen width */
     margin-left: calc(-1 * var(--detail-page-side-padding)) !important;
     padding-left: var(--detail-page-side-padding) !important;
@@ -861,16 +851,17 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     min-width: 160px !important; /* Minimum width for season posters */
 }
 
-/* Maintain grid layout for episodes if they are listItems */
+/* Maintain grid layout for episodes if they are listItems or if specifically grid is needed */
 #childrenContent .itemsContainer.vertical-list:has(.listItem),
 #childrenContent .itemsContainer.vertical-wrap:has(.listItem),
-#childrenContent .itemsContainer.vertical-list:not(:has(.card)) {
+#childrenContent .itemsContainer.vertical-list:not(:has(.card)),
+#childrenContent .itemsContainer.vertical-wrap:not(:has(.card)) {
     display: grid !important;
     grid-template-columns: repeat(auto-fill, minmax(var(--episode-grid-min-item-width), 1fr)) !important;
     overflow-x: hidden !important;
     flex-wrap: wrap !important;
     gap: var(--episode-grid-gap) !important;
-    width: 94vw !important; /* Occupy almost the entire screen width */
+    width: 94vw !important; /* Maintain full width for episode grid too */
     margin-left: calc(-1 * var(--detail-page-side-padding)) !important;
     padding-left: var(--detail-page-side-padding) !important;
 }
