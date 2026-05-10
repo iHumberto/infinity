@@ -442,8 +442,20 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   width: 100%; /* Ensure buttons container takes full width in the column */
 }
 
+.layout-desktop .detailPagePrimaryContainer,
+.layout-desktop .detailPageSecondaryContainer {
+  min-height: 50vh; /* Together they ensure content below starts after the backdrop area */
+}
+
+.layout-desktop .detailPagePrimaryContainer + .detailPageSecondaryContainer {
+  min-height: unset; /* If both exist, we don't need double min-height */
+}
+
 .layout-desktop .detailPageContent {
   padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 50vh; /* Base height to cover the backdrop offset */
 }
 
 .layout-desktop .detailPagePrimaryContent {
@@ -505,12 +517,6 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   margin-top: var(--detail-page-content-offset);
   position: relative;
   z-index: 2; /* Ensure content is above mask */
-}
-
-.layout-desktop .detailPageWrapperContainer::before {
-  content: "";
-  display: block;
-  height: 10vh; /* Compensates for the -50vh margin-top, pushing content to the bottom of the backdrop */
 }
 
 /* --- Element Hiding on Detail Page --- */
