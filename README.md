@@ -25,8 +25,8 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 - Aumento na quantidade de itens no slideshow (de 8 para 16);
 - Alteração da fonte para a Kodchasan;
 - Slideshow clicável (clicar em um item do slideshow direciona para a página do item na biblioteca);
-- A página de séries agora exibe as temporadas em um slide, ocupando a maior parte da tela (lateralmente). O slide é navegável pelas setas do teclado, ou através de touch em monitores/telas compatíveis. Há também um ajuste para que o slide não sobreponha o backdrop;
-- A página das temporadas agora exibe os episódios em um grid que ocupa 94% da área da tela (lateralmente), assim mais episódios são exibidos por linha. Há também um ajuste na `<div>` que contém os episódios para que eles não sobreponham o backdrop. 
+- A página de séries agora exibe as temporadas em um slide, ocupando a maior parte da tela (lateralmente). O slide é navegável pelas setas do teclado, ou através de touch em monitores/telas compatíveis. 
+- A página das temporadas agora exibe os episódios em um grid que ocupa 94% da área da tela (lateralmente), assim mais episódios são exibidos por linha.
 
 ## Instalação
 
