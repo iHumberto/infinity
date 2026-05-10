@@ -510,7 +510,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .layout-desktop .detailPageWrapperContainer::before {
   content: "";
   display: block;
-  height: 50vh; /* Compensates for the -50vh margin-top, pushing content to the bottom of the backdrop */
+  height: 10vh; /* Compensates for the -50vh margin-top, pushing content to the bottom of the backdrop */
 }
 
 /* --- Element Hiding on Detail Page --- */
