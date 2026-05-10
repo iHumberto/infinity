@@ -865,6 +865,26 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     border-radius: 10px;
 }
 
+/* ===== CORREÇÃO: FIXAR TEMPORADAS E EPISÓDIOS ABAIXO DO BACKDROP ===== */
+
+/* Torna o body o ponto de referência para o posicionamento absoluto */
+.layout-desktop body {
+    position: relative;
+}
+
+/* Retira o container do fluxo e posiciona-o sempre 100vh abaixo do topo da página */
+.layout-desktop #childrenContent,
+.layout-desktop #childrenCollapsible,
+.layout-desktop .childrenSection {
+    position: absolute !important;
+    top: 100vh;                   /* começa exatamente onde o backdrop termina */
+    left: 0;
+    width: 100%;
+    margin-top: 0 !important;     /* remove a antiga margem variável */
+    padding-top: 1.5rem;          /* pequeno respiro visual */
+    z-index: 3;                   /* acima do backdrop e da máscara, mas sem cobrir o texto */
+}
+
 /* Ensure seasons (cards) have a fixed width in the slider */
 #childrenContent .itemsContainer.vertical-list .card, 
 #childrenContent .itemsContainer.vertical-wrap .card, 
