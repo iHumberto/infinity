@@ -431,9 +431,6 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   z-index: 2; /* Above backdrop/mask */
   position: relative;
   width: var(--detail-page-primary-width);
-  height: var(--primary-fixed-height) !important;
-  min-height: unset !important;
-  overflow: hidden; 
 }
 
 .mainDetailButtons { /* Container for main action buttons (Play, Favorite, etc.) */
@@ -827,7 +824,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 4vh !important; /* Move sections down into the black area below backdrop */
+    margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
     width: 100% !important;
     display: block !important;
 }
@@ -1207,7 +1204,6 @@ div.listItem-content div.listItemImage.listItemImage-large.itemAction.lazy.non-b
   :root {
     --button-overlay-size: 28px;
     --button-overlay-icon-size: 17px;
-    --primary-fixed-height: 60vh;
   }
   div.cardScalable button.cardOverlayButton.cardOverlayButton-br.itemAction.paper-icon-button-light span.material-icons.cardOverlayButtonIcon.play_arrow {
     display: none;
@@ -1476,6 +1472,3 @@ html.layout-desktop [dir="rtl"] .detailRibbon {
     body > #reactRoot .mainAnimatedPages .page.homePage .tabContent#homeTab #slides-container + .homeSectionsContainer {
       top: -25vh !important;
     }
-
-    /* Required external libraries for markdown rendering and sanitization in slideshow overview */
-/* index.html must include marked and DOMPurify before slideshowpure.js */
