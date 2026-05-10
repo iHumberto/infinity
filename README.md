@@ -87,6 +87,6 @@ Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do
 Este projeto é licenciado sob a [GNU GPL v3](LICENSE).
 
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
-[Static-Badge]: https://img.shields.io/badge/status-ready-brightgreen?style=plastic&logo=forgejo
+[Static-Badge]: https://img.shields.io/badge/status-developing-blue?style=plastic&logo=forgejo
 [repo-shield]: https://img.shields.io/badge/forgejo-repo-brightgreen?logo=forgejo
 [license-shield]: https://img.shields.io/badge/License-GNU_GPL_v3-brightgreen?style=flat&logo=gnuprivacyguard
