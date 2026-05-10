@@ -513,7 +513,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   pointer-events: none; /* Allow clicks to pass through */
 }
 
-.itemsContainer.padded-right.vertical-list {
+.padded-right.vertical-list {
   position: relative;
   margin-top: 10vh;
 }
