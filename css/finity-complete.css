@@ -431,6 +431,9 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   z-index: 2; /* Above backdrop/mask */
   position: relative;
   width: var(--detail-page-primary-width);
+  height: var(--primary-fixed-height) !important;
+  min-height: unset !important;
+  overflow: hidden; 
 }
 
 .mainDetailButtons { /* Container for main action buttons (Play, Favorite, etc.) */
@@ -824,7 +827,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
+    margin-top: 4vh !important; /* Move sections down into the black area below backdrop */
     width: 100% !important;
     display: block !important;
 }
@@ -859,26 +862,6 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 #childrenCollapsible .childrenItemsContainer::-webkit-scrollbar-thumb {
     background: var(--theme-accent-color-alpha-med);
     border-radius: 10px;
-}
-
-/* ===== CORREÇÃO: FIXAR TEMPORADAS E EPISÓDIOS ABAIXO DO BACKDROP ===== */
-
-/* Torna o body o ponto de referência para o posicionamento absoluto */
-.layout-desktop body {
-    position: relative;
-}
-
-/* Retira o container do fluxo e posiciona-o sempre 100vh abaixo do topo da página */
-.layout-desktop #childrenContent,
-.layout-desktop #childrenCollapsible,
-.layout-desktop .childrenSection {
-    position: absolute !important;
-    top: 100vh;                   /* começa exatamente onde o backdrop termina */
-    left: 0;
-    width: 100%;
-    margin-top: 0 !important;     /* remove a antiga margem variável */
-    padding-top: 1.5rem;          /* pequeno respiro visual */
-    z-index: 3;                   /* acima do backdrop e da máscara, mas sem cobrir o texto */
 }
 
 /* Ensure seasons (cards) have a fixed width in the slider */
@@ -1224,6 +1207,7 @@ div.listItem-content div.listItemImage.listItemImage-large.itemAction.lazy.non-b
   :root {
     --button-overlay-size: 28px;
     --button-overlay-icon-size: 17px;
+    --primary-fixed-height: 60vh;
   }
   div.cardScalable button.cardOverlayButton.cardOverlayButton-br.itemAction.paper-icon-button-light span.material-icons.cardOverlayButtonIcon.play_arrow {
     display: none;
