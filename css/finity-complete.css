@@ -885,6 +885,11 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
     padding-left: var(--detail-page-side-padding) !important;
 }
 
+.itemsContainer:has(.vertical-list){
+  position: relative !important; 
+  margin-top: 30vh !important;
+}
+
 /* --- Individual Episode Item --- */
 .listItem.listItem-largeImage {
   content-visibility: auto;
