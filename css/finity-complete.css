@@ -518,10 +518,6 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   margin-top: 10vh;
 }
 
-.overview.detail-clamp-text {
-  height: 360px !important;
-}
-
 .layout-desktop .detailPageWrapperContainer {
   margin-top: var(--detail-page-content-offset);
   position: relative;
