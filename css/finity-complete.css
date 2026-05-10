@@ -431,6 +431,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   z-index: 2; /* Above backdrop/mask */
   position: relative;
   width: var(--detail-page-primary-width);
+  min-height: 50vh; /* Ensures content below (seasons/episodes) starts after the backdrop area */
 }
 
 .mainDetailButtons { /* Container for main action buttons (Play, Favorite, etc.) */
@@ -807,7 +808,7 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 25vh !important; /* Move sections down into the black area below backdrop */
+    margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
 }
 
 #childrenContent .itemsContainer.vertical-list, 
