@@ -289,13 +289,14 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   outline-color: var(--selection-border-color) !important;
   box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
   background-color: transparent !important;
+  border-radius: var(--theme-roundness-large) !important;
 }
 
-/* Checked state: purple background (detected via display:flex on checked icon) */
-.multiSelectCheckboxOutline:has(.checkboxIcon-checked[style*="flex"]),
-.checkboxOutline:has(.checkboxIcon-checked[style*="flex"]),
-[class*="multiSelectCheckboxOutline"]:has([class*="checkboxIcon-checked"][style*="flex"]),
-[class*="checkboxOutline"]:has([class*="checkboxIcon-checked"][style*="flex"]) {
+/* Checked state: purple bg when unchecked icon is hidden (has display:none) */
+.multiSelectCheckboxOutline:has(.checkboxIcon-unchecked[style*="none"]),
+.checkboxOutline:has(.checkboxIcon-unchecked[style*="none"]),
+[class*="multiSelectCheckboxOutline"]:has([class*="checkboxIcon-unchecked"][style*="none"]),
+[class*="checkboxOutline"]:has([class*="checkboxIcon-unchecked"][style*="none"]) {
   background-color: var(--selection-border-color) !important;
 }
 
