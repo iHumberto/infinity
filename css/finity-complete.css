@@ -271,8 +271,15 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 }
 
 /* --- Card Selection (multi-select mode) --- */
-/* Jellyfin uses blue (#00a4dc) on .itemSelectionPanel border; override to purple */
-.itemSelectionPanel,
+/* Selection border around cards — outline only, no background */
+.itemSelectionPanel {
+  border-color: var(--selection-border-color) !important;
+  outline-color: var(--selection-border-color) !important;
+  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+  background-color: transparent !important;
+}
+
+/* Checkbox element — purple background + border */
 .multiSelectCheckboxOutline,
 .checkboxOutline,
 [class*="multiSelectCheckboxOutline"],
