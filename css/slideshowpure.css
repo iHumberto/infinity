@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap');
 
 :root {
-  --theme-background-color: #181818;
+  --theme-background-color: #0F0D14;
   --theme-text-color: #eee;
   --button-bg-subtle: rgba(255, 255, 255, 0.1);
   --button-bg-subtle-hover: rgba(255, 255, 255, 0.16);
@@ -255,11 +255,11 @@
 .gradient-overlay {
 background: linear-gradient(
 90deg,
-rgba(18, 18, 18, 0.88) 0%,
-rgba(18, 18, 18, 0.72) 18%,
-rgba(18, 18, 18, 0.42) 38%,
-rgba(18, 18, 18, 0.12) 60%,
-rgba(18, 18, 18, 0) 78%
+rgba(15, 13, 20, 0.88) 0%,
+rgba(15, 13, 20, 0.72) 18%,
+rgba(15, 13, 20, 0.42) 38%,
+rgba(15, 13, 20, 0.12) 60%,
+rgba(15, 13, 20, 0) 78%
 );
 top: 0;
 pointer-events: none;

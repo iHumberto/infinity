@@ -13,15 +13,15 @@ body {
 /* ======================================== */
 :root {
   /* --- Base Colors --- */
-  --theme-background-color: #181818; /* Base background for the page */
-  --theme-background-color-alpha: #18181849; /* Background with alpha for some elements */
+  --theme-background-color: #0F0D14; /* Base background for the page — dark purple undertone */
+  --theme-background-color-alpha: #0F0D1449; /* Background with alpha for some elements */
   --theme-text-color: #eee; /* Primary text color */
   --theme-text-color-secondary: #dbdbdb; /* Secondary text color (e.g., episode titles) */
-  --theme-accent-color: #B038AE; /* Main accent color (links, highlights) */
-  --theme-accent-color-alpha-low: #7C277B; /* Accent color with low alpha (hover effects) */
-  --theme-accent-color-alpha-med: #CD60CB; /* Accent color with medium alpha (hover effects) */
-  --theme-accent-color-alpha-high: #D883D6; /* Accent color with high alpha (progress bar) */
-  --theme-accent-color-alpha-hover: #7C277B; /* Accent color on hover */
+  --theme-accent-color: #9400D3; /* Main accent color (links, highlights, selection border) */
+  --theme-accent-color-alpha-low: #6A0099; /* Accent color darker (hover effects) */
+  --theme-accent-color-alpha-med: #AD33E0; /* Accent color mid-lighter (list hover) */
+  --theme-accent-color-alpha-high: #C266EB; /* Accent color light (progress bar) */
+  --theme-accent-color-alpha-hover: #6A0099; /* Accent color on hover (FAB) */
   --theme-warning-color: #bb4a4a; /* Color for warning/destructive actions (e.g., shutdown) */
 
   /* --- Alpha Colors (White & Black) --- */
@@ -40,20 +40,20 @@ body {
   --theme-black-alpha-highest: rgba(0, 0, 0, 0.85);/* Tooltips */
 
   /* --- Element Backgrounds --- */
-  --card-bg: #101010; /* Background color for cards */
-  --indicator-bg: #10101094; /* Background for indicators (played, count) */
-  --transparent-bg: #10101000; /* Fully transparent background */
-  --header-bg: rgba(0, 0, 0, 0.6); /* Background for header/action sheet */
-  --button-bg: #2f2f2f; /* Background for standard buttons */
-  --button-bg-subtle: rgba(255, 255, 255, 0.1); /* Subtle background for pill buttons, etc. */
-  --button-bg-subtle-hover: rgba(255, 255, 255, 0.16); /* Hover background for subtle buttons */
-  --button-bg-play: rgba(255, 255, 255, 0.3); /* Background for primary play buttons */
+  --card-bg: #15121A; /* Background color for cards */
+  --indicator-bg: #15121A94; /* Background for indicators (played, count) */
+  --transparent-bg: #15121A00; /* Fully transparent background */
+  --header-bg: rgba(10, 8, 18, 0.7); /* Background for header/action sheet */
+  --button-bg: #27242E; /* Background for standard buttons */
+  --button-bg-subtle: rgba(255, 255, 255, 0.08); /* Subtle background for pill buttons, etc. */
+  --button-bg-subtle-hover: rgba(255, 255, 255, 0.12); /* Hover background for subtle buttons */
+  --button-bg-play: rgba(255, 255, 255, 0.25); /* Background for primary play buttons */
   --button-bg-overlay: rgba(255, 255, 255, 0.08); /* Background for small overlay buttons */
   --button-bg-overlay-hover: rgba(255, 255, 255, 0.15); /* Hover background for small overlay buttons */
   --tooltip-bg: rgba(0, 0, 0, 0.85); /* Background for tooltips */
-  --context-menu-bg: rgba(58, 58, 58, 0.5); /* Fallback background for context menus (used with blur) */
-  --sidebar-bg: rgba(0, 0, 0, 0.6); /* Background for collapsible sidebar */
-  --episode-grid-bg: #00000082; /* Background for episode elements in the episode grid */
+  --context-menu-bg: rgba(45, 42, 52, 0.5); /* Fallback background for context menus (used with blur) */
+  --sidebar-bg: rgba(10, 8, 18, 0.65); /* Background for collapsible sidebar */
+  --episode-grid-bg: rgba(15, 13, 20, 0.85); /* Background for episode elements in the episode grid */
 
   /* --- Borders & Roundness --- */
   --theme-roundness: 0.5rem; /* General border radius */
@@ -63,9 +63,10 @@ body {
   --theme-roundness-progress: 10px; /* Border radius for progress bars */
   /* Border Gradient (Uncomment to use, ensure --border-color-solid is transparent) */
   /* --border-color: linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 41%, rgba(255, 255, 255, 0.1) 57%, rgba(255, 255, 255, 0.3) 100%); */
-  --border-color-solid: transparent; /* Use transparent for gradient border, or set a solid color */
+  --border-color-solid: #9400D3; /* Solid border accent color — used for header/sidebar/action-sheet edges */
+  --selection-border-color: #9400D3; /* Border color for selected/hovered items */
   --border-width: 1px; /* Standard border width */
-  --border-width-thick: 2px; /* Thicker border width */
+  --border-width-thick: 2px; /* Thicker border width for selection outlines */
 
   /* --- Effects --- */
   --blur-intensity: 2px; /* Blur amount */
@@ -139,13 +140,8 @@ html {
   background-color: var(--theme-background-color);
 }
 
-*,
-*::before,
-*::after {
-  box-shadow: none !important;
-  -webkit-box-shadow: none !important;
-  -moz-box-shadow: none !important;
-}
+/* box-shadow: left active so Jellyfin's native focus/selection ring works.
+   Selection and hover feedback is handled by border/outline rules below. */
 
 
 /* ======================================== */
@@ -269,6 +265,33 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 
 .itemsContainer > .card > .cardBox:hover {
   transform: translateY(-5px);
+  outline: var(--border-width-thick) solid var(--selection-border-color);
+  outline-offset: 2px;
+}
+
+/* --- Card Selection (multi-select mode) --- */
+/* Jellyfin adds inline style or class to mark selected items; we cover common patterns */
+.card.selected .cardBox,
+.card[aria-selected="true"] .cardBox,
+.card[data-selected="true"] .cardBox,
+.cardBox.isSelected,
+.itemAction.selected .cardBox {
+  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
+  outline-offset: 2px;
+}
+
+/* Selection mode: selected rows in list views */
+.listItem.selected,
+.listItem[aria-selected="true"],
+.listItem[data-selected="true"] {
+  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
+  outline-offset: -2px;
+}
+
+/* Keep hover accent + add subtle outline for list items */
+.listItem:hover {
+  outline: 1px solid var(--theme-accent-color-alpha-med);
+  outline-offset: -1px;
 }
 
 .cardImageContainer {
