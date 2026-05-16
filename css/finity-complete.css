@@ -263,20 +263,23 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   transition: transform 0.3s ease-in-out;
 }
 
-.itemsContainer > .card > .cardBox:hover {
+/* Hover: purple outline on card hover */
+.cardBox:hover {
   transform: translateY(-5px);
   outline: var(--border-width-thick) solid var(--selection-border-color);
   outline-offset: 2px;
 }
 
 /* --- Card Selection (multi-select mode) --- */
-/* Jellyfin adds inline style or class to mark selected items; we cover common patterns */
+/* Jellyfin uses inline style (often blue) for selected items; !important needed to override */
 .card.selected .cardBox,
 .card[aria-selected="true"] .cardBox,
 .card[data-selected="true"] .cardBox,
 .cardBox.isSelected,
-.itemAction.selected .cardBox {
-  outline: var(--border-width-thick) solid var(--selection-border-color);
+.itemAction.selected .cardBox,
+.card.selected .cardBox .cardScalable,
+.card.selected .cardOverlayContainer {
+  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
   outline-offset: 2px;
 }
 
@@ -284,7 +287,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .listItem.selected,
 .listItem[aria-selected="true"],
 .listItem[data-selected="true"] {
-  outline: var(--border-width-thick) solid var(--selection-border-color);
+  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
   outline-offset: -2px;
 }
 
