@@ -271,19 +271,24 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 }
 
 /* --- Card Selection (multi-select mode) --- */
-/* Jellyfin renders a dedicated outline element (.multiSelectCheckboxOutline) */
-/* and uses blue (#00a4dc); override to purple */
+/* Jellyfin uses blue (#00a4dc) on .itemSelectionPanel border; override to purple */
+.itemSelectionPanel,
 .multiSelectCheckboxOutline,
-.checkboxOutline {
+.checkboxOutline,
+[class*="multiSelectCheckboxOutline"],
+[class*="checkboxOutline"] {
   border-color: var(--selection-border-color) !important;
   outline-color: var(--selection-border-color) !important;
   box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
-  background: var(--selection-border-color) !important;
+  background-color: var(--selection-border-color) !important;
 }
 
-/* Checkbox icon color when checked */
-.checkboxIcon-checked {
-  color: var(--selection-border-color) !important;
+/* Checkbox states */
+/* Unselected: purple bg + border (no visible icon) */
+/* Selected: purple bg + white checkmark */
+.checkboxIcon-checked,
+[class*="checkboxIcon-checked"] {
+  color: #fff !important;
 }
 
 /* Fallback selectors (cover generic selection patterns) */
@@ -309,9 +314,12 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 }
 
 /* --- Selection Panel (top bar during multi-select) --- */
-.selectionCommandsPanel {
+.selectionCommandsPanel,
+.selectionCommandsPanel *,
+[class*="selectionCommands"] {
   border-color: var(--selection-border-color) !important;
-  box-shadow: 0 -2px 0 var(--selection-border-color) !important;
+  background-color: var(--card-bg) !important;
+  color: var(--theme-text-color) !important;
 }
 
 /* Keep hover accent + add subtle outline for list items */
