@@ -63,8 +63,8 @@ body {
   --theme-roundness-progress: 10px; /* Border radius for progress bars */
   /* Border Gradient (Uncomment to use, ensure --border-color-solid is transparent) */
   /* --border-color: linear-gradient(45deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 41%, rgba(255, 255, 255, 0.1) 57%, rgba(255, 255, 255, 0.3) 100%); */
-  --border-color-solid: #9400D3; /* Solid border accent color — used for header/sidebar/action-sheet edges */
-  --selection-border-color: #9400D3; /* Border color for selected/hovered items */
+  --border-color-solid: transparent; /* Card base border stays invisible; selection uses outline */
+  --selection-border-color: #9400D3; /* Outline color for selected/hovered items */
   --border-width: 1px; /* Standard border width */
   --border-width-thick: 2px; /* Thicker border width for selection outlines */
 
@@ -276,7 +276,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .card[data-selected="true"] .cardBox,
 .cardBox.isSelected,
 .itemAction.selected .cardBox {
-  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
+  outline: var(--border-width-thick) solid var(--selection-border-color);
   outline-offset: 2px;
 }
 
@@ -284,7 +284,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .listItem.selected,
 .listItem[aria-selected="true"],
 .listItem[data-selected="true"] {
-  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
+  outline: var(--border-width-thick) solid var(--selection-border-color);
   outline-offset: -2px;
 }
 
