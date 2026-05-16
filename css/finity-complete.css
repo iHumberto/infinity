@@ -279,7 +279,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   background-color: transparent !important;
 }
 
-/* Checkbox element — purple background + border */
+/* Checkbox element — border always purple; background only when checked */
 .multiSelectCheckboxOutline,
 .checkboxOutline,
 [class*="multiSelectCheckboxOutline"],
@@ -287,12 +287,18 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   border-color: var(--selection-border-color) !important;
   outline-color: var(--selection-border-color) !important;
   box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+  background-color: transparent !important;
+}
+
+/* Checked state: purple background (detected via .check class on child icon) */
+.multiSelectCheckboxOutline:has(.check),
+.checkboxOutline:has(.check),
+[class*="multiSelectCheckboxOutline"]:has(.check),
+[class*="checkboxOutline"]:has(.check) {
   background-color: var(--selection-border-color) !important;
 }
 
-/* Checkbox states */
-/* Unselected: purple bg + border (no visible icon) */
-/* Selected: purple bg + white checkmark */
+/* Checkbox checkmark — always white for contrast */
 .checkboxIcon-checked,
 [class*="checkboxIcon-checked"] {
   color: #fff !important;
