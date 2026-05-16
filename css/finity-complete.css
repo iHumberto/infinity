@@ -298,6 +298,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 [class*="multiSelectCheckboxOutline"]:has([class*="checkboxIcon-unchecked"][style*="none"]),
 [class*="checkboxOutline"]:has([class*="checkboxIcon-unchecked"][style*="none"]) {
   background-color: var(--selection-border-color) !important;
+  border-radius: var(--theme-roundness-large) !important;
 }
 
 /* Checkbox checkmark — always white for contrast */
