@@ -271,7 +271,22 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 }
 
 /* --- Card Selection (multi-select mode) --- */
-/* Jellyfin uses inline style (often blue) for selected items; !important needed to override */
+/* Jellyfin renders a dedicated outline element (.multiSelectCheckboxOutline) */
+/* and uses blue (#00a4dc); override to purple */
+.multiSelectCheckboxOutline,
+.checkboxOutline {
+  border-color: var(--selection-border-color) !important;
+  outline-color: var(--selection-border-color) !important;
+  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+  background: var(--selection-border-color) !important;
+}
+
+/* Checkbox icon color when checked */
+.checkboxIcon-checked {
+  color: var(--selection-border-color) !important;
+}
+
+/* Fallback selectors (cover generic selection patterns) */
 .card.selected .cardBox,
 .card[aria-selected="true"] .cardBox,
 .card[data-selected="true"] .cardBox,
@@ -281,6 +296,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .card.selected .cardOverlayContainer {
   outline: var(--border-width-thick) solid var(--selection-border-color) !important;
   outline-offset: 2px;
+  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
 }
 
 /* Selection mode: selected rows in list views */
@@ -289,6 +305,13 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 .listItem[data-selected="true"] {
   outline: var(--border-width-thick) solid var(--selection-border-color) !important;
   outline-offset: -2px;
+  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+}
+
+/* --- Selection Panel (top bar during multi-select) --- */
+.selectionCommandsPanel {
+  border-color: var(--selection-border-color) !important;
+  box-shadow: 0 -2px 0 var(--selection-border-color) !important;
 }
 
 /* Keep hover accent + add subtle outline for list items */
