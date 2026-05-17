@@ -56,11 +56,24 @@ Palheta inteira refeita com roxo `#9400D3` como cor primária:
 
 ## Instalação
 
+O Infinity usa **dois arquivos CSS** com responsabilidades diferentes:
+
+| Arquivo | Onde carregar | Páginas que afeta |
+|---|---|---|
+| `finity-complete.css` | Dashboard > Geral > Branding > CSS Customizado | Home, detalhes, listas, player (páginas do usuário) |
+| `dashboard.css` | No `<head>` do `index.html` | Dashboard, admin, configurações, plugins |
+
+> O campo de CSS Customizado do Branding **não** injeta CSS nas páginas de admin/dashboard do Jellyfin — por isso o `dashboard.css` precisa ir no `index.html`.
+
 ### 1. Index.html
 
 Cole no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
 
 ```html
+<!-- Infinity — Dashboard styles (admin/config pages) -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/dashboard.css">
+
+<!-- Infinity — Slideshow (home page) -->
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/slideshowpure.css">
@@ -71,13 +84,13 @@ Cole no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
 
 ### 2. CSS Customizado (Branding)
 
-No Jellyfin, vá em **Configurações > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
+No Jellyfin, vá em **Dashboard > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
 ```
 
-> **Importante:** O `finity-complete.css` deve ser carregado via campo de CSS customizado do Jellyfin, **não** no `index.html`. Isso garante que as regras de estilo sejam aplicadas sobre os elementos renderizados pelo React.
+> **Importante:** O `finity-complete.css` deve ser carregado SOMENTE via campo de CSS customizado, **não** no `index.html`. Carregá-lo em ambos os lugares causa carregamento duplicado e não resolve o problema da Dashboard.
 
 ### 3. Arquivo list.txt
 
