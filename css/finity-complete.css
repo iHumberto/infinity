@@ -157,13 +157,17 @@ body,
 
 /* --- Tabs slider (library views) — prevent overlapping content below --- */
 .emby-tabs-slider {
-  margin-bottom: 8px;
+  margin-bottom: 16px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
 
-.emby-tabs-slider + .flex.align-items-center.justify-content-center {
-  position: relative;
-  clear: both;
-  margin-top: 4px;
+.emby-tabs-slider ~ .flex.align-items-center.justify-content-center,
+.emby-tabs-slider ~ [class*="padded-top"][class*="focuscontainer"] {
+  position: relative !important;
+  z-index: 0 !important;
+  margin-top: 8px !important;
+  clear: both !important;
 }
 
 /* --- Header, Action Sheet, Main Drawer --- */
