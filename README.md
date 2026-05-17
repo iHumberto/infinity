@@ -30,17 +30,28 @@ Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do
 
 ## Instalação
 
-Para usar este tema basta colar os scripts e css abaixo em seu index.html do jellyfin (inserir obrigatoriamente no _*final*_ do cabeçalho antes de `</head>`):
+### 1. Index.html
+
+Cole os scripts e o CSS do slideshow no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
 
 ```
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/slideshowpure.css">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css">
 <script defer src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/slideshowpure.js"></script>
 <script async src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableTitles.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableSlideshow.js"></script>"
+<script src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableSlideshow.js"></script>
 ```
+
+### 2. CSS Customizado (Branding)
+
+No painel do Jellyfin, vá em **Configurações > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
+
+```
+@import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
+```
+
+> **Nota:** O `finity-complete.css` deve ser carregado via campo de CSS customizado do Jellyfin, e NÃO no `index.html`. Isso garante que as regras de estilo sejam aplicadas corretamente sobre os elementos renderizados pelo React.
 
 Você também precisará criar um arquivo `list.txt` no _*mesmo diretório*_ do `index.html` e popular este arquivo inserindo _*apenas*_ os IDs das mídias que deseja no slideshow.
 
