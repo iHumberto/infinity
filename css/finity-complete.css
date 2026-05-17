@@ -263,14 +263,26 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   transition: transform 0.3s ease-in-out;
 }
 
-/* Hover/Focus: lift on cardBox, purple ring on card wrapper */
+/* Hover/Focus: lift + purple border via ::after (avoids clip + offset issues) */
+.cardBox {
+  position: relative;
+}
 .cardBox:hover {
   transform: translateY(-5px);
 }
-.card:hover,
-.card:focus-within {
-  outline: var(--border-width-thick) solid var(--selection-border-color) !important;
-  outline-offset: -2px;
+.cardBox::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: var(--border-width-thick) solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 5;
+  transition: border-color 0.2s;
+}
+.cardBox:hover::after,
+.card:focus-within .cardBox::after {
+  border-color: var(--selection-border-color);
 }
 
 /* --- Card Selection (multi-select mode) --- */
