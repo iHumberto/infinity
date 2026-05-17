@@ -916,9 +916,12 @@ div.detailPageContent div.detailSectionContent p, /* General paragraph in detail
 
 /* --- Grid/Slider Container --- */
 #childrenContent, #childrenCollapsible, .childrenSection {
-    margin-top: 10vh !important; /* Move sections down into the black area below backdrop */
+    margin-top: 50vh !important; /* Push below backdrop overlap zone */
     width: 100% !important;
     display: block !important;
+    position: relative;
+    z-index: 3;
+    background-color: var(--theme-background-color);
 }
 
 #childrenContent .itemsContainer.vertical-list, 
