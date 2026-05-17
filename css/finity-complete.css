@@ -263,13 +263,16 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   transition: transform 0.3s ease-in-out;
 }
 
-/* Hover/Focus: purple ring on card (box-shadow avoids JS outline reset + overflow clip) */
+/* Hover/Focus: lift + purple ring on cardBox */
 .cardBox:hover {
   transform: translateY(-5px);
 }
-.card:hover,
-.card:focus-within {
-  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+.cardBox:hover,
+.cardBox:focus-visible {
+  box-shadow: var(--card-shadow), 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
+}
+.card:focus-within .cardBox {
+  box-shadow: var(--card-shadow), 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
 }
 
 /* --- Card Selection (multi-select mode) --- */
