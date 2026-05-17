@@ -177,6 +177,19 @@
   overflow: hidden;
   margin: 0 auto;
   padding-top: 6vh !important;
+  background-color: var(--theme-background-color);
+}
+
+#slides-container::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20vh;
+  background: linear-gradient(to bottom, transparent, var(--theme-background-color));
+  z-index: 4;
+  pointer-events: none;
 }
 
 .slide {
