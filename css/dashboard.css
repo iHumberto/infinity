@@ -193,9 +193,16 @@ body.dashboardDocument .mainDrawer {
   padding-top: 6vh;
 }
 
-/* Section headers — spacing between nav groups */
-body.dashboardDocument .MuiDrawer-root .MuiListSubheader-root {
-  margin-top: 16px;
+/* First list item (logo) — spacing below */
+body.dashboardDocument .MuiDrawer-root .MuiListItem-root:first-of-type {
+  margin-bottom: 20px;
+}
+
+/* Section headers (MuiListSubheader) — spacing between nav groups */
+body.dashboardDocument .MuiDrawer-root .MuiListSubheader-root,
+body.dashboardDocument .MuiDrawer-root [class*="MuiListSubheader"],
+body.dashboardDocument .MuiDrawer-root [class*="MuiList-subheader"] {
+  margin-top: 20px !important;
   margin-bottom: 4px;
 }
 
