@@ -189,14 +189,7 @@ body.dashboardDocument .mainDrawer {
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
   overflow-x: hidden !important;
-}
-
-/* List inside drawer — prevent horizontal overflow */
-body.dashboardDocument .MuiDrawer-paper .MuiList-root,
-body.dashboardDocument .MuiDrawer-root .MuiList-root {
-  width: auto !important;
-  overflow-x: hidden !important;
-  box-sizing: border-box !important;
+  overflow-y: auto !important;
 }
 
 /* Scroll container inside drawer */
