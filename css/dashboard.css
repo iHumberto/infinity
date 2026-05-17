@@ -1,0 +1,639 @@
+/* ======================================== */
+/* === INFINITY THEME — DASHBOARD STYLES === */
+/* ======================================== */
+/* Carregado via <link> no index.html para   */
+/* garantir que o tema aplique na Dashboard  */
+/* e páginas de admin do Jellyfin.           */
+/*                                           */
+/* Usa valores hardcoded (não depende de     */
+/* variáveis :root que o bundle CSS da       */
+/* Dashboard pode sobrescrever).             */
+/* ======================================== */
+
+/* ======================================== */
+/* === FONTS === */
+/* ======================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap');
+
+body {
+  font-family: 'Kodchasan', sans-serif !important;
+}
+
+/* ======================================== */
+/* === THEME VARIABLES (:root) === */
+/* ======================================== */
+/* Definição mantida para elementos que      */
+/* consomem variáveis nativamente.           */
+/* Se o bundle da Dashboard sobrescrever,    */
+/* os seletores abaixo usam valores fixos.   */
+/* ======================================== */
+:root {
+  --theme-background-color: #0F0D14;
+  --theme-text-color: #eee;
+  --theme-text-color-secondary: #dbdbdb;
+  --theme-accent-color: #9400D3;
+  --theme-accent-color-alpha-low: rgba(148, 0, 211, 0.18);
+  --theme-accent-color-alpha-med: #AD33E0;
+  --theme-accent-color-alpha-high: #C266EB;
+  --theme-accent-color-alpha-hover: rgba(148, 0, 211, 0.35);
+  --theme-warning-color: #bb4a4a;
+  --theme-white-alpha-low: rgba(255, 255, 255, 0.08);
+  --theme-white-alpha-med: rgba(255, 255, 255, 0.1);
+  --theme-white-alpha-med-high: rgba(255, 255, 255, 0.15);
+  --theme-white-alpha-high: rgba(255, 255, 255, 0.16);
+  --theme-white-alpha-higher: rgba(255, 255, 255, 0.3);
+  --theme-white-alpha-text-low: rgba(255, 255, 255, 0.7);
+  --theme-white-alpha-text-med: rgba(255, 255, 255, 0.85);
+  --theme-white-alpha-text-high: rgba(255, 255, 255, 0.9);
+  --theme-black-alpha-low: rgba(0, 0, 0, 0.3);
+  --theme-black-alpha-med: rgba(0, 0, 0, 0.55);
+  --theme-black-alpha-high: rgba(0, 0, 0, 0.6);
+  --theme-black-alpha-higher: rgba(0, 0, 0, 0.8);
+  --theme-black-alpha-highest: rgba(0, 0, 0, 0.85);
+  --card-bg: #15121A;
+  --header-bg: rgba(10, 8, 18, 0.7);
+  --sidebar-bg: rgba(10, 8, 18, 0.65);
+  --button-bg: #27242E;
+  --button-bg-subtle: rgba(255, 255, 255, 0.08);
+  --button-bg-subtle-hover: rgba(255, 255, 255, 0.12);
+  --tooltip-bg: rgba(0, 0, 0, 0.85);
+  --theme-roundness: 0.5rem;
+  --theme-roundness-large: 15px;
+  --theme-roundness-xlarge: 1em;
+  --theme-roundness-full: 4em;
+  --theme-roundness-progress: 10px;
+  --selection-border-color: #9400D3;
+  --border-width-thick: 2px;
+  --display-header-warning: none;
+}
+
+/* ======================================== */
+/* === PAGE BACKGROUND === */
+/* ======================================== */
+
+html {
+  background-color: #0F0D14 !important;
+  font-family: 'Kodchasan', sans-serif !important;
+}
+
+body {
+  background-color: #0F0D14 !important;
+  color: #eee !important;
+}
+
+.dashboardDocument,
+.dashboardDocument body,
+[class*="dashboardPage"],
+[class*="adminPage"],
+#dashboardPage,
+.dashboardPage {
+  background-color: #0F0D14 !important;
+}
+
+/* ======================================== */
+/* === HEADER & NAVIGATION === */
+/* ======================================== */
+
+.skinHeader {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+  border-left: 0 !important;
+  border-right: 0 !important;
+  border-top: 0 !important;
+  border-radius: 0 !important;
+}
+
+.skinHeader .paper-icon-button-light:hover:not(:disabled) {
+  background-color: rgba(148, 0, 211, 0.18) !important;
+}
+
+.headerTabs,
+.sectionTabs {
+  background: transparent !important;
+}
+
+.headerTabs .emby-tab-button,
+.sectionTabs .emby-tab-button {
+  color: #eee !important;
+}
+
+.headerTabs .emby-tab-button[aria-selected="true"],
+.sectionTabs .emby-tab-button[aria-selected="true"] {
+  color: #9400D3 !important;
+}
+
+/* Header warning/announcement */
+.skinHeader::before {
+  content: "⚠️ put your cool announcement here";
+  display: var(--display-header-warning);
+  background-color: #222222;
+  color: #FFFFFF;
+  text-align: center;
+  padding: 5px 0;
+  font-weight: 400;
+}
+
+/* ======================================== */
+/* === SIDEBAR / MAIN DRAWER === */
+/* ======================================== */
+
+.mainDrawer {
+  background-color: rgba(10, 8, 18, 0.65) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+}
+
+.mainDrawer-scrollContainer {
+  padding-top: 6vh;
+}
+
+.navMenuOption:hover {
+  background-color: #AD33E0 !important;
+}
+
+.navMenuOption-selected {
+  color: #9400D3 !important;
+}
+
+/* ======================================== */
+/* === DASHBOARD SECTIONS & CARDS === */
+/* ======================================== */
+
+.dashboardSection,
+.adminSection,
+[class*="dashboardSection"],
+[class*="adminSection"] {
+  background-color: transparent !important;
+}
+
+.dashboardSection .cardBox,
+.dashboardSection .cardContent,
+.dashboardSection .cardPadder,
+.adminSection .cardBox,
+.adminSection .cardContent,
+.adminSection .cardPadder {
+  border-radius: 0.5rem !important;
+  background-color: #15121A !important;
+}
+
+.dashboardSection h2,
+.dashboardSection h3,
+.dashboardSection h1,
+.adminSection h2,
+.adminSection h3,
+.adminSection h1 {
+  color: #eee !important;
+  font-weight: 700 !important;
+}
+
+.sectionTitle {
+  text-shadow: 0.5px 0.5px 4px black;
+}
+
+.sectionTitleContainer > .sectionTitle {
+  display: inline-block;
+  margin: 0;
+  vertical-align: middle;
+  text-shadow: 0.5px 0.5px 4px black;
+}
+
+/* ======================================== */
+/* === PAPER LISTS (Settings Sections) === */
+/* ======================================== */
+
+.paperList {
+  border-radius: 1em !important;
+  background-color: #15121A !important;
+  color: #eee !important;
+}
+
+.dashboardSection .paperList,
+.adminSection .paperList {
+  border-radius: 15px !important;
+  background-color: #15121A !important;
+}
+
+/* ======================================== */
+/* === LIST ITEMS === */
+/* ======================================== */
+
+.listItem {
+  transition: 0.3s all ease-in-out;
+}
+
+.listItem:hover {
+  background-color: #AD33E0 !important;
+  outline: 1px solid #AD33E0;
+  outline-offset: -1px;
+}
+
+.listItem.selected,
+.listItem[aria-selected="true"],
+.listItem[data-selected="true"] {
+  outline: 2px solid #9400D3 !important;
+  outline-offset: -2px;
+  box-shadow: 0 0 0 2px #9400D3 !important;
+}
+
+.listItemBodyText {
+  color: #dbdbdb !important;
+}
+
+.dashboardSection .listItemBodyText,
+.adminSection .listItemBodyText {
+  color: #dbdbdb !important;
+}
+
+/* ======================================== */
+/* === FORM ELEMENTS === */
+/* ======================================== */
+
+/* Text Inputs */
+.emby-input,
+input[type="text"],
+input[type="number"],
+input[type="password"],
+input[type="email"],
+input[type="url"],
+input[type="search"],
+textarea,
+.emby-textarea,
+.selectContainer {
+  background-color: #27242E !important;
+  color: #eee !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0.5rem !important;
+}
+
+.emby-input:focus,
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="search"]:focus,
+textarea:focus,
+.emby-textarea:focus {
+  border-color: #9400D3 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(148, 0, 211, 0.25) !important;
+}
+
+/* Select Dropdowns */
+select,
+.emby-select,
+select:enabled {
+  background-color: #27242E !important;
+  color: #eee !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0.5rem !important;
+}
+
+select:focus {
+  border-color: #9400D3 !important;
+  outline: none !important;
+}
+
+option {
+  background-color: #15121A !important;
+  color: #eee !important;
+}
+
+/* Checkboxes */
+.checkboxOutline,
+.multiSelectCheckboxOutline,
+[class*="checkboxOutline"],
+[class*="multiSelectCheckboxOutline"] {
+  border-color: #9400D3 !important;
+  background-color: transparent !important;
+}
+
+.checkboxIcon-checked,
+[class*="checkboxIcon-checked"] {
+  color: #fff !important;
+}
+
+/* Toggle switches (MDL/MUI style) */
+.mdl-switch__track,
+.emby-toggle-track {
+  background-color: rgba(148, 0, 211, 0.3) !important;
+}
+
+.mdl-switch__thumb,
+.emby-toggle-thumb {
+  background-color: #9400D3 !important;
+}
+
+/* Labels */
+.emby-input-label,
+.selectLabel,
+label {
+  color: #dbdbdb !important;
+}
+
+/* Field descriptions / helper text */
+.fieldDescription,
+.emby-input + .fieldDescription,
+[class*="fieldDescription"] {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ======================================== */
+/* === BUTTONS === */
+/* ======================================== */
+
+/* Standard Buttons */
+.emby-button,
+button:not(.paper-icon-button-light):not(.cardOverlayButton):not(.listItemButton):not(.listItemImageButton),
+.paper-icon-button-light {
+  background-color: #27242E !important;
+  color: #eee !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Raised / Pill Buttons */
+.raised {
+  border-radius: 4em !important;
+}
+
+/* Icon Button Hover (purple) */
+@media (hover: hover) and (pointer: fine) {
+  .paper-icon-button-light:hover:not(:disabled) {
+    background-color: rgba(148, 0, 211, 0.18) !important;
+  }
+}
+
+/* Primary / Accent Button (e.g., Save) */
+.button-flat.emby-button,
+.emby-button.submit,
+.emby-button[type="submit"],
+button[is="emby-button"][type="submit"] {
+  background-color: #9400D3 !important;
+  color: #fff !important;
+}
+
+.button-flat.emby-button:hover,
+.emby-button.submit:hover {
+  background-color: #AD33E0 !important;
+}
+
+/* Warning / Destructive Buttons */
+#btnShutdown {
+  background-color: #bb4a4a !important;
+}
+
+#btnRestartServer {
+  background: #bb7a4a !important;
+}
+
+/* Subtle / Pill Buttons (for tags, etc.) */
+.button-link {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0.5rem !important;
+  color: inherit !important;
+  transition: background-color 0.2s ease-out;
+}
+
+.button-link:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ======================================== */
+/* === ACTION SHEETS & DIALOGS === */
+/* ======================================== */
+
+.actionSheet,
+.dialog,
+.focuscontainer.dialog {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+  border-radius: 15px !important;
+}
+
+.actionSheetContent {
+  background: rgba(0, 0, 0, 0.75) !important;
+}
+
+.actionSheetMenuItem:hover {
+  background-color: #AD33E0 !important;
+}
+
+.actionSheetText {
+  margin-top: 0 !important;
+  margin-bottom: 1.2rem !important;
+  font-size: small;
+}
+
+.actionSheetText,
+.actionSheetTitle {
+  flex-grow: 0 !important;
+  padding: 0 1.25rem !important;
+  font-weight: 420;
+}
+
+/* ======================================== */
+/* === CONTEXT MENUS & TOOLTIPS === */
+/* ======================================== */
+
+.focuscontainer {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.tooltip,
+[class*="tooltip"] {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  color: #eee !important;
+  border-radius: 0.5rem !important;
+}
+
+.toast.toastVisible {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+}
+
+/* ======================================== */
+/* === TABLES (Devices, Activity, etc.) === */
+/* ======================================== */
+
+table,
+.tbl,
+[class*="tbl"] {
+  color: #eee !important;
+}
+
+table th,
+thead th,
+.tblHeader {
+  color: #dbdbdb !important;
+}
+
+table td,
+table th {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+table tr:hover {
+  background-color: #AD33E0 !important;
+}
+
+/* ======================================== */
+/* === SCROLLBAR === */
+/* ======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #9400D3 !important;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #AD33E0 !important;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #9400D3 transparent;
+}
+
+/* ======================================== */
+/* === LINKS === */
+/* ======================================== */
+
+a {
+  color: #9400D3 !important;
+}
+
+a:hover {
+  color: #AD33E0 !important;
+}
+
+/* ======================================== */
+/* === PROGRESS BARS === */
+/* ======================================== */
+
+progress,
+.progressBar,
+.emby-progressbar,
+[class*="progress"] {
+  accent-color: #9400D3 !important;
+}
+
+.itemProgressBar {
+  background-color: rgba(0, 0, 0, 0.55) !important;
+  border-radius: 10px !important;
+  overflow: hidden;
+}
+
+.itemProgressBarForeground {
+  background-color: #C266EB !important;
+  border-radius: 10px !important;
+}
+
+/* ======================================== */
+/* === SLIDER / RANGE INPUTS === */
+/* ======================================== */
+
+input[type="range"] {
+  accent-color: #9400D3 !important;
+}
+
+.sliderContainer {
+  height: 1em;
+}
+
+/* ======================================== */
+/* === COLLAPSIBLE SECTIONS === */
+/* ======================================== */
+
+.collapseContent,
+.emby-collapse .collapseContent {
+  background: rgba(0, 0, 0, 0.75) !important;
+}
+
+div.filterDialogContent div.emby-collapse div.collapseContent {
+  background: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* ======================================== */
+/* === PLUGIN CONFIG PAGES === */
+/* ======================================== */
+
+.configurationPage,
+[class*="pluginConfiguration"],
+[class*="configPage"],
+.pluginConfigPage {
+  background-color: #0F0D14 !important;
+  color: #eee !important;
+}
+
+.pluginCard,
+[class*="pluginCard"],
+.pluginPreview {
+  background-color: #15121A !important;
+  border-radius: 15px !important;
+}
+
+/* ======================================== */
+/* === METADATA MANAGER === */
+/* ======================================== */
+
+.metadataManager,
+[class*="metadataManager"],
+[class*="metadataEditor"] {
+  background-color: #0F0D14 !important;
+}
+
+/* ======================================== */
+/* === CARD SELECTION (Multi-select mode) === */
+/* ======================================== */
+
+.itemSelectionPanel {
+  border-color: #9400D3 !important;
+  outline-color: #9400D3 !important;
+  box-shadow: 0 0 0 2px #9400D3 !important;
+  background-color: transparent !important;
+  border-radius: 15px !important;
+}
+
+.selectionCommandsPanel,
+.selectionCommandsPanel *,
+[class*="selectionCommands"] {
+  border-color: #9400D3 !important;
+  background-color: #15121A !important;
+  color: #eee !important;
+}
+
+/* ======================================== */
+/* === DASHBOARD GLOBAL TEXT === */
+/* ======================================== */
+
+.dashboardSection *,
+.adminSection * {
+  color: #eee !important;
+}
+
+/* ======================================== */
+/* === RESPONSIVE === */
+/* ======================================== */
+
+@media (max-width: 900px) {
+  .skinHeader,
+  .actionSheet,
+  select:enabled,
+  option {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+}
