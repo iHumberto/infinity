@@ -374,8 +374,8 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
 
 /* --- Card Overlays & Content --- */
 .cardOverlayContainer,
-.cardContent:not(.dashboardSection .cardContent),
-.cardPadder:not(.dashboardSection .cardPadder), 
+.cardContent,
+.cardPadder,
 .blurhash-canvas {
   border-radius: var(--theme-roundness) !important;
 }
