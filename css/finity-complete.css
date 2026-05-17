@@ -281,7 +281,7 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   position: absolute;
   inset: 0;
   border: var(--border-width-thick) solid transparent;
-  border-radius: inherit;
+  border-radius: var(--theme-roundness); /* matches card image corners better than 15px */
   pointer-events: none;
   z-index: 5;
   transition: border-color 0.2s;
