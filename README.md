@@ -112,10 +112,10 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 <img src="screenshots/Screenshot_01.png" title="Home - slideshow 01" width="75%"/>
 <img src="screenshots/Screenshot_02.png" title="Home - slideshow 02" width="75%"/></br>
 <img src="screenshots/Screenshot_03.png" title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
+<img src="screenshots/Screenshot_10.png" title="Home - New colors selection mode" width="75%"/>
 <img src="screenshots/Screenshot_04.png" title="Movie page" width="75%"/></br>
 <img src="screenshots/Screenshot_05.png" title="New series page, with slide seasons" width="75%"/>
 <img src="screenshots/Screenshot_08.png" title="New series page, with bigger grid episodes" width="75%"/>
-<img src="screenshots/Screenshot_10.png" title="New colors" width="75%"/>
 </div>
 
 
