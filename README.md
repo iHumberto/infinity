@@ -6,35 +6,61 @@
 
 # Infinity
 
-Repositório dedicado aos arquivos do projeto Infity, uma versão customizada do tema [Finity](https://github.com/prism2001/finity).
+Tema customizado para Jellyfin, baseado no [Finity](https://github.com/prism2001/finity) por prism2001.
 
-## Ajustes
+## O que muda em relação ao Finity
 
-- Ajuste na inicialização do cronômetro do slideshow;
-- Correção dos `dots` que marcam a quantidade de itens no slideshow;
-- Correção na transparência nas páginas de filmes e séries;
-- Imagem de Fundo (Backdrop): 
-  * Alteração das variáveis `--detail-page-backdrop-offset` para 0 e `--detail-page-backdrop-width` para 100vw. Isso faz com que a imagem ocupe toda a largura da tela, eliminando a  barra preta na esquerda.
-  * Substituí o desfoque por um gradiente escuro sólido `(rgba(0,0,0,0.8)` na esquerda sumindo até transparente na direita. Isso garante que o texto continue legível sobre a imagem.
-- Painel de Texto:
-  * Ajuste da máscara lateral `(.backgroundContainer.withBackdrop)` para cobrir a área onde os textos ficam (definida em 70vw).
+### 🎨 Tema de cores — Dark Purple
 
+Palheta inteira refeita com roxo `#9400D3` como cor primária:
 
-## Modificações
+- Fundo da página com undertone roxo (`#9400D3`)
+- Cards, header, sidebar e botões com tons de roxo escuro
+- Barra de progresso, hover de listas e scrollbar em roxo
+- Borda de seleção (multi-select) em roxo
+- Checkbox de seleção com fundo roxo e checkmark branco
+- Hover de botões com roxo transparente (não mais preto sólido)
+- Botão Play com fade roxo no hover
+- Gradiente do backdrop do slideshow em tons roxos
 
-- Aumento na quantidade de itens no slideshow (de 8 para 16);
-- Alteração da fonte para a Kodchasan;
-- Slideshow clicável (clicar em um item do slideshow direciona para a página do item na biblioteca);
-- A página de séries agora exibe as temporadas em um slide, ocupando a maior parte da tela (lateralmente). O slide é navegável pelas setas do teclado, ou através de touch em monitores/telas compatíveis. 
-- A página das temporadas agora exibe os episódios em um grid que ocupa 94% da área da tela (lateralmente), assim mais episódios são exibidos por linha.
+### 🖱️ Feedback visual de hover e foco
+
+- Borda roxa ao redor do card no hover do mouse
+- Borda roxa ao navegar com controle remoto/teclado (`.focused`)
+- List items ganham outline roxo sutil + fundo no hover
+
+### 📐 Layout e páginas de detalhes
+
+- Backdrop ocupa 100% da largura (`--detail-page-backdrop-width: 100vw`, offset 0)
+- Máscara lateral com gradiente escuro sólido (sem blur) para legibilidade do texto
+- Máscara cobre a área de texto (60vw)
+- Temporadas em slider horizontal ocupando 94% da tela
+- Episódios em grid com 94% de largura, navegável por setas e touch
+- Fonte alterada para **Kodchasan**
+
+### 🎬 Slideshow
+
+- 16 itens (original: 8)
+- Slides clicáveis — direcionam para a página do item
+- Títulos de episódios clicáveis no grid view
+- Intervalo sincronizado com a animação Ken Burns (10s)
+- `will-change` em elementos animados para GPU acceleration
+- Correção dos dots indicadores de posição
+- Correção na inicialização do cronômetro
+
+### 🧹 Limpeza da UI
+
+- Controle de exibição via variáveis CSS (tomato rating, age rating, IMDb logo, star rating, critic rating, trailer tab, header warning)
+- Container de seleção de vídeo oculto
+- Títulos originais configuráveis
 
 ## Instalação
 
 ### 1. Index.html
 
-Cole os scripts e o CSS do slideshow no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
+Cole no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
 
-```
+```html
 <script src="https://cdn.jsdelivr.net/npm/marked@15.0.11/marked.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/dompurify@3.2.5/dist/purify.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/slideshowpure.css">
@@ -45,51 +71,52 @@ Cole os scripts e o CSS do slideshow no final do `<head>` do `index.html` do Jel
 
 ### 2. CSS Customizado (Branding)
 
-No painel do Jellyfin, vá em **Configurações > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
+No Jellyfin, vá em **Configurações > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
 
-```
+```css
 @import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
 ```
 
-> **Nota:** O `finity-complete.css` deve ser carregado via campo de CSS customizado do Jellyfin, e NÃO no `index.html`. Isso garante que as regras de estilo sejam aplicadas corretamente sobre os elementos renderizados pelo React.
+> **Importante:** O `finity-complete.css` deve ser carregado via campo de CSS customizado do Jellyfin, **não** no `index.html`. Isso garante que as regras de estilo sejam aplicadas sobre os elementos renderizados pelo React.
 
-Você também precisará criar um arquivo `list.txt` no _*mesmo diretório*_ do `index.html` e popular este arquivo inserindo _*apenas*_ os IDs das mídias que deseja no slideshow.
+### 3. Arquivo list.txt
 
-<img src="screenshots/Screenshot_06.png"    title="URL media id" width="auto"/>
+Crie um arquivo `list.txt` no mesmo diretório do `index.html` com os IDs das mídias do slideshow (um por linha, máximo 16):
 
 ```
-Arquivo1id
-Arquivo2id
-.
-.
-.
-Arquivo16id
+ID_DO_FILME_1
+ID_DO_FILME_2
+...
+ID_DO_FILME_16
 ```
 
-Se quiser automatizar esse processo e manter o slideshow sempre atualizado com as mídias mais recentes, você pode usar o [Script Runner](https://github.com/iHumberto/jellyfin-plugin-scriptrunner) e criar um script customizado que busque as mídias mais recentes e atualize o arquivo com os ids. 
+<img src="screenshots/Screenshot_06.png" title="URL media id" width="auto"/>
 
-## Dica
+Para automatizar, use o [Script Runner](https://github.com/iHumberto/jellyfin-plugin-scriptrunner) com um script que busque as mídias mais recentes.
 
-Se voce usa o docker vale a pena criar uma pasta `custom` no mesmo diretório do seu `docker-compose.yaml` e colocar dentro dessa pasta o `index.html` modificado e o arquivo `list.txt`. Depois basta referenciar esses arquivos para dentro do seu container docker
+## Dica — Docker
 
-<img src="screenshots/Screenshot_07.png"    title="Directory tip" width="auto"/>
+Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 
 ```
 - ./custom/index.html:/jellyfin/jellyfin-web/index.html
 - ./custom/list.txt:/jellyfin/jellyfin-web/list.txt
 ```
 
+<img src="screenshots/Screenshot_07.png" title="Directory tip" width="auto"/>
+
 ## Screenshots
 
 <div align="center">
 
-<img src="screenshots/Screenshot_01.png"    title="Home - slideshow 01" width="75%"/>
-<img src="screenshots/Screenshot_02.png"    title="Home - slideshow 02" width="75%"/></br>
-<img src="screenshots/Screenshot_03.png"    title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
-<img src="screenshots/Screenshot_04.png"    title="Movie page" width="75%"/></br>
-<img src="screenshots/Screenshot_05.png"    title="New series page, with slide seasons" width="75%"/>
-<img src="screenshots/Screenshot_08.png"    title="New series page, with bigger grid episodes" width="75%"/>
-
+<img src="screenshots/Screenshot_01.png" title="Home - slideshow 01" width="75%"/>
+<img src="screenshots/Screenshot_02.png" title="Home - slideshow 02" width="75%"/></br>
+<img src="screenshots/Screenshot_03.png" title="Home - Continue Watching, Next, Recent Movies" width="75%"/>
+<img src="screenshots/Screenshot_04.png" title="Movie page" width="75%"/></br>
+<img src="screenshots/Screenshot_05.png" title="New series page, with slide seasons" width="75%"/>
+<img src="screenshots/Screenshot_08.png" title="New series page, with bigger grid episodes" width="75%"/>
+<img src="screenshots/Screenshot_09.png" title="New colors" width="75%"/>
+<img src="screenshots/Screenshot_10.png" title="New colors" width="75%"/>
 </div>
 
 
