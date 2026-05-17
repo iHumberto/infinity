@@ -156,6 +156,11 @@ body,
 /* ======================================== */
 
 /* --- Tabs slider (library views) — prevent overlapping content below --- */
+/* Pages with absolute tabs need top margin so content starts below the tab bar */
+.pageWithAbsoluteTabs {
+  margin-top: 7em !important;
+}
+
 .emby-tabs-slider {
   margin-bottom: 16px !important;
   position: relative !important;
