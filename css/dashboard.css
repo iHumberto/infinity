@@ -1,32 +1,26 @@
 /* ======================================== */
 /* === INFINITY THEME — DASHBOARD STYLES === */
 /* ======================================== */
-/* Carregado via <link> no index.html para   */
-/* garantir que o tema aplique na Dashboard  */
-/* e páginas de admin do Jellyfin.           */
+/* Carregado via <link> no index.html.       */
 /*                                           */
-/* Usa valores hardcoded (não depende de     */
-/* variáveis :root que o bundle CSS da       */
-/* Dashboard pode sobrescrever).             */
+/* TODAS as regras são escopadas sob         */
+/* body.dashboardDocument — classe que o     */
+/* Jellyfin adiciona ao <body> nas rotas     */
+/* de admin (Dashboard, configurações, etc). */
+/*                                           */
+/* NADA aqui afeta a Home ou páginas do      */
+/* usuário — essas são estilizadas pelo      */
+/* finity-complete.css (Branding CSS).       */
 /* ======================================== */
 
 /* ======================================== */
-/* === FONTS === */
+/* === FONTS (global — seguro) === */
 /* ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap');
 
-body {
-  font-family: 'Kodchasan', sans-serif !important;
-}
-
 /* ======================================== */
-/* === THEME VARIABLES (:root) === */
-/* ======================================== */
-/* Definição mantida para elementos que      */
-/* consomem variáveis nativamente.           */
-/* Se o bundle da Dashboard sobrescrever,    */
-/* os seletores abaixo usam valores fixos.   */
+/* === THEME VARIABLES (global — seguro) === */
 /* ======================================== */
 :root {
   --theme-background-color: #0F0D14;
@@ -53,7 +47,7 @@ body {
   --theme-black-alpha-highest: rgba(0, 0, 0, 0.85);
   --card-bg: #15121A;
   --header-bg: rgba(10, 8, 18, 0.7);
-  --sidebar-bg: rgba(10, 8, 18, 0.65);
+  --sidebar-bg: #0D0A14;
   --button-bg: #27242E;
   --button-bg-subtle: rgba(255, 255, 255, 0.08);
   --button-bg-subtle-hover: rgba(255, 255, 255, 0.12);
@@ -68,20 +62,22 @@ body {
   --display-header-warning: none;
 }
 
-/* ======================================== */
-/* === PAGE BACKGROUND === */
-/* ======================================== */
+/* ============================================ */
+/* === DASHBOARD-SCOPED (body.dashboardDocument) === */
+/* ============================================ */
+/* Todas as regras abaixo só aplicam quando o  */
+/* body tem a classe .dashboardDocument —      */
+/* ou seja, exclusivamente nas páginas de      */
+/* admin/configuração do Jellyfin.             */
+/* ============================================ */
 
-html {
-  background-color: #0F0D14 !important;
+body.dashboardDocument {
   font-family: 'Kodchasan', sans-serif !important;
-}
-
-body {
   background-color: #0F0D14 !important;
   color: #eee !important;
 }
 
+/* ---- Page containers ---- */
 .dashboardDocument,
 .dashboardDocument body,
 [class*="dashboardPage"],
@@ -92,10 +88,10 @@ body {
 }
 
 /* ======================================== */
-/* === HEADER & NAVIGATION === */
+/* === HEADER (Dashboard only) === */
 /* ======================================== */
 
-.skinHeader {
+body.dashboardDocument .skinHeader {
   background-color: rgba(10, 8, 18, 0.7) !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
@@ -105,27 +101,26 @@ body {
   border-radius: 0 !important;
 }
 
-.skinHeader .paper-icon-button-light:hover:not(:disabled) {
+body.dashboardDocument .skinHeader .paper-icon-button-light:hover:not(:disabled) {
   background-color: rgba(148, 0, 211, 0.18) !important;
 }
 
-.headerTabs,
-.sectionTabs {
+body.dashboardDocument .headerTabs,
+body.dashboardDocument .sectionTabs {
   background: transparent !important;
 }
 
-.headerTabs .emby-tab-button,
-.sectionTabs .emby-tab-button {
+body.dashboardDocument .headerTabs .emby-tab-button,
+body.dashboardDocument .sectionTabs .emby-tab-button {
   color: #eee !important;
 }
 
-.headerTabs .emby-tab-button[aria-selected="true"],
-.sectionTabs .emby-tab-button[aria-selected="true"] {
+body.dashboardDocument .headerTabs .emby-tab-button[aria-selected="true"],
+body.dashboardDocument .sectionTabs .emby-tab-button[aria-selected="true"] {
   color: #9400D3 !important;
 }
 
-/* Header warning/announcement */
-.skinHeader::before {
+body.dashboardDocument .skinHeader::before {
   content: "⚠️ put your cool announcement here";
   display: var(--display-header-warning);
   background-color: #222222;
@@ -136,56 +131,138 @@ body {
 }
 
 /* ======================================== */
-/* === SIDEBAR / MAIN DRAWER === */
+/* === SIDEBAR (Dashboard only) === */
 /* ======================================== */
 
-.mainDrawer {
+body.dashboardDocument .mainDrawer {
   background-color: #0D0A14 !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
 }
 
-.mainDrawer-scrollContainer {
+body.dashboardDocument .mainDrawer-scrollContainer {
   padding-top: 6vh;
 }
 
-/* Sidebar navigation items — white text, pill shape, spaced */
-.navMenuOption {
+body.dashboardDocument .mainDrawer a,
+body.dashboardDocument .mainDrawer .material-icons,
+body.dashboardDocument .mainDrawer span {
+  color: #eee !important;
+}
+
+body.dashboardDocument .navMenuOption {
   color: #eee !important;
   border-radius: 4em !important;
   margin: 2px 8px !important;
 }
 
-.navMenuOption a,
-.navMenuOption .material-icons,
-.navMenuOption span {
+body.dashboardDocument .navMenuOption a,
+body.dashboardDocument .navMenuOption .material-icons,
+body.dashboardDocument .navMenuOption span {
   color: #eee !important;
 }
 
-.navMenuOption:hover {
+body.dashboardDocument .navMenuOption:hover {
   background-color: #AD33E0 !important;
 }
 
-.navMenuOption:hover a,
-.navMenuOption:hover .material-icons,
-.navMenuOption:hover span {
+body.dashboardDocument .navMenuOption:hover a,
+body.dashboardDocument .navMenuOption:hover .material-icons,
+body.dashboardDocument .navMenuOption:hover span {
   color: #fff !important;
 }
 
-.navMenuOption-selected {
+body.dashboardDocument .navMenuOption-selected {
   color: #eee !important;
   background-color: rgba(148, 0, 211, 0.25) !important;
 }
 
-/* Sidebar section headers (e.g. "Libraries", "Settings") */
-.mainDrawer .sectionTitle,
-.mainDrawer .sidebarHeader {
+body.dashboardDocument .mainDrawer .sectionTitle,
+body.dashboardDocument .mainDrawer .sidebarHeader {
   color: rgba(255, 255, 255, 0.5) !important;
   font-size: 0.8rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin: 12px 8px 4px 16px;
   font-weight: 500;
+}
+
+/* ======================================== */
+/* === DIALOGS / TOASTS (Dashboard only) === */
+/* ======================================== */
+
+body.dashboardDocument .actionSheet,
+body.dashboardDocument .dialog,
+body.dashboardDocument .focuscontainer.dialog {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+  border-radius: 15px !important;
+}
+
+body.dashboardDocument .actionSheetContent {
+  background: rgba(0, 0, 0, 0.75) !important;
+}
+
+body.dashboardDocument .actionSheetMenuItem:hover {
+  background-color: #AD33E0 !important;
+}
+
+body.dashboardDocument .actionSheetText {
+  margin-top: 0 !important;
+  margin-bottom: 1.2rem !important;
+  font-size: small;
+}
+
+body.dashboardDocument .actionSheetText,
+body.dashboardDocument .actionSheetTitle {
+  flex-grow: 0 !important;
+  padding: 0 1.25rem !important;
+  font-weight: 420;
+}
+
+body.dashboardDocument .focuscontainer {
+  background-color: rgba(0, 0, 0, 0.6) !important;
+}
+
+body.dashboardDocument .tooltip,
+body.dashboardDocument [class*="tooltip"] {
+  background-color: rgba(0, 0, 0, 0.85) !important;
+  color: #eee !important;
+  border-radius: 0.5rem !important;
+}
+
+body.dashboardDocument .toast.toastVisible {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+}
+
+/* ======================================== */
+/* === SCROLLBAR (Dashboard only) === */
+/* ======================================== */
+
+body.dashboardDocument ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.dashboardDocument ::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+body.dashboardDocument ::-webkit-scrollbar-thumb {
+  background: #9400D3 !important;
+  border-radius: 10px;
+}
+
+body.dashboardDocument ::-webkit-scrollbar-thumb:hover {
+  background: #AD33E0 !important;
+}
+
+body.dashboardDocument * {
+  scrollbar-width: thin;
+  scrollbar-color: #9400D3 transparent;
 }
 
 /* ======================================== */
@@ -209,36 +286,19 @@ body {
   background-color: #15121A !important;
 }
 
+.dashboardSection h1,
 .dashboardSection h2,
 .dashboardSection h3,
-.dashboardSection h1,
+.adminSection h1,
 .adminSection h2,
-.adminSection h3,
-.adminSection h1 {
+.adminSection h3 {
   color: #eee !important;
   font-weight: 700 !important;
 }
 
-.sectionTitle {
-  text-shadow: 0.5px 0.5px 4px black;
-}
-
-.sectionTitleContainer > .sectionTitle {
-  display: inline-block;
-  margin: 0;
-  vertical-align: middle;
-  text-shadow: 0.5px 0.5px 4px black;
-}
-
 /* ======================================== */
-/* === PAPER LISTS (Settings Sections) === */
+/* === PAPER LISTS (Dashboard only) === */
 /* ======================================== */
-
-.paperList {
-  border-radius: 1em !important;
-  background-color: #15121A !important;
-  color: #eee !important;
-}
 
 .dashboardSection .paperList,
 .adminSection .paperList {
@@ -247,29 +307,30 @@ body {
 }
 
 /* ======================================== */
-/* === LIST ITEMS === */
+/* === LIST ITEMS (Dashboard only) === */
 /* ======================================== */
 
-.listItem {
+.dashboardSection .listItem,
+.adminSection .listItem {
   transition: 0.3s all ease-in-out;
 }
 
-.listItem:hover {
+.dashboardSection .listItem:hover,
+.adminSection .listItem:hover {
   background-color: #AD33E0 !important;
   outline: 1px solid #AD33E0;
   outline-offset: -1px;
 }
 
-.listItem.selected,
-.listItem[aria-selected="true"],
-.listItem[data-selected="true"] {
+.dashboardSection .listItem.selected,
+.dashboardSection .listItem[aria-selected="true"],
+.dashboardSection .listItem[data-selected="true"],
+.adminSection .listItem.selected,
+.adminSection .listItem[aria-selected="true"],
+.adminSection .listItem[data-selected="true"] {
   outline: 2px solid #9400D3 !important;
   outline-offset: -2px;
   box-shadow: 0 0 0 2px #9400D3 !important;
-}
-
-.listItemBodyText {
-  color: #dbdbdb !important;
 }
 
 .dashboardSection .listItemBodyText,
@@ -277,328 +338,237 @@ body {
   color: #dbdbdb !important;
 }
 
+.dashboardSection .listItemBodyText-secondary,
+.adminSection .listItemBodyText-secondary {
+  color: #dbdbdb !important;
+}
+
+.dashboardSection .cardText,
+.adminSection .cardText {
+  color: #eee !important;
+}
+
 /* ======================================== */
-/* === FORM ELEMENTS === */
+/* === LINKS (Dashboard content only) === */
+/* ======================================== */
+
+.dashboardSection a,
+.adminSection a {
+  color: #9400D3 !important;
+}
+
+.dashboardSection a:hover,
+.adminSection a:hover {
+  color: #AD33E0 !important;
+}
+
+/* ======================================== */
+/* === FORM ELEMENTS (Dashboard only) === */
 /* ======================================== */
 
 /* Text Inputs */
-.emby-input,
-input[type="text"],
-input[type="number"],
-input[type="password"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-textarea,
-.emby-textarea,
-.selectContainer {
+body.dashboardDocument .emby-input,
+body.dashboardDocument input[type="text"],
+body.dashboardDocument input[type="number"],
+body.dashboardDocument input[type="password"],
+body.dashboardDocument input[type="email"],
+body.dashboardDocument input[type="url"],
+body.dashboardDocument input[type="search"],
+body.dashboardDocument textarea,
+body.dashboardDocument .emby-textarea,
+body.dashboardDocument .selectContainer {
   background-color: #27242E !important;
   color: #eee !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
 }
 
-.emby-input:focus,
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="password"]:focus,
-input[type="email"]:focus,
-input[type="url"]:focus,
-input[type="search"]:focus,
-textarea:focus,
-.emby-textarea:focus {
+body.dashboardDocument .emby-input:focus,
+body.dashboardDocument input[type="text"]:focus,
+body.dashboardDocument input[type="number"]:focus,
+body.dashboardDocument input[type="password"]:focus,
+body.dashboardDocument input[type="email"]:focus,
+body.dashboardDocument input[type="url"]:focus,
+body.dashboardDocument input[type="search"]:focus,
+body.dashboardDocument textarea:focus,
+body.dashboardDocument .emby-textarea:focus {
   border-color: #9400D3 !important;
   outline: none !important;
   box-shadow: 0 0 0 2px rgba(148, 0, 211, 0.25) !important;
 }
 
 /* Select Dropdowns */
-select,
-.emby-select,
-select:enabled {
+body.dashboardDocument select,
+body.dashboardDocument .emby-select,
+body.dashboardDocument select:enabled {
   background-color: #27242E !important;
   color: #eee !important;
   border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
 }
 
-select:focus {
+body.dashboardDocument select:focus {
   border-color: #9400D3 !important;
   outline: none !important;
 }
 
-option {
+body.dashboardDocument option {
   background-color: #15121A !important;
   color: #eee !important;
 }
 
 /* Checkboxes */
-.checkboxOutline,
-.multiSelectCheckboxOutline,
-[class*="checkboxOutline"],
-[class*="multiSelectCheckboxOutline"] {
+body.dashboardDocument .checkboxOutline,
+body.dashboardDocument .multiSelectCheckboxOutline,
+body.dashboardDocument [class*="checkboxOutline"],
+body.dashboardDocument [class*="multiSelectCheckboxOutline"] {
   border-color: #9400D3 !important;
   background-color: transparent !important;
 }
 
-.checkboxIcon-checked,
-[class*="checkboxIcon-checked"] {
+body.dashboardDocument .checkboxIcon-checked,
+body.dashboardDocument [class*="checkboxIcon-checked"] {
   color: #fff !important;
 }
 
-/* Toggle switches (MDL/MUI style) */
-.mdl-switch__track,
-.emby-toggle-track {
+/* Toggle switches */
+body.dashboardDocument .mdl-switch__track,
+body.dashboardDocument .emby-toggle-track {
   background-color: rgba(148, 0, 211, 0.3) !important;
 }
 
-.mdl-switch__thumb,
-.emby-toggle-thumb {
+body.dashboardDocument .mdl-switch__thumb,
+body.dashboardDocument .emby-toggle-thumb {
   background-color: #9400D3 !important;
 }
 
 /* Labels */
-.emby-input-label,
-.selectLabel,
-label {
+body.dashboardDocument .emby-input-label,
+body.dashboardDocument .selectLabel,
+body.dashboardDocument label {
   color: #dbdbdb !important;
 }
 
-/* Field descriptions / helper text */
-.fieldDescription,
-.emby-input + .fieldDescription,
-[class*="fieldDescription"] {
+/* Field descriptions */
+body.dashboardDocument .fieldDescription,
+body.dashboardDocument .emby-input + .fieldDescription,
+body.dashboardDocument [class*="fieldDescription"] {
   color: rgba(255, 255, 255, 0.7) !important;
 }
 
 /* ======================================== */
-/* === BUTTONS === */
+/* === BUTTONS (Dashboard only) === */
 /* ======================================== */
 
-/* Standard Buttons — pill shape */
-.emby-button,
-button:not(.paper-icon-button-light):not(.cardOverlayButton):not(.listItemButton):not(.listItemImageButton),
-.paper-icon-button-light {
+body.dashboardDocument .emby-button,
+body.dashboardDocument button:not(.paper-icon-button-light):not(.cardOverlayButton):not(.listItemButton):not(.listItemImageButton),
+body.dashboardDocument .paper-icon-button-light {
   background-color: #27242E !important;
   color: #eee !important;
   border-radius: 4em !important;
 }
 
-/* Raised / Pill Buttons */
-.raised {
+body.dashboardDocument .raised {
   border-radius: 4em !important;
 }
 
-/* Icon Button Hover (purple) */
 @media (hover: hover) and (pointer: fine) {
-  .paper-icon-button-light:hover:not(:disabled) {
+  body.dashboardDocument .paper-icon-button-light:hover:not(:disabled) {
     background-color: rgba(148, 0, 211, 0.18) !important;
   }
 }
 
 /* Primary / Accent Button (e.g., Save) */
-.button-flat.emby-button,
-.emby-button.submit,
-.emby-button[type="submit"],
-button[is="emby-button"][type="submit"] {
+body.dashboardDocument .button-flat.emby-button,
+body.dashboardDocument .emby-button.submit,
+body.dashboardDocument .emby-button[type="submit"],
+body.dashboardDocument button[is="emby-button"][type="submit"] {
   background-color: #9400D3 !important;
   color: #fff !important;
 }
 
-.button-flat.emby-button:hover,
-.emby-button.submit:hover {
+body.dashboardDocument .button-flat.emby-button:hover,
+body.dashboardDocument .emby-button.submit:hover {
   background-color: #AD33E0 !important;
 }
 
 /* Warning / Destructive Buttons */
-#btnShutdown {
+body.dashboardDocument #btnShutdown {
   background-color: #bb4a4a !important;
 }
 
-#btnRestartServer {
+body.dashboardDocument #btnRestartServer {
   background: #bb7a4a !important;
 }
 
-/* Subtle / Pill Buttons (for tags, etc.) */
-.button-link {
+/* Subtle / Pill Buttons */
+body.dashboardDocument .button-link {
   background: rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
   color: inherit !important;
   transition: background-color 0.2s ease-out;
 }
 
-.button-link:hover {
+body.dashboardDocument .button-link:hover {
   background: rgba(255, 255, 255, 0.12) !important;
 }
 
 /* ======================================== */
-/* === ACTION SHEETS & DIALOGS === */
+/* === TABLES (Dashboard only) === */
 /* ======================================== */
 
-.actionSheet,
-.dialog,
-.focuscontainer.dialog {
-  background-color: rgba(10, 8, 18, 0.7) !important;
-  backdrop-filter: blur(2px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
-  border-radius: 15px !important;
-}
-
-.actionSheetContent {
-  background: rgba(0, 0, 0, 0.75) !important;
-}
-
-.actionSheetMenuItem:hover {
-  background-color: #AD33E0 !important;
-}
-
-.actionSheetText {
-  margin-top: 0 !important;
-  margin-bottom: 1.2rem !important;
-  font-size: small;
-}
-
-.actionSheetText,
-.actionSheetTitle {
-  flex-grow: 0 !important;
-  padding: 0 1.25rem !important;
-  font-weight: 420;
-}
-
-/* ======================================== */
-/* === CONTEXT MENUS & TOOLTIPS === */
-/* ======================================== */
-
-.focuscontainer {
-  background-color: rgba(0, 0, 0, 0.6) !important;
-}
-
-.tooltip,
-[class*="tooltip"] {
-  background-color: rgba(0, 0, 0, 0.85) !important;
-  color: #eee !important;
-  border-radius: 0.5rem !important;
-}
-
-.toast.toastVisible {
-  background-color: rgba(10, 8, 18, 0.7) !important;
-  backdrop-filter: blur(2px) saturate(180%) !important;
-  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
-}
-
-/* ======================================== */
-/* === TABLES (Devices, Activity, etc.) === */
-/* ======================================== */
-
-table,
-.tbl,
-[class*="tbl"] {
+body.dashboardDocument table,
+body.dashboardDocument .tbl,
+body.dashboardDocument [class*="tbl"] {
   color: #eee !important;
 }
 
-table th,
-thead th,
-.tblHeader {
+body.dashboardDocument table th,
+body.dashboardDocument thead th,
+body.dashboardDocument .tblHeader {
   color: #dbdbdb !important;
 }
 
-table td,
-table th {
+body.dashboardDocument table td,
+body.dashboardDocument table th {
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-table tr:hover {
+body.dashboardDocument table tr:hover {
   background-color: #AD33E0 !important;
 }
 
 /* ======================================== */
-/* === SCROLLBAR === */
+/* === PROGRESS BARS (Dashboard only) === */
 /* ======================================== */
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #9400D3 !important;
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #AD33E0 !important;
-}
-
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #9400D3 transparent;
-}
-
-/* ======================================== */
-/* === LINKS === */
-/* ======================================== */
-/* Only style content links — navigation     */
-/* links in sidebar/header use their own     */
-/* rules to keep white text.                 */
-/* ======================================== */
-
-a {
-  color: #9400D3 !important;
-}
-
-a:hover {
-  color: #AD33E0 !important;
-}
-
-/* Keep navigation links white (override generic a rule) */
-.mainDrawer a,
-.skinHeader a,
-.headerTabs a,
-.sectionTabs a,
-.navMenuOption a {
-  color: #eee !important;
-}
-
-.mainDrawer a:hover,
-.navMenuOption a:hover {
-  color: #fff !important;
-}
-
-/* ======================================== */
-/* === PROGRESS BARS === */
-/* ======================================== */
-
-progress,
-.progressBar,
-.emby-progressbar,
-[class*="progress"] {
+body.dashboardDocument progress,
+body.dashboardDocument .progressBar,
+body.dashboardDocument .emby-progressbar,
+body.dashboardDocument [class*="progress"] {
   accent-color: #9400D3 !important;
 }
 
-.itemProgressBar {
+body.dashboardDocument .itemProgressBar {
   background-color: rgba(0, 0, 0, 0.55) !important;
   border-radius: 10px !important;
   overflow: hidden;
 }
 
-.itemProgressBarForeground {
+body.dashboardDocument .itemProgressBarForeground {
   background-color: #C266EB !important;
   border-radius: 10px !important;
 }
 
 /* ======================================== */
-/* === SLIDER / RANGE INPUTS === */
+/* === RANGE INPUTS (Dashboard only) === */
 /* ======================================== */
 
-input[type="range"] {
+body.dashboardDocument input[type="range"] {
   accent-color: #9400D3 !important;
 }
 
-.sliderContainer {
+body.dashboardDocument .sliderContainer {
   height: 1em;
 }
 
@@ -606,30 +576,50 @@ input[type="range"] {
 /* === COLLAPSIBLE SECTIONS === */
 /* ======================================== */
 
-.collapseContent,
-.emby-collapse .collapseContent {
+body.dashboardDocument .collapseContent,
+body.dashboardDocument .emby-collapse .collapseContent {
   background: rgba(0, 0, 0, 0.75) !important;
 }
 
-div.filterDialogContent div.emby-collapse div.collapseContent {
+body.dashboardDocument div.filterDialogContent div.emby-collapse div.collapseContent {
   background: rgba(0, 0, 0, 0.75) !important;
+}
+
+/* ======================================== */
+/* === MULTI-SELECT CARDS === */
+/* ======================================== */
+
+body.dashboardDocument .itemSelectionPanel {
+  border-color: #9400D3 !important;
+  outline-color: #9400D3 !important;
+  box-shadow: 0 0 0 2px #9400D3 !important;
+  background-color: transparent !important;
+  border-radius: 15px !important;
+}
+
+body.dashboardDocument .selectionCommandsPanel,
+body.dashboardDocument .selectionCommandsPanel *,
+body.dashboardDocument [class*="selectionCommands"] {
+  border-color: #9400D3 !important;
+  background-color: #15121A !important;
+  color: #eee !important;
 }
 
 /* ======================================== */
 /* === PLUGIN CONFIG PAGES === */
 /* ======================================== */
 
-.configurationPage,
-[class*="pluginConfiguration"],
-[class*="configPage"],
-.pluginConfigPage {
+body.dashboardDocument .configurationPage,
+body.dashboardDocument [class*="pluginConfiguration"],
+body.dashboardDocument [class*="configPage"],
+body.dashboardDocument .pluginConfigPage {
   background-color: #0F0D14 !important;
   color: #eee !important;
 }
 
-.pluginCard,
-[class*="pluginCard"],
-.pluginPreview {
+body.dashboardDocument .pluginCard,
+body.dashboardDocument [class*="pluginCard"],
+body.dashboardDocument .pluginPreview {
   background-color: #15121A !important;
   border-radius: 15px !important;
 }
@@ -638,52 +628,10 @@ div.filterDialogContent div.emby-collapse div.collapseContent {
 /* === METADATA MANAGER === */
 /* ======================================== */
 
-.metadataManager,
-[class*="metadataManager"],
-[class*="metadataEditor"] {
+body.dashboardDocument .metadataManager,
+body.dashboardDocument [class*="metadataManager"],
+body.dashboardDocument [class*="metadataEditor"] {
   background-color: #0F0D14 !important;
-}
-
-/* ======================================== */
-/* === CARD SELECTION (Multi-select mode) === */
-/* ======================================== */
-
-.itemSelectionPanel {
-  border-color: #9400D3 !important;
-  outline-color: #9400D3 !important;
-  box-shadow: 0 0 0 2px #9400D3 !important;
-  background-color: transparent !important;
-  border-radius: 15px !important;
-}
-
-.selectionCommandsPanel,
-.selectionCommandsPanel *,
-[class*="selectionCommands"] {
-  border-color: #9400D3 !important;
-  background-color: #15121A !important;
-  color: #eee !important;
-}
-
-/* ======================================== */
-/* === DASHBOARD TEXT READABILITY === */
-/* ======================================== */
-
-/* Dashboard section text — white for readability */
-.dashboardSection,
-.adminSection,
-.dashboardSection .listItemBodyText,
-.adminSection .listItemBodyText,
-.dashboardSection .cardText,
-.adminSection .cardText,
-.dashboardSection .listItemBody,
-.adminSection .listItemBody {
-  color: #eee !important;
-}
-
-/* Dashboard subsection text — slightly dimmer */
-.dashboardSection .listItemBodyText-secondary,
-.adminSection .listItemBodyText-secondary {
-  color: #dbdbdb !important;
 }
 
 /* ======================================== */
@@ -691,10 +639,10 @@ div.filterDialogContent div.emby-collapse div.collapseContent {
 /* ======================================== */
 
 @media (max-width: 900px) {
-  .skinHeader,
-  .actionSheet,
-  select:enabled,
-  option {
+  body.dashboardDocument .skinHeader,
+  body.dashboardDocument .actionSheet,
+  body.dashboardDocument select:enabled,
+  body.dashboardDocument option {
     backdrop-filter: none !important;
     -webkit-backdrop-filter: none !important;
   }
