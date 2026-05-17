@@ -140,6 +140,13 @@ html {
   background-color: var(--theme-background-color);
 }
 
+body,
+.homePage,
+.homeSectionsContainer,
+#homeTab {
+  background-color: var(--theme-background-color) !important;
+}
+
 /* box-shadow: left active so Jellyfin's native focus/selection ring works.
    Selection and hover feedback is handled by border/outline rules below. */
 
