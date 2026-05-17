@@ -3,24 +3,23 @@
 /* ======================================== */
 /* Carregado via <link> no index.html.       */
 /*                                           */
-/* TODAS as regras são escopadas sob         */
-/* body.dashboardDocument — classe que o     */
-/* Jellyfin adiciona ao <body> nas rotas     */
-/* de admin (Dashboard, configurações, etc). */
+/* Escopo: body.dashboardDocument            */
+/* (classe que o Jellyfin adiciona ao <body> */
+/* nas rotas de admin).                      */
 /*                                           */
-/* NADA aqui afeta a Home ou páginas do      */
-/* usuário — essas são estilizadas pelo      */
-/* finity-complete.css (Branding CSS).       */
+/* Seletores cobrem:                         */
+/* - Classes legacy do Jellyfin (10.8/10.9)  */
+/* - Classes MUI (10.10+)                    */
 /* ======================================== */
 
 /* ======================================== */
-/* === FONTS (global — seguro) === */
+/* === FONTS === */
 /* ======================================== */
 
 @import url('https://fonts.googleapis.com/css2?family=Kodchasan:wght@400;500;600;700&display=swap');
 
 /* ======================================== */
-/* === THEME VARIABLES (global — seguro) === */
+/* === THEME VARIABLES === */
 /* ======================================== */
 :root {
   --theme-background-color: #0F0D14;
@@ -32,43 +31,16 @@
   --theme-accent-color-alpha-high: #C266EB;
   --theme-accent-color-alpha-hover: rgba(148, 0, 211, 0.35);
   --theme-warning-color: #bb4a4a;
-  --theme-white-alpha-low: rgba(255, 255, 255, 0.08);
-  --theme-white-alpha-med: rgba(255, 255, 255, 0.1);
-  --theme-white-alpha-med-high: rgba(255, 255, 255, 0.15);
-  --theme-white-alpha-high: rgba(255, 255, 255, 0.16);
-  --theme-white-alpha-higher: rgba(255, 255, 255, 0.3);
-  --theme-white-alpha-text-low: rgba(255, 255, 255, 0.7);
-  --theme-white-alpha-text-med: rgba(255, 255, 255, 0.85);
-  --theme-white-alpha-text-high: rgba(255, 255, 255, 0.9);
-  --theme-black-alpha-low: rgba(0, 0, 0, 0.3);
-  --theme-black-alpha-med: rgba(0, 0, 0, 0.55);
-  --theme-black-alpha-high: rgba(0, 0, 0, 0.6);
-  --theme-black-alpha-higher: rgba(0, 0, 0, 0.8);
-  --theme-black-alpha-highest: rgba(0, 0, 0, 0.85);
   --card-bg: #15121A;
   --header-bg: rgba(10, 8, 18, 0.7);
   --sidebar-bg: #0D0A14;
   --button-bg: #27242E;
-  --button-bg-subtle: rgba(255, 255, 255, 0.08);
-  --button-bg-subtle-hover: rgba(255, 255, 255, 0.12);
-  --tooltip-bg: rgba(0, 0, 0, 0.85);
-  --theme-roundness: 0.5rem;
-  --theme-roundness-large: 15px;
-  --theme-roundness-xlarge: 1em;
-  --theme-roundness-full: 4em;
-  --theme-roundness-progress: 10px;
   --selection-border-color: #9400D3;
-  --border-width-thick: 2px;
   --display-header-warning: none;
 }
 
 /* ============================================ */
-/* === DASHBOARD-SCOPED (body.dashboardDocument) === */
-/* ============================================ */
-/* Todas as regras abaixo só aplicam quando o  */
-/* body tem a classe .dashboardDocument —      */
-/* ou seja, exclusivamente nas páginas de      */
-/* admin/configuração do Jellyfin.             */
+/* === PAGE BACKGROUND === */
 /* ============================================ */
 
 body.dashboardDocument {
@@ -77,21 +49,68 @@ body.dashboardDocument {
   color: #eee !important;
 }
 
-/* ---- Page containers ---- */
-.dashboardDocument,
-.dashboardDocument body,
-[class*="dashboardPage"],
-[class*="adminPage"],
-#dashboardPage,
-.dashboardPage {
-  background-color: #0F0D14 !important;
+/* ============================================ */
+/* === TYPOGRAPHY (MUI + legacy) === */
+/* ============================================ */
+
+/* All MUI Typography text — white */
+body.dashboardDocument .MuiTypography-root {
+  color: #eee !important;
 }
 
-/* ======================================== */
-/* === HEADER (Dashboard only) === */
-/* ======================================== */
+/* Subtle/secondary text */
+body.dashboardDocument .MuiTypography-body2,
+body.dashboardDocument .MuiTypography-caption,
+body.dashboardDocument .listItemBodyText,
+body.dashboardDocument .listItemBodyText-secondary {
+  color: #dbdbdb !important;
+}
 
-body.dashboardDocument .skinHeader {
+/* Headings in dashboard content */
+body.dashboardDocument .MuiTypography-h4,
+body.dashboardDocument .MuiTypography-h5,
+body.dashboardDocument .MuiTypography-h6,
+body.dashboardDocument h1,
+body.dashboardDocument h2,
+body.dashboardDocument h3 {
+  color: #eee !important;
+  font-weight: 700 !important;
+}
+
+/* ============================================ */
+/* === LINKS === */
+/* ============================================ */
+
+/* Links inside dashboard content — purple accent */
+body.dashboardDocument a {
+  color: #9400D3 !important;
+}
+
+body.dashboardDocument a:hover {
+  color: #AD33E0 !important;
+}
+
+/* But navigation/sidebar links stay white */
+body.dashboardDocument .MuiDrawer-root a,
+body.dashboardDocument .mainDrawer a,
+body.dashboardDocument .navMenuOption a,
+body.dashboardDocument .skinHeader a,
+body.dashboardDocument .headerTabs a {
+  color: #eee !important;
+}
+
+body.dashboardDocument .MuiDrawer-root a:hover,
+body.dashboardDocument .mainDrawer a:hover,
+body.dashboardDocument .navMenuOption a:hover {
+  color: #fff !important;
+}
+
+/* ============================================ */
+/* === HEADER (MUI AppBar / legacy skinHeader) === */
+/* ============================================ */
+
+body.dashboardDocument .skinHeader,
+body.dashboardDocument .MuiAppBar-root {
   background-color: rgba(10, 8, 18, 0.7) !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
@@ -101,22 +120,26 @@ body.dashboardDocument .skinHeader {
   border-radius: 0 !important;
 }
 
-body.dashboardDocument .skinHeader .paper-icon-button-light:hover:not(:disabled) {
+body.dashboardDocument .skinHeader .paper-icon-button-light:hover:not(:disabled),
+body.dashboardDocument .MuiAppBar-root .MuiIconButton-root:hover {
   background-color: rgba(148, 0, 211, 0.18) !important;
 }
 
 body.dashboardDocument .headerTabs,
-body.dashboardDocument .sectionTabs {
+body.dashboardDocument .sectionTabs,
+body.dashboardDocument .MuiTabs-root {
   background: transparent !important;
 }
 
 body.dashboardDocument .headerTabs .emby-tab-button,
-body.dashboardDocument .sectionTabs .emby-tab-button {
+body.dashboardDocument .sectionTabs .emby-tab-button,
+body.dashboardDocument .MuiTab-root {
   color: #eee !important;
 }
 
 body.dashboardDocument .headerTabs .emby-tab-button[aria-selected="true"],
-body.dashboardDocument .sectionTabs .emby-tab-button[aria-selected="true"] {
+body.dashboardDocument .sectionTabs .emby-tab-button[aria-selected="true"],
+body.dashboardDocument .MuiTab-root.Mui-selected {
   color: #9400D3 !important;
 }
 
@@ -130,55 +153,72 @@ body.dashboardDocument .skinHeader::before {
   font-weight: 400;
 }
 
-/* ======================================== */
-/* === SIDEBAR (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === SIDEBAR (MUI Drawer + legacy) === */
+/* ============================================ */
 
+/* Drawer paper (the actual sidebar panel) */
+body.dashboardDocument .MuiDrawer-paper,
+body.dashboardDocument .MuiDrawer-root .MuiPaper-root,
 body.dashboardDocument .mainDrawer {
   background-color: #0D0A14 !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
 }
 
-body.dashboardDocument .mainDrawer-scrollContainer {
+/* Scroll container inside drawer */
+body.dashboardDocument .mainDrawer-scrollContainer,
+body.dashboardDocument .MuiDrawer-root .MuiList-root:first-child {
   padding-top: 6vh;
 }
 
-body.dashboardDocument .mainDrawer a,
-body.dashboardDocument .mainDrawer .material-icons,
-body.dashboardDocument .mainDrawer span {
-  color: #eee !important;
-}
-
-body.dashboardDocument .navMenuOption {
-  color: #eee !important;
+/* Navigation items — pill shape, white text, spaced */
+body.dashboardDocument .navMenuOption,
+body.dashboardDocument .MuiListItem-root,
+body.dashboardDocument .MuiListItemButton-root {
   border-radius: 4em !important;
   margin: 2px 8px !important;
 }
 
 body.dashboardDocument .navMenuOption a,
 body.dashboardDocument .navMenuOption .material-icons,
-body.dashboardDocument .navMenuOption span {
+body.dashboardDocument .navMenuOption span,
+body.dashboardDocument .MuiListItem-root .MuiTypography-root,
+body.dashboardDocument .MuiListItemButton-root .MuiTypography-root,
+body.dashboardDocument .MuiListItem-root .MuiSvgIcon-root,
+body.dashboardDocument .MuiListItemButton-root .MuiSvgIcon-root {
   color: #eee !important;
 }
 
-body.dashboardDocument .navMenuOption:hover {
+/* Hover — purple background, text stays white */
+body.dashboardDocument .navMenuOption:hover,
+body.dashboardDocument .MuiListItem-root:hover,
+body.dashboardDocument .MuiListItemButton-root:hover {
   background-color: #AD33E0 !important;
 }
 
 body.dashboardDocument .navMenuOption:hover a,
 body.dashboardDocument .navMenuOption:hover .material-icons,
-body.dashboardDocument .navMenuOption:hover span {
+body.dashboardDocument .navMenuOption:hover span,
+body.dashboardDocument .MuiListItem-root:hover .MuiTypography-root,
+body.dashboardDocument .MuiListItemButton-root:hover .MuiTypography-root,
+body.dashboardDocument .MuiListItem-root:hover .MuiSvgIcon-root,
+body.dashboardDocument .MuiListItemButton-root:hover .MuiSvgIcon-root {
   color: #fff !important;
 }
 
-body.dashboardDocument .navMenuOption-selected {
+/* Selected item — subtle purple bg, white text */
+body.dashboardDocument .navMenuOption-selected,
+body.dashboardDocument .MuiListItem-root.Mui-selected,
+body.dashboardDocument .MuiListItemButton-root.Mui-selected {
   color: #eee !important;
   background-color: rgba(148, 0, 211, 0.25) !important;
 }
 
+/* Sidebar section headers */
 body.dashboardDocument .mainDrawer .sectionTitle,
-body.dashboardDocument .mainDrawer .sidebarHeader {
+body.dashboardDocument .mainDrawer .sidebarHeader,
+body.dashboardDocument .MuiListSubheader-root {
   color: rgba(255, 255, 255, 0.5) !important;
   font-size: 0.8rem;
   text-transform: uppercase;
@@ -187,24 +227,272 @@ body.dashboardDocument .mainDrawer .sidebarHeader {
   font-weight: 500;
 }
 
-/* ======================================== */
-/* === DIALOGS / TOASTS (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === CARDS / PAPER SURFACES === */
+/* ============================================ */
+
+/* Dashboard stat cards — MUI Paper + legacy */
+body.dashboardDocument .MuiPaper-root,
+body.dashboardDocument .MuiCard-root,
+body.dashboardDocument .dashboardSection .cardBox,
+body.dashboardDocument .adminSection .cardBox {
+  border-radius: 15px !important;
+  background-color: #15121A !important;
+  background-image: none !important;
+}
+
+/* Ensure MUI Paper elevation doesn't override bg */
+body.dashboardDocument .MuiPaper-elevation,
+body.dashboardDocument .MuiPaper-elevation1,
+body.dashboardDocument .MuiPaper-elevation2,
+body.dashboardDocument .MuiPaper-elevation3,
+body.dashboardDocument .MuiPaper-elevation4 {
+  background-color: #15121A !important;
+  background-image: none !important;
+}
+
+/* Paper inside dialogs gets dialog bg, not card bg */
+body.dashboardDocument .MuiDialog-root .MuiPaper-root {
+  background-color: rgba(10, 8, 18, 0.7) !important;
+  backdrop-filter: blur(2px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+}
+
+/* ============================================ */
+/* === LISTS (MUI List + legacy) === */
+/* ============================================ */
+
+body.dashboardDocument .MuiList-root,
+body.dashboardDocument .paperList {
+  border-radius: 15px !important;
+  background-color: #15121A !important;
+}
+
+/* List item hover — purple */
+body.dashboardDocument .dashboardSection .listItem:hover,
+body.dashboardDocument .adminSection .listItem:hover,
+body.dashboardDocument .MuiListItem-root:hover:not(.Mui-selected),
+body.dashboardDocument .MuiListItemButton-root:hover:not(.Mui-selected) {
+  background-color: #AD33E0 !important;
+  outline: 1px solid #AD33E0;
+  outline-offset: -1px;
+}
+
+/* List item selected */
+body.dashboardDocument .dashboardSection .listItem.selected,
+body.dashboardDocument .adminSection .listItem.selected,
+body.dashboardDocument .MuiListItem-root.Mui-selected,
+body.dashboardDocument .MuiListItemButton-root.Mui-selected {
+  outline: 2px solid #9400D3 !important;
+  outline-offset: -2px;
+  box-shadow: 0 0 0 2px #9400D3 !important;
+}
+
+/* ============================================ */
+/* === FORM ELEMENTS (MUI + legacy) === */
+/* ============================================ */
+
+/* Text Inputs */
+body.dashboardDocument .emby-input,
+body.dashboardDocument input[type="text"],
+body.dashboardDocument input[type="number"],
+body.dashboardDocument input[type="password"],
+body.dashboardDocument input[type="email"],
+body.dashboardDocument input[type="url"],
+body.dashboardDocument input[type="search"],
+body.dashboardDocument textarea,
+body.dashboardDocument .emby-textarea,
+body.dashboardDocument .selectContainer,
+body.dashboardDocument .MuiInputBase-root,
+body.dashboardDocument .MuiOutlinedInput-root,
+body.dashboardDocument .MuiFilledInput-root {
+  background-color: #27242E !important;
+  color: #eee !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Input focus — purple ring */
+body.dashboardDocument .emby-input:focus,
+body.dashboardDocument input[type="text"]:focus,
+body.dashboardDocument input[type="number"]:focus,
+body.dashboardDocument input[type="password"]:focus,
+body.dashboardDocument textarea:focus,
+body.dashboardDocument .emby-textarea:focus,
+body.dashboardDocument .MuiInputBase-root.Mui-focused,
+body.dashboardDocument .MuiOutlinedInput-root.Mui-focused,
+body.dashboardDocument .MuiFilledInput-root.Mui-focused {
+  border-color: #9400D3 !important;
+  outline: none !important;
+  box-shadow: 0 0 0 2px rgba(148, 0, 211, 0.25) !important;
+}
+
+/* MUI OutlinedInput fieldset border override */
+body.dashboardDocument .MuiOutlinedInput-root .MuiOutlinedInput-notchedOutline {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dashboardDocument .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: #9400D3 !important;
+}
+
+/* Select Dropdowns */
+body.dashboardDocument select,
+body.dashboardDocument .emby-select,
+body.dashboardDocument select:enabled,
+body.dashboardDocument .MuiSelect-select {
+  background-color: #27242E !important;
+  color: #eee !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-radius: 0.5rem !important;
+}
+
+body.dashboardDocument select:focus {
+  border-color: #9400D3 !important;
+  outline: none !important;
+}
+
+body.dashboardDocument option {
+  background-color: #15121A !important;
+  color: #eee !important;
+}
+
+/* Checkboxes */
+body.dashboardDocument .checkboxOutline,
+body.dashboardDocument .multiSelectCheckboxOutline,
+body.dashboardDocument [class*="checkboxOutline"],
+body.dashboardDocument .MuiCheckbox-root {
+  color: #9400D3 !important;
+}
+
+body.dashboardDocument .checkboxIcon-checked,
+body.dashboardDocument [class*="checkboxIcon-checked"],
+body.dashboardDocument .MuiCheckbox-root.Mui-checked {
+  color: #9400D3 !important;
+}
+
+/* Toggle switches */
+body.dashboardDocument .mdl-switch__track,
+body.dashboardDocument .emby-toggle-track,
+body.dashboardDocument .MuiSwitch-track {
+  background-color: rgba(148, 0, 211, 0.3) !important;
+}
+
+body.dashboardDocument .mdl-switch__thumb,
+body.dashboardDocument .emby-toggle-thumb,
+body.dashboardDocument .MuiSwitch-thumb {
+  background-color: #9400D3 !important;
+}
+
+body.dashboardDocument .MuiSwitch-root.Mui-checked .MuiSwitch-track {
+  background-color: rgba(148, 0, 211, 0.5) !important;
+}
+
+body.dashboardDocument .MuiSwitch-root.Mui-checked .MuiSwitch-thumb {
+  background-color: #9400D3 !important;
+}
+
+/* Labels */
+body.dashboardDocument .emby-input-label,
+body.dashboardDocument .selectLabel,
+body.dashboardDocument label,
+body.dashboardDocument .MuiFormLabel-root,
+body.dashboardDocument .MuiInputLabel-root {
+  color: #dbdbdb !important;
+}
+
+/* Field descriptions */
+body.dashboardDocument .fieldDescription,
+body.dashboardDocument [class*="fieldDescription"],
+body.dashboardDocument .MuiFormHelperText-root {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ============================================ */
+/* === BUTTONS (MUI + legacy) === */
+/* ============================================ */
+
+/* All buttons — pill shape */
+body.dashboardDocument .emby-button,
+body.dashboardDocument .paper-icon-button-light,
+body.dashboardDocument .raised,
+body.dashboardDocument .MuiButton-root {
+  border-radius: 4em !important;
+}
+
+/* Default button colors */
+body.dashboardDocument .emby-button,
+body.dashboardDocument .paper-icon-button-light,
+body.dashboardDocument .MuiButton-root:not(.MuiButton-containedPrimary):not(.MuiButton-containedError) {
+  background-color: #27242E !important;
+  color: #eee !important;
+}
+
+/* MUI text/outlined buttons — no solid bg */
+body.dashboardDocument .MuiButton-text,
+body.dashboardDocument .MuiButton-outlined {
+  background-color: transparent !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+/* Icon Button Hover */
+@media (hover: hover) and (pointer: fine) {
+  body.dashboardDocument .paper-icon-button-light:hover:not(:disabled),
+  body.dashboardDocument .MuiIconButton-root:hover {
+    background-color: rgba(148, 0, 211, 0.18) !important;
+  }
+}
+
+/* Primary / Accent Button (Save, Apply) */
+body.dashboardDocument .button-flat.emby-button,
+body.dashboardDocument .emby-button.submit,
+body.dashboardDocument .emby-button[type="submit"],
+body.dashboardDocument .MuiButton-containedPrimary {
+  background-color: #9400D3 !important;
+  color: #fff !important;
+}
+
+body.dashboardDocument .button-flat.emby-button:hover,
+body.dashboardDocument .emby-button.submit:hover,
+body.dashboardDocument .MuiButton-containedPrimary:hover {
+  background-color: #AD33E0 !important;
+}
+
+/* Warning / Destructive Buttons */
+body.dashboardDocument #btnShutdown {
+  background-color: #bb4a4a !important;
+}
+
+body.dashboardDocument #btnRestartServer {
+  background: #bb7a4a !important;
+}
+
+body.dashboardDocument .MuiButton-containedError {
+  background-color: #bb4a4a !important;
+  color: #fff !important;
+}
+
+/* ============================================ */
+/* === DIALOGS / TOASTS / TOOLTIPS === */
+/* ============================================ */
 
 body.dashboardDocument .actionSheet,
 body.dashboardDocument .dialog,
-body.dashboardDocument .focuscontainer.dialog {
-  background-color: rgba(10, 8, 18, 0.7) !important;
+body.dashboardDocument .focuscontainer.dialog,
+body.dashboardDocument .MuiDialog-root .MuiDialog-container .MuiPaper-root {
+  background-color: rgba(10, 8, 18, 0.95) !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
   border-radius: 15px !important;
 }
 
-body.dashboardDocument .actionSheetContent {
+body.dashboardDocument .actionSheetContent,
+body.dashboardDocument .MuiDialogContent-root {
   background: rgba(0, 0, 0, 0.75) !important;
 }
 
-body.dashboardDocument .actionSheetMenuItem:hover {
+body.dashboardDocument .actionSheetMenuItem:hover,
+body.dashboardDocument .MuiMenuItem-root:hover {
   background-color: #AD33E0 !important;
 }
 
@@ -226,21 +514,23 @@ body.dashboardDocument .focuscontainer {
 }
 
 body.dashboardDocument .tooltip,
-body.dashboardDocument [class*="tooltip"] {
+body.dashboardDocument [class*="tooltip"],
+body.dashboardDocument .MuiTooltip-tooltip {
   background-color: rgba(0, 0, 0, 0.85) !important;
   color: #eee !important;
   border-radius: 0.5rem !important;
 }
 
-body.dashboardDocument .toast.toastVisible {
+body.dashboardDocument .toast.toastVisible,
+body.dashboardDocument .MuiSnackbar-root .MuiPaper-root {
   background-color: rgba(10, 8, 18, 0.7) !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
 }
 
-/* ======================================== */
-/* === SCROLLBAR (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === SCROLLBAR === */
+/* ============================================ */
 
 body.dashboardDocument ::-webkit-scrollbar {
   width: 8px;
@@ -265,319 +555,81 @@ body.dashboardDocument * {
   scrollbar-color: #9400D3 transparent;
 }
 
-/* ======================================== */
-/* === DASHBOARD SECTIONS & CARDS === */
-/* ======================================== */
-
-.dashboardSection,
-.adminSection,
-[class*="dashboardSection"],
-[class*="adminSection"] {
-  background-color: transparent !important;
-}
-
-.dashboardSection .cardBox,
-.dashboardSection .cardContent,
-.dashboardSection .cardPadder,
-.adminSection .cardBox,
-.adminSection .cardContent,
-.adminSection .cardPadder {
-  border-radius: 15px !important;
-  background-color: #15121A !important;
-}
-
-.dashboardSection h1,
-.dashboardSection h2,
-.dashboardSection h3,
-.adminSection h1,
-.adminSection h2,
-.adminSection h3 {
-  color: #eee !important;
-  font-weight: 700 !important;
-}
-
-/* ======================================== */
-/* === PAPER LISTS (Dashboard only) === */
-/* ======================================== */
-
-.dashboardSection .paperList,
-.adminSection .paperList {
-  border-radius: 15px !important;
-  background-color: #15121A !important;
-}
-
-/* ======================================== */
-/* === LIST ITEMS (Dashboard only) === */
-/* ======================================== */
-
-.dashboardSection .listItem,
-.adminSection .listItem {
-  transition: 0.3s all ease-in-out;
-}
-
-.dashboardSection .listItem:hover,
-.adminSection .listItem:hover {
-  background-color: #AD33E0 !important;
-  outline: 1px solid #AD33E0;
-  outline-offset: -1px;
-}
-
-.dashboardSection .listItem.selected,
-.dashboardSection .listItem[aria-selected="true"],
-.dashboardSection .listItem[data-selected="true"],
-.adminSection .listItem.selected,
-.adminSection .listItem[aria-selected="true"],
-.adminSection .listItem[data-selected="true"] {
-  outline: 2px solid #9400D3 !important;
-  outline-offset: -2px;
-  box-shadow: 0 0 0 2px #9400D3 !important;
-}
-
-.dashboardSection .listItemBodyText,
-.adminSection .listItemBodyText {
-  color: #dbdbdb !important;
-}
-
-.dashboardSection .listItemBodyText-secondary,
-.adminSection .listItemBodyText-secondary {
-  color: #dbdbdb !important;
-}
-
-.dashboardSection .cardText,
-.adminSection .cardText {
-  color: #eee !important;
-}
-
-/* ======================================== */
-/* === LINKS (Dashboard content only) === */
-/* ======================================== */
-
-.dashboardSection a,
-.adminSection a {
-  color: #9400D3 !important;
-}
-
-.dashboardSection a:hover,
-.adminSection a:hover {
-  color: #AD33E0 !important;
-}
-
-/* ======================================== */
-/* === FORM ELEMENTS (Dashboard only) === */
-/* ======================================== */
-
-/* Text Inputs */
-body.dashboardDocument .emby-input,
-body.dashboardDocument input[type="text"],
-body.dashboardDocument input[type="number"],
-body.dashboardDocument input[type="password"],
-body.dashboardDocument input[type="email"],
-body.dashboardDocument input[type="url"],
-body.dashboardDocument input[type="search"],
-body.dashboardDocument textarea,
-body.dashboardDocument .emby-textarea,
-body.dashboardDocument .selectContainer {
-  background-color: #27242E !important;
-  color: #eee !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0.5rem !important;
-}
-
-body.dashboardDocument .emby-input:focus,
-body.dashboardDocument input[type="text"]:focus,
-body.dashboardDocument input[type="number"]:focus,
-body.dashboardDocument input[type="password"]:focus,
-body.dashboardDocument input[type="email"]:focus,
-body.dashboardDocument input[type="url"]:focus,
-body.dashboardDocument input[type="search"]:focus,
-body.dashboardDocument textarea:focus,
-body.dashboardDocument .emby-textarea:focus {
-  border-color: #9400D3 !important;
-  outline: none !important;
-  box-shadow: 0 0 0 2px rgba(148, 0, 211, 0.25) !important;
-}
-
-/* Select Dropdowns */
-body.dashboardDocument select,
-body.dashboardDocument .emby-select,
-body.dashboardDocument select:enabled {
-  background-color: #27242E !important;
-  color: #eee !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0.5rem !important;
-}
-
-body.dashboardDocument select:focus {
-  border-color: #9400D3 !important;
-  outline: none !important;
-}
-
-body.dashboardDocument option {
-  background-color: #15121A !important;
-  color: #eee !important;
-}
-
-/* Checkboxes */
-body.dashboardDocument .checkboxOutline,
-body.dashboardDocument .multiSelectCheckboxOutline,
-body.dashboardDocument [class*="checkboxOutline"],
-body.dashboardDocument [class*="multiSelectCheckboxOutline"] {
-  border-color: #9400D3 !important;
-  background-color: transparent !important;
-}
-
-body.dashboardDocument .checkboxIcon-checked,
-body.dashboardDocument [class*="checkboxIcon-checked"] {
-  color: #fff !important;
-}
-
-/* Toggle switches */
-body.dashboardDocument .mdl-switch__track,
-body.dashboardDocument .emby-toggle-track {
-  background-color: rgba(148, 0, 211, 0.3) !important;
-}
-
-body.dashboardDocument .mdl-switch__thumb,
-body.dashboardDocument .emby-toggle-thumb {
-  background-color: #9400D3 !important;
-}
-
-/* Labels */
-body.dashboardDocument .emby-input-label,
-body.dashboardDocument .selectLabel,
-body.dashboardDocument label {
-  color: #dbdbdb !important;
-}
-
-/* Field descriptions */
-body.dashboardDocument .fieldDescription,
-body.dashboardDocument .emby-input + .fieldDescription,
-body.dashboardDocument [class*="fieldDescription"] {
-  color: rgba(255, 255, 255, 0.7) !important;
-}
-
-/* ======================================== */
-/* === BUTTONS (Dashboard only) === */
-/* ======================================== */
-
-body.dashboardDocument .emby-button,
-body.dashboardDocument button:not(.paper-icon-button-light):not(.cardOverlayButton):not(.listItemButton):not(.listItemImageButton),
-body.dashboardDocument .paper-icon-button-light {
-  background-color: #27242E !important;
-  color: #eee !important;
-  border-radius: 4em !important;
-}
-
-body.dashboardDocument .raised {
-  border-radius: 4em !important;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  body.dashboardDocument .paper-icon-button-light:hover:not(:disabled) {
-    background-color: rgba(148, 0, 211, 0.18) !important;
-  }
-}
-
-/* Primary / Accent Button (e.g., Save) */
-body.dashboardDocument .button-flat.emby-button,
-body.dashboardDocument .emby-button.submit,
-body.dashboardDocument .emby-button[type="submit"],
-body.dashboardDocument button[is="emby-button"][type="submit"] {
-  background-color: #9400D3 !important;
-  color: #fff !important;
-}
-
-body.dashboardDocument .button-flat.emby-button:hover,
-body.dashboardDocument .emby-button.submit:hover {
-  background-color: #AD33E0 !important;
-}
-
-/* Warning / Destructive Buttons */
-body.dashboardDocument #btnShutdown {
-  background-color: #bb4a4a !important;
-}
-
-body.dashboardDocument #btnRestartServer {
-  background: #bb7a4a !important;
-}
-
-/* Subtle / Pill Buttons */
-body.dashboardDocument .button-link {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-radius: 0.5rem !important;
-  color: inherit !important;
-  transition: background-color 0.2s ease-out;
-}
-
-body.dashboardDocument .button-link:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
-}
-
-/* ======================================== */
-/* === TABLES (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === TABLES === */
+/* ============================================ */
 
 body.dashboardDocument table,
 body.dashboardDocument .tbl,
-body.dashboardDocument [class*="tbl"] {
+body.dashboardDocument [class*="tbl"],
+body.dashboardDocument .MuiTable-root {
   color: #eee !important;
 }
 
 body.dashboardDocument table th,
 body.dashboardDocument thead th,
-body.dashboardDocument .tblHeader {
+body.dashboardDocument .tblHeader,
+body.dashboardDocument .MuiTableCell-head {
   color: #dbdbdb !important;
 }
 
 body.dashboardDocument table td,
-body.dashboardDocument table th {
+body.dashboardDocument table th,
+body.dashboardDocument .MuiTableCell-root {
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-body.dashboardDocument table tr:hover {
+body.dashboardDocument table tr:hover,
+body.dashboardDocument .MuiTableRow-root:hover {
   background-color: #AD33E0 !important;
 }
 
-/* ======================================== */
-/* === PROGRESS BARS (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === PROGRESS BARS === */
+/* ============================================ */
 
 body.dashboardDocument progress,
 body.dashboardDocument .progressBar,
 body.dashboardDocument .emby-progressbar,
-body.dashboardDocument [class*="progress"] {
+body.dashboardDocument [class*="progress"],
+body.dashboardDocument .MuiLinearProgress-root {
   accent-color: #9400D3 !important;
 }
 
-body.dashboardDocument .itemProgressBar {
+body.dashboardDocument .itemProgressBar,
+body.dashboardDocument .MuiLinearProgress-root {
   background-color: rgba(0, 0, 0, 0.55) !important;
   border-radius: 10px !important;
   overflow: hidden;
 }
 
-body.dashboardDocument .itemProgressBarForeground {
+body.dashboardDocument .itemProgressBarForeground,
+body.dashboardDocument .MuiLinearProgress-bar {
   background-color: #C266EB !important;
   border-radius: 10px !important;
 }
 
-/* ======================================== */
-/* === RANGE INPUTS (Dashboard only) === */
-/* ======================================== */
+/* ============================================ */
+/* === RANGE / SLIDER === */
+/* ============================================ */
 
 body.dashboardDocument input[type="range"] {
   accent-color: #9400D3 !important;
 }
 
-body.dashboardDocument .sliderContainer {
+body.dashboardDocument .sliderContainer,
+body.dashboardDocument .MuiSlider-root {
   height: 1em;
+  color: #9400D3 !important;
 }
 
-/* ======================================== */
+/* ============================================ */
 /* === COLLAPSIBLE SECTIONS === */
-/* ======================================== */
+/* ============================================ */
 
 body.dashboardDocument .collapseContent,
-body.dashboardDocument .emby-collapse .collapseContent {
+body.dashboardDocument .emby-collapse .collapseContent,
+body.dashboardDocument .MuiAccordionDetails-root {
   background: rgba(0, 0, 0, 0.75) !important;
 }
 
@@ -585,9 +637,18 @@ body.dashboardDocument div.filterDialogContent div.emby-collapse div.collapseCon
   background: rgba(0, 0, 0, 0.75) !important;
 }
 
-/* ======================================== */
+body.dashboardDocument .MuiAccordion-root {
+  background-color: #15121A !important;
+  border-radius: 15px !important;
+}
+
+body.dashboardDocument .MuiAccordionSummary-root {
+  background-color: transparent !important;
+}
+
+/* ============================================ */
 /* === MULTI-SELECT CARDS === */
-/* ======================================== */
+/* ============================================ */
 
 body.dashboardDocument .itemSelectionPanel {
   border-color: #9400D3 !important;
@@ -605,9 +666,9 @@ body.dashboardDocument [class*="selectionCommands"] {
   color: #eee !important;
 }
 
-/* ======================================== */
-/* === PLUGIN CONFIG PAGES === */
-/* ======================================== */
+/* ============================================ */
+/* === PLUGIN / CONFIG PAGES === */
+/* ============================================ */
 
 body.dashboardDocument .configurationPage,
 body.dashboardDocument [class*="pluginConfiguration"],
@@ -624,9 +685,9 @@ body.dashboardDocument .pluginPreview {
   border-radius: 15px !important;
 }
 
-/* ======================================== */
+/* ============================================ */
 /* === METADATA MANAGER === */
-/* ======================================== */
+/* ============================================ */
 
 body.dashboardDocument .metadataManager,
 body.dashboardDocument [class*="metadataManager"],
@@ -634,12 +695,45 @@ body.dashboardDocument [class*="metadataEditor"] {
   background-color: #0F0D14 !important;
 }
 
-/* ======================================== */
+/* ============================================ */
+/* === GRID / STACK LAYOUT === */
+/* ============================================ */
+
+/* Ensure grid and stack containers are transparent */
+body.dashboardDocument .MuiGrid-root,
+body.dashboardDocument .MuiStack-root {
+  background-color: transparent !important;
+}
+
+/* ============================================ */
+/* === CHIPS / TAGS === */
+/* ============================================ */
+
+body.dashboardDocument .MuiChip-root {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #eee !important;
+  border-radius: 4em !important;
+}
+
+body.dashboardDocument .MuiChip-root:hover {
+  background-color: rgba(255, 255, 255, 0.12) !important;
+}
+
+/* ============================================ */
+/* === DIVIDERS === */
+/* ============================================ */
+
+body.dashboardDocument .MuiDivider-root {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+/* ============================================ */
 /* === RESPONSIVE === */
-/* ======================================== */
+/* ============================================ */
 
 @media (max-width: 900px) {
   body.dashboardDocument .skinHeader,
+  body.dashboardDocument .MuiAppBar-root,
   body.dashboardDocument .actionSheet,
   body.dashboardDocument select:enabled,
   body.dashboardDocument option {
