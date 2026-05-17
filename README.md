@@ -115,7 +115,6 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 <img src="screenshots/Screenshot_04.png" title="Movie page" width="75%"/></br>
 <img src="screenshots/Screenshot_05.png" title="New series page, with slide seasons" width="75%"/>
 <img src="screenshots/Screenshot_08.png" title="New series page, with bigger grid episodes" width="75%"/>
-<img src="screenshots/Screenshot_09.png" title="New colors" width="75%"/>
 <img src="screenshots/Screenshot_10.png" title="New colors" width="75%"/>
 </div>
 
