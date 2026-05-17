@@ -155,6 +155,17 @@ body,
 /* (Header, Drawer, Action Sheets, Form Elements) */
 /* ======================================== */
 
+/* --- Tabs slider (library views) — prevent overlapping content below --- */
+.emby-tabs-slider {
+  margin-bottom: 8px;
+}
+
+.emby-tabs-slider + .flex.align-items-center.justify-content-center {
+  position: relative;
+  clear: both;
+  margin-top: 4px;
+}
+
 /* --- Header, Action Sheet, Main Drawer --- */
 .skinHeader,
 .actionSheet,
