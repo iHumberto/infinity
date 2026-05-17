@@ -137,6 +137,6 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 Este projeto é licenciado sob a [GNU GPL v3](LICENSE).
 
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
-[Static-Badge]: https://img.shields.io/badge/Status-developing-blue?logo=Forgejo
+[Static-Badge]: https://img.shields.io/badge/production-Ready-brightgreen?logo=Forgejo
 [repo-shield]: https://img.shields.io/badge/forgejo-repo-brightgreen?logo=forgejo
 [license-shield]: https://img.shields.io/badge/License-GNU_GPL_v3-brightgreen?style=flat&logo=gnuprivacyguard
