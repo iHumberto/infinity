@@ -190,7 +190,7 @@ body.dashboardDocument .mainDrawer {
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
   overflow-x: hidden !important;
   overflow-y: auto !important;
-  padding-top: 6vh;
+  padding-top: 8px;
 }
 
 /* First list item (logo) — spacing below */
