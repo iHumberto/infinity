@@ -263,14 +263,13 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   transition: transform 0.3s ease-in-out;
 }
 
-/* Hover/Focus: purple outline on card (mouse + keyboard/remote navigation) */
-/* Negative outline-offset draws inside the card, avoiding clip by parent overflow */
-.cardBox:hover,
-.cardBox:focus,
-.cardBox:focus-visible {
+/* Hover/Focus: purple ring on card (box-shadow avoids JS outline reset + overflow clip) */
+.cardBox:hover {
   transform: translateY(-5px);
-  outline: var(--border-width-thick) solid var(--selection-border-color);
-  outline-offset: -4px;
+}
+.card:hover,
+.card:focus-within {
+  box-shadow: 0 0 0 var(--border-width-thick) var(--selection-border-color) !important;
 }
 
 /* --- Card Selection (multi-select mode) --- */
