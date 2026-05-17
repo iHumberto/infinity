@@ -380,6 +380,21 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   border-radius: var(--theme-roundness) !important;
 }
 
+/* --- Dashboard / Admin Panel --- */
+.dashboardSection .cardBox,
+.dashboardSection .cardContent,
+.dashboardSection .cardPadder,
+.adminSection .cardBox {
+  border-radius: var(--theme-roundness) !important;
+  background-color: var(--card-bg) !important;
+}
+
+.dashboardSection .paperList,
+.adminSection .paperList {
+  border-radius: var(--theme-roundness-large) !important;
+  background-color: var(--card-bg) !important;
+}
+
 .cardOverlayContainer {
   background-color: var(--transparent-bg);
   overlay: none;
