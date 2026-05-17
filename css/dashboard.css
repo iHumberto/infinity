@@ -53,9 +53,33 @@ body.dashboardDocument {
 /* === TYPOGRAPHY (MUI + legacy) === */
 /* ============================================ */
 
-/* All MUI Typography text — white */
+/* All MUI Typography text — white, Kodchasan font */
 body.dashboardDocument .MuiTypography-root {
   color: #eee !important;
+  font-family: 'Kodchasan', sans-serif !important;
+}
+
+/* Force Kodchasan on all MUI interactive components */
+body.dashboardDocument .MuiButton-root,
+body.dashboardDocument .MuiInputBase-root,
+body.dashboardDocument .MuiListItem-root,
+body.dashboardDocument .MuiListItemButton-root,
+body.dashboardDocument .MuiListSubheader-root,
+body.dashboardDocument .MuiFormLabel-root,
+body.dashboardDocument .MuiInputLabel-root,
+body.dashboardDocument .MuiChip-root,
+body.dashboardDocument .MuiTab-root,
+body.dashboardDocument .MuiTableCell-root,
+body.dashboardDocument .MuiMenuItem-root,
+body.dashboardDocument .MuiDialogTitle-root,
+body.dashboardDocument .MuiAccordionSummary-root,
+body.dashboardDocument .MuiFormHelperText-root,
+body.dashboardDocument .MuiSelect-select,
+body.dashboardDocument input,
+body.dashboardDocument select,
+body.dashboardDocument textarea,
+body.dashboardDocument button {
+  font-family: 'Kodchasan', sans-serif !important;
 }
 
 /* Subtle/secondary text */
@@ -164,12 +188,31 @@ body.dashboardDocument .mainDrawer {
   background-color: #0D0A14 !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
+  overflow-x: hidden !important;
+}
+
+/* List inside drawer — prevent horizontal overflow */
+body.dashboardDocument .MuiDrawer-paper .MuiList-root,
+body.dashboardDocument .MuiDrawer-root .MuiList-root {
+  width: auto !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
 }
 
 /* Scroll container inside drawer */
 body.dashboardDocument .mainDrawer-scrollContainer,
 body.dashboardDocument .MuiDrawer-root .MuiList-root:first-child {
   padding-top: 6vh;
+}
+
+/* Space between nav section groups in drawer */
+body.dashboardDocument .MuiDrawer-root .MuiList-root + .MuiList-root {
+  margin-top: 12px;
+}
+
+/* Section headers — more breathing room */
+body.dashboardDocument .MuiDrawer-root .MuiListSubheader-root {
+  margin-top: 4px;
 }
 
 /* Navigation items — pill shape, white text, spaced */
@@ -428,11 +471,13 @@ body.dashboardDocument .MuiButton-root:not(.MuiButton-containedPrimary):not(.Mui
   color: #eee !important;
 }
 
-/* MUI text/outlined buttons — no solid bg */
+/* MUI text/outlined buttons — no solid bg, centered text */
 body.dashboardDocument .MuiButton-text,
 body.dashboardDocument .MuiButton-outlined {
   background-color: transparent !important;
   border-color: rgba(255, 255, 255, 0.3) !important;
+  justify-content: center !important;
+  text-align: center !important;
 }
 
 /* Icon Button Hover */
