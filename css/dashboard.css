@@ -140,7 +140,7 @@ body {
 /* ======================================== */
 
 .mainDrawer {
-  background-color: rgba(10, 8, 18, 0.65) !important;
+  background-color: #0D0A14 !important;
   backdrop-filter: blur(2px) saturate(180%) !important;
   -webkit-backdrop-filter: blur(2px) saturate(180%) !important;
 }
@@ -149,12 +149,43 @@ body {
   padding-top: 6vh;
 }
 
+/* Sidebar navigation items — white text, pill shape, spaced */
+.navMenuOption {
+  color: #eee !important;
+  border-radius: 4em !important;
+  margin: 2px 8px !important;
+}
+
+.navMenuOption a,
+.navMenuOption .material-icons,
+.navMenuOption span {
+  color: #eee !important;
+}
+
 .navMenuOption:hover {
   background-color: #AD33E0 !important;
 }
 
+.navMenuOption:hover a,
+.navMenuOption:hover .material-icons,
+.navMenuOption:hover span {
+  color: #fff !important;
+}
+
 .navMenuOption-selected {
-  color: #9400D3 !important;
+  color: #eee !important;
+  background-color: rgba(148, 0, 211, 0.25) !important;
+}
+
+/* Sidebar section headers (e.g. "Libraries", "Settings") */
+.mainDrawer .sectionTitle,
+.mainDrawer .sidebarHeader {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin: 12px 8px 4px 16px;
+  font-weight: 500;
 }
 
 /* ======================================== */
@@ -174,7 +205,7 @@ body {
 .adminSection .cardBox,
 .adminSection .cardContent,
 .adminSection .cardPadder {
-  border-radius: 0.5rem !important;
+  border-radius: 15px !important;
   background-color: #15121A !important;
 }
 
@@ -344,13 +375,13 @@ label {
 /* === BUTTONS === */
 /* ======================================== */
 
-/* Standard Buttons */
+/* Standard Buttons — pill shape */
 .emby-button,
 button:not(.paper-icon-button-light):not(.cardOverlayButton):not(.listItemButton):not(.listItemImageButton),
 .paper-icon-button-light {
   background-color: #27242E !important;
   color: #eee !important;
-  border-radius: 0.5rem !important;
+  border-radius: 4em !important;
 }
 
 /* Raised / Pill Buttons */
@@ -510,6 +541,10 @@ table tr:hover {
 /* ======================================== */
 /* === LINKS === */
 /* ======================================== */
+/* Only style content links — navigation     */
+/* links in sidebar/header use their own     */
+/* rules to keep white text.                 */
+/* ======================================== */
 
 a {
   color: #9400D3 !important;
@@ -517,6 +552,20 @@ a {
 
 a:hover {
   color: #AD33E0 !important;
+}
+
+/* Keep navigation links white (override generic a rule) */
+.mainDrawer a,
+.skinHeader a,
+.headerTabs a,
+.sectionTabs a,
+.navMenuOption a {
+  color: #eee !important;
+}
+
+.mainDrawer a:hover,
+.navMenuOption a:hover {
+  color: #fff !important;
 }
 
 /* ======================================== */
@@ -616,12 +665,25 @@ div.filterDialogContent div.emby-collapse div.collapseContent {
 }
 
 /* ======================================== */
-/* === DASHBOARD GLOBAL TEXT === */
+/* === DASHBOARD TEXT READABILITY === */
 /* ======================================== */
 
-.dashboardSection *,
-.adminSection * {
+/* Dashboard section text — white for readability */
+.dashboardSection,
+.adminSection,
+.dashboardSection .listItemBodyText,
+.adminSection .listItemBodyText,
+.dashboardSection .cardText,
+.adminSection .cardText,
+.dashboardSection .listItemBody,
+.adminSection .listItemBody {
   color: #eee !important;
+}
+
+/* Dashboard subsection text — slightly dimmer */
+.dashboardSection .listItemBodyText-secondary,
+.adminSection .listItemBodyText-secondary {
+  color: #dbdbdb !important;
 }
 
 /* ======================================== */
