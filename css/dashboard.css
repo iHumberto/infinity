@@ -191,6 +191,7 @@ body.dashboardDocument .mainDrawer {
   overflow-x: hidden !important;
   overflow-y: auto !important;
   padding-top: 8px;
+  max-width: 230px !important;
 }
 
 /* First list item (logo) — spacing below */
