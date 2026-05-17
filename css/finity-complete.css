@@ -281,7 +281,8 @@ body > div.skinHeader.focuscontainer-x.skinHeader-withBackground.skinHeader-blur
   transition: border-color 0.2s;
 }
 .cardBox:hover::after,
-.card:focus-within .cardBox::after {
+.card:focus-within .cardBox::after,
+.card.focused .cardBox::after {
   border-color: var(--selection-border-color);
 }
 
