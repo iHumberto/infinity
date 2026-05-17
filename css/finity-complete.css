@@ -18,10 +18,10 @@ body {
   --theme-text-color: #eee; /* Primary text color */
   --theme-text-color-secondary: #dbdbdb; /* Secondary text color (e.g., episode titles) */
   --theme-accent-color: #9400D3; /* Main accent color (links, highlights, selection border) */
-  --theme-accent-color-alpha-low: #6A0099; /* Accent color darker (hover effects) */
+  --theme-accent-color-alpha-low: rgba(148, 0, 211, 0.18); /* Transparent purple (icon button hover bg) */
   --theme-accent-color-alpha-med: #AD33E0; /* Accent color mid-lighter (list hover) */
   --theme-accent-color-alpha-high: #C266EB; /* Accent color light (progress bar) */
-  --theme-accent-color-alpha-hover: #6A0099; /* Accent color on hover (FAB) */
+  --theme-accent-color-alpha-hover: rgba(148, 0, 211, 0.35); /* Semi-transparent purple (FAB hover fade) */
   --theme-warning-color: #bb4a4a; /* Color for warning/destructive actions (e.g., shutdown) */
 
   /* --- Alpha Colors (White & Black) --- */
