@@ -3,7 +3,6 @@
 ![License][license-shield]
 <a href="https://forgejo.humbertof.dev/Humberto/infinity/">![Repository][repo-shield]</a>
 
-> ⚠️ **Esta é a branch `dev` (desenvolvimento).** O código aqui pode estar instável, quebrado ou incompleto. **Não utilize em produção.** Para a versão estável, acesse a branch [`main`](https://forgejo.humbertof.dev/Humberto/infinity/src/branch/main/).
 
 # Infinity
 
