@@ -102,7 +102,7 @@ No Jellyfin, vá em **Dashboard > Geral > Branding/Marca** e cole no campo **CSS
 @import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
 ```
 
-> **Importante:** O `finity-complete.css` deve ser carregado SOMENTE via campo de CSS customizado, **não** no `index.html`. Carregá-lo em ambos os lugares causa carregamento duplicado e não resolve o problema da Dashboard.
+> **Importante:** O `finity-complete.css` deve ser carregado SOMENTE via campo de CSS customizado, **não** no `index.html`. 
 
 ### 3. Arquivo list.txt
 
