@@ -60,9 +60,7 @@ O tema também estiliza a Dashboard de administração (páginas que o CSS custo
 - **Tipografia**: fonte Kodchasan em todos os componentes MUI (Typography, Button, Input, ListItem, Tab, Chip, Select, etc.)
 - **Formulários**: inputs, selects, textareas com fundo escuro e foco roxo
 - **Botões**: formato pill em todos os botões (padrão, submit, warning, outlined, text)
-- **Scrollbar**: roxa e fina, consistente com o resto do tema
 - **Páginas de plugins, metadata manager e configuração** com o mesmo tema visual
-- Correção de sobreposição da barra de tabs nas bibliotecas (filmes e séries)
 
 > Veja a seção [Instalação](#instalação) para configurar o `dashboard.css` corretamente.
 
