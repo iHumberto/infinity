@@ -1,8 +1,9 @@
+<div align="center">
 ![Project Stage][Static-Badge]
 ![Maintenance][maintenance-shield]
 ![License][license-shield]
 <a href="https://forgejo.humbertof.dev/Humberto/infinity/">![Repository][repo-shield]</a>
-
+</div>
 
 # Infinity
 
@@ -48,11 +49,21 @@ Palheta inteira refeita com roxo `#9400D3` como cor primária:
 - Correção dos dots indicadores de posição
 - Correção na inicialização do cronômetro
 
-### 🧹 Limpeza da UI
+### 🖥️ Dashboard e páginas de admin
 
-- Controle de exibição via variáveis CSS (tomato rating, age rating, IMDb logo, star rating, critic rating, trailer tab, header warning)
-- Container de seleção de vídeo oculto
-- Títulos originais configuráveis
+O tema também estiliza a Dashboard de administração (páginas que o CSS customizado do Branding não alcança), usando um arquivo separado (`dashboard.css` carregado no `index.html`):
+
+- Fundo roxo escuro em todas as páginas de admin
+- **Painel lateral (sidebar)**: fundo roxo opaco (`#0D0A14`), itens de navegação com formato pill, texto branco, hover roxo com texto preservado, espaçamento entre seções
+- **Cards e painéis**: bordas arredondadas (15px), fundo escuro (`#15121A`), consistente com os cards da Home
+- **Tipografia**: fonte Kodchasan em todos os componentes MUI (Typography, Button, Input, ListItem, Tab, Chip, Select, etc.)
+- **Formulários**: inputs, selects, textareas com fundo escuro e foco roxo
+- **Botões**: formato pill em todos os botões (padrão, submit, warning, outlined, text)
+- **Scrollbar**: roxa e fina, consistente com o resto do tema
+- **Páginas de plugins, metadata manager e configuração** com o mesmo tema visual
+- Correção de sobreposição da barra de tabs nas bibliotecas (filmes e séries)
+
+> Veja a seção [Instalação](#instalação) para configurar o `dashboard.css` corretamente.
 
 ## Instalação
 
@@ -129,6 +140,7 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 <img src="screenshots/Screenshot_04.png" title="Movie page" width="75%"/></br>
 <img src="screenshots/Screenshot_05.png" title="New series page, with slide seasons" width="75%"/>
 <img src="screenshots/Screenshot_08.png" title="New series page, with bigger grid episodes" width="75%"/>
+<img src="screenshots/Screenshot_09.png" title="New Admin dashboard" width="75%"/>
 </div>
 
 
