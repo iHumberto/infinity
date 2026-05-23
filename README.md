@@ -128,6 +128,99 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 
 <img src="screenshots/Screenshot_07.png" title="Directory tip" width="auto"/>
 
+## Personalização
+
+O Infinity expõe **~55 variáveis CSS** que podem ser sobrescritas no campo **Custom CSS do Branding**. Basta adicionar as variáveis no mesmo bloco onde você importa o tema:
+
+```css
+@import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
+
+:root {
+  --theme-accent-color: #00B894;    /* muda a cor primária */
+  --infinity-slideshow-items: 10;   /* menos slides no carrossel */
+}
+```
+
+> **Dica:** você não precisa redeclarar todas as variáveis — apenas as que quiser alterar. As demais usam os valores padrão do tema.
+
+### 🎨 Cores
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `--theme-background-color` | `#0F0D14` | Fundo da página |
+| `--theme-text-color` | `#eee` | Cor do texto principal |
+| `--theme-text-color-secondary` | `#dbdbdb` | Cor do texto secundário (ex: títulos de episódios) |
+| `--theme-accent-color` | `#9400D3` | Cor de destaque (links, seleção, hover) |
+| `--theme-accent-color-alpha-low` | `rgba(148,0,211,.18)` | Destaque transparente (hover de botões) |
+| `--theme-accent-color-alpha-med` | `#AD33E0` | Destaque médio (hover de listas) |
+| `--theme-accent-color-alpha-high` | `#C266EB` | Destaque claro (barra de progresso) |
+| `--theme-accent-color-alpha-hover` | `rgba(148,0,211,.35)` | Destaque hover (FAB) |
+| `--theme-warning-color` | `#bb4a4a` | Cor de aviso/ações destrutivas |
+| `--selection-border-color` | `#9400D3` | Cor da borda de seleção |
+| `--card-bg` | `#15121A` | Fundo dos cards |
+| `--header-bg` | `rgba(10,8,18,.7)` | Fundo do header |
+| `--sidebar-bg` | `rgba(10,8,18,.65)` | Fundo da sidebar |
+| `--button-bg` | `#27242E` | Fundo dos botões padrão |
+| `--button-bg-subtle` | `rgba(255,255,255,.08)` | Fundo de botões sutis |
+| `--tooltip-bg` | `rgba(0,0,0,.85)` | Fundo dos tooltips |
+| `--context-menu-bg` | `rgba(45,42,52,.5)` | Fundo dos menus de contexto |
+| `--episode-grid-bg` | `rgba(15,13,20,.85)` | Fundo dos episódios no grid |
+| `--indicator-bg` | `#15121A94` | Fundo dos indicadores (played, count) |
+| `--scrollbar-thumb-color` | `#9400D3` | Cor do scrollbar |
+
+### 🔤 Tipografia
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `--font-family-base` | `"Kodchasan", sans-serif` | Fonte principal |
+| `--font-size-base` | `0.9rem` | Tamanho base da fonte |
+| `--font-size-h2` | `1.5em` | Tamanho dos títulos H2 |
+| `--font-weight-normal` | `400` | Peso normal |
+| `--font-weight-semibold` | `600` | Peso semi-negrito |
+| `--font-weight-bold` | `700` | Peso negrito |
+
+### 📐 Bordas e layout
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `--theme-roundness` | `0.5rem` | Arredondamento geral |
+| `--theme-roundness-large` | `15px` | Arredondamento de cards |
+| `--theme-roundness-full` | `4em` | Formato pill |
+| `--card-padding` | `25px` | Espaçamento interno dos cards |
+| `--card-shadow` | `0px 8px 16px rgba(0,0,0,.3)` | Sombra dos cards |
+| `--detail-page-backdrop-width` | `100vw` | Largura do backdrop na página de detalhes |
+| `--detail-page-primary-width` | `60%` | Largura da área de conteúdo |
+| `--detail-page-mask-width` | `60vw` | Largura da máscara lateral |
+| `--episode-grid-gap` | `1.5rem` | Espaço entre itens no grid de episódios |
+| `--episode-grid-min-item-width` | `200px` | Largura mínima dos cards de episódios |
+
+### 👁️ Toggles de exibição
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `--display-tomato-rating` | `none` | Nota do Rotten Tomatoes |
+| `--display-imdb-logo` | `none` | Logo IMDb |
+| `--display-star-rating` | `none` | Nota por estrelas da comunidade |
+| `--display-critic-rating` | `none` | Ícone fresh/rotten tomato |
+| `--display-age-rating` | `none` | Classificação etária |
+| `--display-original-title` | `block` | Título original |
+| `--display-external-links` | `none` | Links externos |
+| `--display-header-warning` | `none` | Aviso no header |
+
+> Use `flex` ou `block` para mostrar, `none` para esconder.
+
+### 🎬 Slideshow
+
+| Variável | Padrão | Descrição |
+|---|---|---|
+| `--infinity-slideshow-items` | `16` | Quantidade de itens no carrossel |
+| `--infinity-slide-interval` | `10s` | Intervalo entre slides |
+| `--infinity-fade-duration` | `500ms` | Duração da transição de fade |
+| `--infinity-hide-logo` | `false` | Esconder o logo do item |
+| `--infinity-show-title` | `true` | Mostrar título textual |
+| `--infinity-enable-random` | `false` | Fallback aleatório da API |
+| `--infinity-animation` | `true` | Animação Ken Burns no backdrop |
+
 ## Screenshots
 
 <div align="center">
