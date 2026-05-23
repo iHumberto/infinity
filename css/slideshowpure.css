@@ -16,6 +16,16 @@
   --display-imdb-logo: flex;
   --display-star-rating: none;
   --display-critic-rating: flex;
+
+  /* Infinity — Slideshow user-configurable options */
+  /* Override these in Jellyfin Dashboard > Geral > Branding > Custom CSS */
+  --infinity-slideshow-items: 16;
+  --infinity-slide-interval: 10s;
+  --infinity-fade-duration: 500ms;
+  --infinity-hide-logo: false;
+  --infinity-show-title: true;
+  --infinity-enable-random: false;
+  --infinity-animation: true;
 }
 
 /* Base slide text shadow */

@@ -11,6 +11,9 @@
 (function () {
   'use strict';
 
+  const DEBUG = window.DEBUG_INFINITY === true;
+  const debugLog = DEBUG ? console.log.bind(console) : () => {};
+
   // Seletores de elementos que NÃO devem disparar a navegação
   const IGNORE_SELECTORS = [
     '.play-button',
@@ -75,7 +78,7 @@
    * Usa event delegation para capturar cliques em qualquer parte do slide ativo.
    */
   function setupClickListener(container) {
-    console.log('[clickableSlideshow] Adicionando listener no #slides-container.');
+    debugLog('[clickableSlideshow] Adicionando listener no #slides-container.');
 
     container.addEventListener('click', function (event) {
       // Ignora cliques em botões e controles internos
@@ -107,13 +110,13 @@
       const container = document.getElementById('slides-container');
       if (container) {
         obs.disconnect();
-        console.log('[clickableSlideshow] #slides-container encontrado via observer.');
+        debugLog('[clickableSlideshow] #slides-container encontrado via observer.');
         setupClickListener(container);
       }
     });
 
     observer.observe(document.body, { childList: true, subtree: true });
-    console.log('[clickableSlideshow] Aguardando #slides-container...');
+    debugLog('[clickableSlideshow] Aguardando #slides-container...');
   }
 
   // Inicia
