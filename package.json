@@ -4,6 +4,10 @@
   "description": "Tema customizado dark/purple para Jellyfin Media Server",
   "private": true,
   "license": "GPL-3.0",
+  "scripts": {
+    "build": "(for f in js/modules/0*.js; do sed '1,3d' \"$f\"; done) > js/slideshowpure.js",
+    "postbuild": "echo '✅ slideshowpure.js rebuilt from modules'"
+  },
   "repository": {
     "type": "git",
     "url": "https://forgejo.humbertof.dev/Humberto/infinity"
