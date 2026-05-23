@@ -146,7 +146,7 @@ const initJellyfinData = (callback) => {
         if (STATE.jellyfinData.userId === "Not Found" || STATE.jellyfinData.accessToken === "Not Found") {
              throw new Error("User ID or Access Token not found in ApiClient.");
         }
-        console.log("Jellyfin data initialized:", STATE.jellyfinData);
+        console.log("✅ Jellyfin data initialized.");
         if (callback && typeof callback === "function") {
             callback();
         }
