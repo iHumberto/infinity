@@ -7,6 +7,9 @@
 (function() {
     'use strict';
 
+    const DEBUG = window.DEBUG_INFINITY === true;
+    const debugLog = DEBUG ? console.log.bind(console) : () => {};
+
     // Selector for the container we need to find
     const containerSelector = '#childrenContent .itemsContainer.vertical-list, #content .itemsContainer.vertical-list';
     let eventListenerAdded = false; // Flag to ensure we only add the listener once
@@ -18,7 +21,7 @@
             return; // Exit if no container or listener already added
         }
 
-        console.log('Jellyfin Custom Script: Found episode container, adding title click listener.');
+        debugLog('Jellyfin Custom Script: Found episode container, adding title click listener.');
 
         clickListenerFunction = function(event) {
             const titleSelector = '.listItemBody > .listItemBodyText:first-child';
@@ -29,7 +32,7 @@
                 if (listItem) {
                     const imageLink = listItem.querySelector('.listItemImage[data-action="link"]');
                     if (imageLink) {
-                        console.log('Jellyfin Custom Script: Title clicked, triggering image link click for item ID:', listItem.dataset.id);
+                        debugLog('Jellyfin Custom Script: Title clicked, triggering image link click for item ID:', listItem.dataset.id);
                         event.preventDefault();
                         event.stopPropagation();
                         imageLink.click();
@@ -46,7 +49,7 @@
         container.addEventListener('click', clickListenerFunction, true); // Use capture phase
 
         eventListenerAdded = true; // Set flag
-        console.log('Jellyfin Custom Script: Click listener added successfully.');
+        debugLog('Jellyfin Custom Script: Click listener added successfully.');
     }
 
     // --- MutationObserver Setup ---
@@ -65,7 +68,7 @@
             // Once found and set up, we can stop observing
             if (observer) {
                 observer.disconnect();
-                console.log('Jellyfin Custom Script: Container found, observer disconnected.');
+                debugLog('Jellyfin Custom Script: Container found, observer disconnected.');
             }
         }
         // If not found, the observer keeps running
@@ -81,7 +84,7 @@
 
     // Start observing the body for changes in the DOM structure
     // Observing 'body' is broad but necessary if we don't know where content is injected.
-    console.log('Jellyfin Custom Script: Starting MutationObserver to find episode container.');
+    debugLog('Jellyfin Custom Script: Starting MutationObserver to find episode container.');
     observer.observe(document.body, {
         childList: true, // Watch for addition/removal of children
         subtree: true    // Watch descendants as well

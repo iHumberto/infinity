@@ -58,6 +58,9 @@ const STATE = {
     },
 };
 
+const DEBUG = window.DEBUG_INFINITY === true;
+const debugLog = DEBUG ? console.log.bind(console) : () => {};
+
 const requestQueue = [];
 let isProcessingQueue = false;
 
@@ -242,7 +245,7 @@ const initLoadingScreen = () => {
  * Resets the slideshow state completely
  */
 const resetSlideshowState = () => {
-    console.log("🔄 Resetting slideshow state...");
+    debugLog("🔄 Resetting slideshow state...");
 
     STATE.slideshow.slideInterval?.stop();
     STATE.slideshow.slideInterval = null;
@@ -266,7 +269,7 @@ const resetSlideshowState = () => {
         totalItems: 0,
         isLoading: false,
     });
-    console.log("Slideshow state reset complete.");
+    debugLog("Slideshow state reset complete.");
 };
 
 /**
@@ -278,17 +281,17 @@ const startLoginStatusWatcher = () => {
     const checkLogin = () => {
         const isLoggedIn = isUserLoggedIn();
         if (isLoggedIn !== wasLoggedIn) {
-            console.log(`User login status changed: ${wasLoggedIn ? 'Logged Out' : 'Logged In'}`);
+            debugLog(`User login status changed: ${wasLoggedIn ? 'Logged Out' : 'Logged In'}`);
             if (isLoggedIn) {
-                console.log("👤 User logged in. Checking slideshow initialization...");
+                debugLog("👤 User logged in. Checking slideshow initialization...");
                 if (!STATE.slideshow.hasInitialized) {
                     waitForApiClientAndInitialize();
                 } else {
-                    console.log("🔄 Slideshow already initialized. State:", STATE.slideshow);
+                    debugLog("🔄 Slideshow already initialized. State:", STATE.slideshow);
                     // Optionally refresh data if needed on re-login
                 }
             } else {
-                console.log("👋 User logged out. Resetting slideshow...");
+                debugLog("👋 User logged out. Resetting slideshow...");
                 resetSlideshowState();
             }
             wasLoggedIn = isLoggedIn;
@@ -307,32 +310,32 @@ const waitForApiClientAndInitialize = () => {
         clearInterval(window.slideshowCheckInterval);
         window.slideshowCheckInterval = null;
     }
-    console.log("Waiting for ApiClient and user login...");
+    debugLog("Waiting for ApiClient and user login...");
 
     const checkApiClient = () => {
         if (!window.ApiClient) {
-            console.log("⏳ ApiClient not available yet...");
+            debugLog("⏳ ApiClient not available yet...");
             return false;
         }
 
         if (isUserLoggedIn()) {
-            console.log("🔓 User is logged in. Proceeding...");
+            debugLog("🔓 User is logged in. Proceeding...");
             clearInterval(window.slideshowCheckInterval);
             window.slideshowCheckInterval = null;
 
             if (!STATE.slideshow.hasInitialized) {
-                console.log("Initializing Jellyfin data and slideshow...");
+                debugLog("Initializing Jellyfin data and slideshow...");
                 initJellyfinData(() => {
                     console.log("✅ Jellyfin API client data initialized.");
                     // Use setTimeout to ensure DOM might be ready
                     setTimeout(slidesInit, 100);
                 });
             } else {
-                console.log("🔄 Slideshow already initialized, skipping init call.");
+                debugLog("🔄 Slideshow already initialized, skipping init call.");
             }
             return true;
         } else {
-            console.log("🔒 Authentication incomplete or ApiClient not fully ready...");
+            debugLog("🔒 Authentication incomplete or ApiClient not fully ready...");
             return false;
         }
     };
@@ -391,7 +394,7 @@ const SlideUtils = {
         return element;
     },
     getOrCreateSlidesContainer() {
-        console.log("[getOrCreateSlidesContainer] Function called.");
+        debugLog("[getOrCreateSlidesContainer] Function called.");
         const homeTab = document.getElementById('homeTab');
         if (!homeTab) {
              console.error("❌ [getOrCreateSlidesContainer] Critical: #homeTab not found.");
@@ -403,23 +406,23 @@ const SlideUtils = {
              }
              return globalContainer;
         }
-        console.log("[getOrCreateSlidesContainer] Found #homeTab:", homeTab);
+        debugLog("[getOrCreateSlidesContainer] Found #homeTab:", homeTab);
 
         let container = homeTab.querySelector("#slides-container");
 
         if (!container) {
-            console.log("🛠️ [getOrCreateSlidesContainer] #slides-container not found within #homeTab. Creating...");
+            debugLog("🛠️ [getOrCreateSlidesContainer] #slides-container not found within #homeTab. Creating...");
             container = this.createElement("div", { id: "slides-container" });
             const homeSections = homeTab.querySelector('.homeSectionsContainer');
 
             if (homeSections) {
-                console.log(`✅ [getOrCreateSlidesContainer] Found .homeSectionsContainer. Inserting #slides-container before it.`);
+                debugLog(`✅ [getOrCreateSlidesContainer] Found .homeSectionsContainer. Inserting #slides-container before it.`);
                 try {
                     homeTab.insertBefore(container, homeSections);
 
                     const insertedElement = homeTab.querySelector('#slides-container');
                     if (insertedElement && insertedElement === container) {
-                        console.log(`✅ [getOrCreateSlidesContainer] CONFIRMED Inserted successfully. New parent:`, container.parentElement?.id);
+                        debugLog(`✅ [getOrCreateSlidesContainer] CONFIRMED Inserted successfully. New parent:`, container.parentElement?.id);
                     } else {
                         console.error(`❌ [getOrCreateSlidesContainer] FAILED INSERTION CHECK! Element not found immediately after insertBefore.`);
                         homeTab.appendChild(container);
@@ -433,12 +436,12 @@ const SlideUtils = {
             } else {
                 console.warn("⚠️ [getOrCreateSlidesContainer] .homeSectionsContainer NOT found within #homeTab. Appending #slides-container to end of #homeTab.");
                 homeTab.appendChild(container);
-                console.log(`✅ [getOrCreateSlidesContainer] Appended successfully. New parent:`, container.parentElement?.id);
+                debugLog(`✅ [getOrCreateSlidesContainer] Appended successfully. New parent:`, container.parentElement?.id);
             }
         } else {
-             console.log("✅ [getOrCreateSlidesContainer] #slides-container already exists within #homeTab.");
+             debugLog("✅ [getOrCreateSlidesContainer] #slides-container already exists within #homeTab.");
         }
-        console.log("[getOrCreateSlidesContainer] Returning container:", container);
+        debugLog("[getOrCreateSlidesContainer] Returning container:", container);
         return container;
     },
     parseGenres(genresArray) {
@@ -479,7 +482,7 @@ const ApiUtils = {
     },
     async fetchItemIdsFromList() {
         const listFileName = `${STATE.jellyfinData.serverAddress}/web/list.txt?userId=${STATE.jellyfinData.userId}&v=${Date.now()}`;
-        console.log(`Fetching list.txt: ${listFileName}`);
+        debugLog(`Fetching list.txt: ${listFileName}`);
         try {
             const response = await fetch(listFileName, { cache: 'no-cache' });
             if (!response.ok) {
@@ -489,7 +492,7 @@ const ApiUtils = {
             const text = await response.text();
             // Keep custom logic potentially skipping first line if that was intended
             const ids = text.split("\n").map(id => id.trim()).filter(id => id);
-            console.log(`Fetched ${ids.length} IDs from list.txt.`);
+            debugLog(`Fetched ${ids.length} IDs from list.txt.`);
             return ids;
         } catch (error) {
             console.error("Error fetching list.txt:", error);
@@ -501,14 +504,14 @@ const ApiUtils = {
             console.warn("Auth/Server info missing for random item fetch.");
             return [];
         }
-        console.log(`Fetching up to ${limit} random item IDs...`);
+        debugLog(`Fetching up to ${limit} random item IDs...`);
         const url = `${STATE.jellyfinData.serverAddress}/Users/${STATE.jellyfinData.userId}/Items?IncludeItemTypes=Movie,Series&Recursive=true&HasLogo=true&HasBackdrop=true&sortBy=Random&Limit=${limit}&Fields=Id`;
         try {
             const response = await fetch(url, { headers: this.getAuthHeaders() });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();
             const itemIds = (data.Items || []).map(item => item.Id);
-            console.log(`Fetched ${itemIds.length} random IDs.`);
+            debugLog(`Fetched ${itemIds.length} random IDs.`);
             return itemIds;
         } catch (error) {
             console.error("Error fetching random IDs:", error);
@@ -662,17 +665,17 @@ const VisibilityObserver = {
         const shouldBeVisible = isOnHomePage && homeTabActive;
 
         container.style.display = shouldBeVisible ? "block" : "none";
-        console.log(`[updateVisibility] isOnHome: ${isOnHomePage}, homeTabActive: ${homeTabActive}. Setting display: ${container.style.display}`);
+        debugLog(`[updateVisibility] isOnHome: ${isOnHomePage}, homeTabActive: ${homeTabActive}. Setting display: ${container.style.display}`);
 
         if (STATE.slideshow.slideInterval) {
             if (shouldBeVisible && !STATE.slideshow.isPaused) {
                 if (STATE.slideshow.slideInterval.paused) {
-                    console.log("[updateVisibility] Conditions met for RESUME timer.");
+                    debugLog("[updateVisibility] Conditions met for RESUME timer.");
                     STATE.slideshow.slideInterval.start();
                 }
             } else {
                  if (!STATE.slideshow.slideInterval.paused) {
-                    console.log("[updateVisibility] Conditions met for PAUSE timer.");
+                    debugLog("[updateVisibility] Conditions met for PAUSE timer.");
                     STATE.slideshow.slideInterval.pause();
                  }
             }
@@ -689,7 +692,7 @@ const VisibilityObserver = {
             if (this._reinitTimeoutId) {
                 clearTimeout(this._reinitTimeoutId);
                 this._reinitTimeoutId = null;
-                console.log("[_handleMutation] Navigated away or #homeTab missing, cleared pending re-init.");
+                debugLog("[_handleMutation] Navigated away or #homeTab missing, cleared pending re-init.");
             }
             this._stopRemovalCheckObserver();
             return;
@@ -699,7 +702,7 @@ const VisibilityObserver = {
         const homeSectionsExistInHomeTab = !!document.querySelector('#homeTab .homeSectionsContainer');
         const wasInitialized = STATE.slideshow.hasInitialized;
 
-        console.log(`[_handleMutation Check] isOnHome: ${isOnHomePage}, homeTabExists: ${homeTabExists}, homeSectionsInTab: ${homeSectionsExistInHomeTab}, containerInHomeTab: ${containerExistsInHomeTab}, wasInitialized: ${wasInitialized}`);
+        debugLog(`[_handleMutation Check] isOnHome: ${isOnHomePage}, homeTabExists: ${homeTabExists}, homeSectionsInTab: ${homeSectionsExistInHomeTab}, containerInHomeTab: ${containerExistsInHomeTab}, wasInitialized: ${wasInitialized}`);
 
         const globalContainer = document.getElementById("slides-container");
         if (globalContainer && !containerExistsInHomeTab) {
@@ -715,7 +718,7 @@ const VisibilityObserver = {
             STATE.slideshow.hasInitialized = false;
 
             this._reinitTimeoutId = setTimeout(() => {
-                console.log("[Re-init Timeout] Executing delayed re-initialization...");
+                debugLog("[Re-init Timeout] Executing delayed re-initialization...");
                 this._reinitTimeoutId = null;
 
                 const stillOnHomePage = window.location.hash === '#/home.html' || window.location.hash === '#/home';
@@ -723,7 +726,7 @@ const VisibilityObserver = {
                 const containerStillMissing = !document.querySelector('#homeTab #slides-container');
 
                 if (stillOnHomePage && homeSectionsNowExist && containerStillMissing) {
-                    console.log("[Re-init Timeout] Conditions still valid. Calling reset/init.");
+                    debugLog("[Re-init Timeout] Conditions still valid. Calling reset/init.");
                     resetSlideshowState();
                     slidesInit();
                     if (STATE.slideshow.hasInitialized) {
@@ -736,7 +739,7 @@ const VisibilityObserver = {
             }, 250);
 
         } else if (isOnHomePage && !homeSectionsExistInHomeTab && !containerExistsInHomeTab && wasInitialized) {
-             console.log("[_handleMutation] On home page, container missing, homeSectionsContainer not ready yet. Waiting.");
+             debugLog("[_handleMutation] On home page, container missing, homeSectionsContainer not ready yet. Waiting.");
         } else if (isOnHomePage && containerExistsInHomeTab) {
             // If container is correctly present, ensure removal check is running (or start it)
              this._startRemovalCheckObserver();
@@ -749,7 +752,7 @@ const VisibilityObserver = {
         const homeTab = document.getElementById('homeTab');
         if (!homeTab) return;
 
-        console.log("[_startRemovalCheckObserver] Starting observer on #homeTab children.");
+        debugLog("[_startRemovalCheckObserver] Starting observer on #homeTab children.");
         this._removalCheckObserver = new MutationObserver((mutationsList) => {
             for (const mutation of mutationsList) {
                 if (mutation.type === 'childList') {
@@ -781,13 +784,13 @@ const VisibilityObserver = {
         if (this._removalCheckObserver) {
             this._removalCheckObserver.disconnect();
             this._removalCheckObserver = null;
-            console.log("[_stopRemovalCheckObserver] Stopped observer on #homeTab children.");
+            debugLog("[_stopRemovalCheckObserver] Stopped observer on #homeTab children.");
         }
     },
 
     init() {
         if (this._observer) {
-            console.log("[VisibilityObserver.init] Disconnecting existing observers.");
+            debugLog("[VisibilityObserver.init] Disconnecting existing observers.");
             this.disconnect();
         }
 
@@ -796,7 +799,7 @@ const VisibilityObserver = {
              if (this._reinitTimeoutId) {
                  clearTimeout(this._reinitTimeoutId);
                  this._reinitTimeoutId = null;
-                 console.log("[hashchange] Cleared pending re-init due to navigation.");
+                 debugLog("[hashchange] Cleared pending re-init due to navigation.");
              }
              this._stopRemovalCheckObserver();
              setTimeout(() => this.updateVisibility(), 50);
@@ -805,7 +808,7 @@ const VisibilityObserver = {
         const boundMutationHandler = this._handleMutation.bind(this);
         this._observer = new MutationObserver(boundMutationHandler);
 
-        console.log("[VisibilityObserver.init] Observing document.body...");
+        debugLog("[VisibilityObserver.init] Observing document.body...");
         this._observer.observe(document.body, {
             childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'id', 'style']
         });
@@ -814,7 +817,7 @@ const VisibilityObserver = {
         window.addEventListener("hashchange", this._hashChangeListener);
 
         setTimeout(() => {
-            console.log("[VisibilityObserver.init] Running delayed initial updateVisibility.");
+            debugLog("[VisibilityObserver.init] Running delayed initial updateVisibility.");
             this.updateVisibility();
              // Start removal check on initial load as well, if container exists
              if (document.querySelector('#homeTab #slides-container')) {
@@ -822,7 +825,7 @@ const VisibilityObserver = {
              }
         }, 50);
 
-        console.log("Visibility Observer Initialized.");
+        debugLog("Visibility Observer Initialized.");
     },
 
      disconnect() {
@@ -830,7 +833,7 @@ const VisibilityObserver = {
           if (this._observer) {
               this._observer.disconnect();
               this._observer = null;
-              console.log("[VisibilityObserver.disconnect] Main observer disconnected.");
+              debugLog("[VisibilityObserver.disconnect] Main observer disconnected.");
           }
            if (this._clickListener) {
                document.body.removeEventListener("click", this._clickListener);
@@ -843,9 +846,9 @@ const VisibilityObserver = {
            if (this._reinitTimeoutId) {
                  clearTimeout(this._reinitTimeoutId);
                  this._reinitTimeoutId = null;
-                 console.log("[VisibilityObserver.disconnect] Cleared pending re-init.");
+                 debugLog("[VisibilityObserver.disconnect] Cleared pending re-init.");
            }
-           console.log("Visibility Observer Listeners Removed.");
+           debugLog("Visibility Observer Listeners Removed.");
      }
 };
 
@@ -1053,7 +1056,7 @@ const SlideCreator = {
             if (container.contains(placeholder)) container.replaceChild(newSlideElement, placeholder);
             else container.appendChild(newSlideElement);
             STATE.slideshow.createdSlides[itemId] = true;
-            console.log(`Slide created for ${itemId}`);
+            debugLog(`Slide created for ${itemId}`);
             return newSlideElement;
         } catch (error) {
             console.error(`Error creating slide for ${itemId}:`, error);
@@ -1072,7 +1075,7 @@ const SlideshowManager = {
         if (!dotsContainer) { dotsContainer = SlideUtils.createElement("div", { className: "dots-container" }); container.appendChild(dotsContainer); }
         else { dotsContainer.innerHTML = ''; }
         const numDotsToShow = Math.min(CONFIG.slideshowItems, STATE.slideshow.totalItems);
-        console.log(`Creating ${numDotsToShow} dots.`);
+        debugLog(`Creating ${numDotsToShow} dots.`);
         for (let i = 0; i < numDotsToShow; i++) {
             const dot = SlideUtils.createElement("span", { className: "dot", "data-index": i, onclick: (event) => { const idx = parseInt(event.target.getAttribute('data-index'), 10); this.updateCurrentSlide(idx); if (STATE.slideshow.isPaused) document.getElementById("slideshow-pause-button")?.click(); } });
             dotsContainer.appendChild(dot);
@@ -1095,7 +1098,7 @@ const SlideshowManager = {
         STATE.slideshow.isTransitioning = true;
         const totalItems = STATE.slideshow.totalItems;
         index = (index % totalItems + totalItems) % totalItems;
-        console.log(`Updating slide to index: ${index}`);
+        debugLog(`Updating slide to index: ${index}`);
         const container = SlideUtils.getOrCreateSlidesContainer();
         const currentItemId = STATE.slideshow.itemIds[index];
         let nextSlide = container.querySelector(`.slide[data-item-id="${currentItemId}"]:not(.placeholder)`);
@@ -1150,7 +1153,7 @@ const SlideshowManager = {
         const indicesToPreload = new Set();
         for (let i = 1; i <= preloadCount; i++) indicesToPreload.add((currentIndex + i) % totalItems);
         for (let i = 1; i <= preloadCount; i++) indicesToPreload.add((currentIndex - i + totalItems) % totalItems);
-        console.log(`Preloading indices: ${Array.from(indicesToPreload)}`);
+        debugLog(`Preloading indices: ${Array.from(indicesToPreload)}`);
         const preloadPromises = Array.from(indicesToPreload).map(index => {
             const itemId = STATE.slideshow.itemIds[index];
             if (!STATE.slideshow.createdSlides[itemId]) {
@@ -1159,7 +1162,7 @@ const SlideshowManager = {
             return Promise.resolve();
         });
         await Promise.all(preloadPromises);
-        console.log("Preloading finished.");
+        debugLog("Preloading finished.");
     },
     nextSlide() { // Keep custom logic (handles unpausing)
         const nextIndex = (STATE.slideshow.currentSlideIndex + 1) % STATE.slideshow.totalItems;
@@ -1184,7 +1187,7 @@ const SlideshowManager = {
             if (index !== -1 && !indicesToKeep.has(index)) {
                 document.querySelector(`.slide[data-item-id="${itemId}"]`)?.remove();
                 delete STATE.slideshow.createdSlides[itemId]; delete STATE.slideshow.loadedItems[itemId];
-                console.log(`Pruned slide ${itemId} at index ${index}`);
+                debugLog(`Pruned slide ${itemId} at index ${index}`);
             }
         });
     },
@@ -1214,27 +1217,27 @@ const SlideshowManager = {
     async loadSlideshowData() { // Keep custom logic
         try {
             STATE.slideshow.isLoading = true; const neededCount = CONFIG.slideshowItems; let finalItemIds = [];
-            console.log(`Loading slideshow data. Target items: ${neededCount}`);
+            debugLog(`Loading slideshow data. Target items: ${neededCount}`);
             let listIds = await ApiUtils.fetchItemIdsFromList();
-            if (listIds?.length > 0) { console.log(`Got ${listIds.length} from list.txt.`); finalItemIds = [...listIds]; }
-            else console.log("list.txt empty/not found.");
+            if (listIds?.length > 0) { debugLog(`Got ${listIds.length} from list.txt.`); finalItemIds = [...listIds]; }
+            else debugLog("list.txt empty/not found.");
             const missingCount = neededCount - finalItemIds.length;
-            console.log(`Missing ${missingCount} items.`);
+            debugLog(`Missing ${missingCount} items.`);
             if (missingCount > 0 && CONFIG.enableRandom) {
-                console.log(`Fetching random fallback items...`);
+                debugLog(`Fetching random fallback items...`);
                 const fetchLimit = Math.max(missingCount * 3, 30);
                 let serverIds = await ApiUtils.fetchItemIdsFromServer(fetchLimit);
                 if (serverIds?.length > 0) {
                     const listIdSet = new Set(finalItemIds); const uniqueServerIds = serverIds.filter(id => !listIdSet.has(id));
-                    console.log(`Got ${uniqueServerIds.length} unique random IDs.`);
+                    debugLog(`Got ${uniqueServerIds.length} unique random IDs.`);
                     const neededServerIds = SlideUtils.shuffleArray(uniqueServerIds).slice(0, missingCount);
-                    console.log(`Adding ${neededServerIds.length} random IDs.`);
+                    debugLog(`Adding ${neededServerIds.length} random IDs.`);
                     finalItemIds = finalItemIds.concat(neededServerIds);
-                } else console.log("No random items fetched.");
-            } else if (missingCount > 0) console.log(`Random fallback disabled. Slideshow has ${finalItemIds.length} items.`);
+                } else debugLog("No random items fetched.");
+            } else if (missingCount > 0) debugLog(`Random fallback disabled. Slideshow has ${finalItemIds.length} items.`);
             finalItemIds = SlideUtils.shuffleArray(finalItemIds);
-            if (finalItemIds.length > neededCount) { console.log(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`); finalItemIds = finalItemIds.slice(0, neededCount); }
-            console.log(`Final item count: ${finalItemIds.length}.`);
+            if (finalItemIds.length > neededCount) { debugLog(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`); finalItemIds = finalItemIds.slice(0, neededCount); }
+            debugLog(`Final item count: ${finalItemIds.length}.`);
             STATE.slideshow.itemIds = finalItemIds; STATE.slideshow.totalItems = finalItemIds.length;
             if (STATE.slideshow.totalItems > 0) {
                  this.createPaginationDots();
