@@ -31,6 +31,25 @@ const CONFIG = {
     slideAnimationEnabled: true,
 };
 
+/**
+ * Reads user-configurable options from CSS custom properties.
+ * Users override these via Jellyfin Dashboard > Branding > Custom CSS.
+ * Falls back to CONFIG defaults if variables are not set.
+ */
+const readCSSConfig = () => {
+    const style = getComputedStyle(document.documentElement);
+    const parseBool = (val) => val.trim() === 'true';
+    const parseIntVal = (val, fallback) => parseInt(val.trim()) || fallback;
+
+    CONFIG.slideshowItems        = parseIntVal(style.getPropertyValue('--infinity-slideshow-items'), CONFIG.slideshowItems);
+    CONFIG.shuffleInterval       = (parseFloat(style.getPropertyValue('--infinity-slide-interval')) * 1000) || CONFIG.shuffleInterval;
+    CONFIG.fadeTransitionDuration = parseIntVal(style.getPropertyValue('--infinity-fade-duration'), CONFIG.fadeTransitionDuration);
+    CONFIG.hideLogo              = parseBool(style.getPropertyValue('--infinity-hide-logo'));
+    CONFIG.showTitle             = style.getPropertyValue('--infinity-show-title').trim() !== 'false';
+    CONFIG.enableRandom          = parseBool(style.getPropertyValue('--infinity-enable-random'));
+    CONFIG.slideAnimationEnabled = style.getPropertyValue('--infinity-animation').trim() !== 'false';
+};
+
 const STATE = {
     jellyfinData: {
         userId: null,
@@ -1305,6 +1324,7 @@ const slidesInit = async () => {
     if (STATE.slideshow.hasInitialized) { console.log("⚠️ Slideshow already initialized."); return; }
     STATE.slideshow.hasInitialized = true;
     console.log("🌟 Initializing Slideshow...");
+    readCSSConfig();
     if (typeof marked === 'undefined') console.error("Marked.js not loaded.");
     if (typeof DOMPurify === 'undefined') console.warn("DOMPurify not loaded.");
 
