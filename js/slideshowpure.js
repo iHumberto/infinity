@@ -881,10 +881,29 @@ const SlideCreator = {
 
         // Keep custom plot logic with Marked/DOMPurify and marquee
         const rawOverview = item.Overview || "No overview available";
-        const sanitizedOverview = typeof DOMPurify !== 'undefined' ? DOMPurify.sanitize(rawOverview) : rawOverview;
-        const htmlOverview = typeof marked !== 'undefined' ? marked.parse(sanitizedOverview) : `<p>${sanitizedOverview}</p>`;
+        const hasDOMPurify = typeof DOMPurify !== 'undefined';
+        const hasMarked = typeof marked !== 'undefined';
         const plotElement = SlideUtils.createElement("div", { className: "plot" });
-        plotElement.innerHTML = `<div class="marquee-vertical"><div class="marquee-inner">${htmlOverview}</div></div>`;
+        plotElement.innerHTML = `<div class="marquee-vertical"><div class="marquee-inner"></div></div>`;
+        const marqueeInner = plotElement.querySelector(".marquee-inner");
+
+        if (hasDOMPurify && hasMarked) {
+            // Safe path: sanitize then parse markdown → rich innerHTML
+            const sanitizedOverview = DOMPurify.sanitize(rawOverview);
+            const htmlOverview = marked.parse(sanitizedOverview);
+            marqueeInner.innerHTML = htmlOverview;
+        } else {
+            // Secure fallback: plain text only, no HTML parsing
+            if (hasDOMPurify) {
+                marqueeInner.textContent = DOMPurify.sanitize(rawOverview);
+            } else {
+                marqueeInner.textContent = rawOverview;
+                console.warn("DOMPurify not loaded — overview displayed as plain text for security.");
+            }
+            if (!hasMarked) {
+                console.warn("Marked.js not loaded — overview displayed as plain text.");
+            }
+        }
         setTimeout(() => { // Keep custom marquee animation logic
             const inner = plotElement.querySelector(".marquee-inner");
             const container = plotElement;
