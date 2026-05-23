@@ -1325,10 +1325,9 @@ const slidesInit = async () => {
 };
 
 window.slideshowPure = {
-    CONFIG, STATE, SlideUtils, ApiUtils, SlideCreator, SlideshowManager, VisibilityObserver,
-    initSlideshowData: () => SlideshowManager.loadSlideshowData(),
     nextSlide: () => SlideshowManager.nextSlide(),
     prevSlide: () => SlideshowManager.prevSlide(),
+    refresh: () => SlideshowManager.loadSlideshowData(),
 };
 
 initLoadingScreen();
