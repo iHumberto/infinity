@@ -44,12 +44,13 @@
         nextSlide.classList.add('active');
         if (STATE.slideshow.isPaused) nextSlide.classList.add('slideshow-paused');
         else nextSlide.classList.remove('slideshow-paused');
-        void nextSlide.offsetWidth; // Reflow
-        nextSlide.style.opacity = '1';
-        if (CONFIG.slideAnimationEnabled) {
-             nextSlide.querySelector(".backdrop")?.classList.add("animate");
-             nextSlide.querySelector(".logo")?.classList.add("animate");
-         }
+        requestAnimationFrame(() => {
+            nextSlide.style.opacity = '1';
+            if (CONFIG.slideAnimationEnabled) {
+                 nextSlide.querySelector(".backdrop")?.classList.add("animate");
+                 nextSlide.querySelector(".logo")?.classList.add("animate");
+             }
+        });
         STATE.slideshow.currentSlideIndex = index;
         this.updateDots();
         this.preloadAdjacentSlides(index);

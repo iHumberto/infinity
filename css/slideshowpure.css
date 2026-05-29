@@ -86,7 +86,6 @@
 .marquee-inner {
   display: inline-block;
   white-space: normal;
-  will-change: transform;
 }
 
 .bar-loading {
@@ -187,6 +186,7 @@
   overflow: hidden;
   margin: 0 auto;
   padding-top: 6vh !important;
+  contain: layout style;
 }
 
 .slide {
@@ -197,7 +197,6 @@
   width: 100%;
   height: 100%;
   transition: opacity 0.5s ease-in-out;
-  will-change: opacity;
   z-index: 0;
   cursor: pointer;
 }
@@ -205,6 +204,12 @@
 .slide.active {
   opacity: 1;
   z-index: 1;
+}
+
+/* Skip rendering for off-screen slides — reduces CPU/GPU work */
+.slide:not(.active) {
+  content-visibility: auto;
+  contain-intrinsic-size: 100vw 90vh;
 }
 
 /* Pause state animation control */
@@ -232,6 +237,7 @@
   object-position: center 20%;
   border-radius: 5px;
   z-index: 3;
+  image-rendering: auto;
   mask-image: linear-gradient(to top, #fff0 2%, rgb(0 0 0 / 0.5) 6%, #000000 8%);
   -webkit-mask-image: linear-gradient(to top, #fff0 2%, rgb(0 0 0 / 0.5) 6%, #000000 8%);
 }
@@ -256,11 +262,9 @@
 .backdrop.animate {
   animation: frostedGlass 1.2s cubic-bezier(0.4, 0, 0.2, 1),
     kenBurnsZoomIn 10s ease-out forwards;
-  will-change: transform, filter, opacity;
 }
 .logo.animate {
   animation: frostedGlass 1.2s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: filter, opacity;
 }
 
 

@@ -882,14 +882,14 @@ const SlideCreator = {
         const serverAddress = STATE.jellyfinData.serverAddress;
         const slide = SlideUtils.createElement("a", { className: "slide", target: "_top", rel: "noreferrer", tabIndex: 0, "data-item-id": itemId });
 
-        const backdrop = SlideUtils.createElement("img", { className: "backdrop high-quality", src: `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=100`, 'data-low-quality': `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=10`, 'data-high-quality': `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=100`, alt: "Backdrop", loading: "eager" });
+        const backdrop = SlideUtils.createElement("img", { className: "backdrop high-quality", src: `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=100`, 'data-low-quality': `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=10`, 'data-high-quality': `${serverAddress}/Items/${itemId}/Images/Backdrop/0?quality=100`, alt: "Backdrop", loading: "eager", decoding: "async" });
         const backdropOverlay = SlideUtils.createElement("div", { className: "backdrop-overlay" });
         const backdropContainer = SlideUtils.createElement("div", { className: "backdrop-container" });
         backdropContainer.append(backdrop, backdropOverlay);
 
         let logoContainer = null;
         if (!CONFIG.hideLogo) {
-            const logo = SlideUtils.createElement("img", { className: "logo high-quality", src: `${serverAddress}/Items/${itemId}/Images/Logo?quality=75`, 'data-low-quality': `${serverAddress}/Items/${itemId}/Images/Logo?quality=10`, 'data-high-quality': `${serverAddress}/Items/${itemId}/Images/Logo?quality=75`, alt: "Logo", loading: "eager" });
+            const logo = SlideUtils.createElement("img", { className: "logo high-quality", src: `${serverAddress}/Items/${itemId}/Images/Logo?quality=75`, 'data-low-quality': `${serverAddress}/Items/${itemId}/Images/Logo?quality=10`, 'data-high-quality': `${serverAddress}/Items/${itemId}/Images/Logo?quality=75`, alt: "Logo", loading: "eager", decoding: "async" });
             logoContainer = SlideUtils.createElement("div", { className: "logo-container" });
             logoContainer.appendChild(logo);
         }
@@ -1141,12 +1141,13 @@ const SlideshowManager = {
         nextSlide.classList.add('active');
         if (STATE.slideshow.isPaused) nextSlide.classList.add('slideshow-paused');
         else nextSlide.classList.remove('slideshow-paused');
-        void nextSlide.offsetWidth; // Reflow
-        nextSlide.style.opacity = '1';
-        if (CONFIG.slideAnimationEnabled) {
-             nextSlide.querySelector(".backdrop")?.classList.add("animate");
-             nextSlide.querySelector(".logo")?.classList.add("animate");
-         }
+        requestAnimationFrame(() => {
+            nextSlide.style.opacity = '1';
+            if (CONFIG.slideAnimationEnabled) {
+                 nextSlide.querySelector(".backdrop")?.classList.add("animate");
+                 nextSlide.querySelector(".logo")?.classList.add("animate");
+             }
+        });
         STATE.slideshow.currentSlideIndex = index;
         this.updateDots();
         this.preloadAdjacentSlides(index);
