@@ -1,4 +1,4 @@
-// infinity/modules/07-config-page.js — ConfigPage: menu injection + configuration page UI
+// infinity/modules/08-config-page.js — ConfigPage: menu injection + configuration page UI
 // This file is part of the Infinity theme. Built via: npm run build
 
 /**

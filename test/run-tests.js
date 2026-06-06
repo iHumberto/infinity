@@ -2,7 +2,7 @@
 /**
  * Infinity Theme — Test Suite
  *
- * Tests for ConfigPersistence module (08-config-persistence.js).
+ * Tests for ConfigPersistence module (07-config-persistence.js).
  * Uses a localStorage mock and minimal DOM simulation for Node.js.
  *
  * Run: node test/run-tests.js
@@ -105,7 +105,7 @@ try {
     const fs = require('fs');
     const path = require('path');
     const vm = require('vm');
-    const modulePath = path.join(__dirname, '..', 'js', 'modules', '08-config-persistence.js');
+    const modulePath = path.join(__dirname, '..', 'js', 'modules', '07-config-persistence.js');
     const code = fs.readFileSync(modulePath, 'utf8');
     vm.runInThisContext(code);
     console.log('✅ Module 08 loaded successfully.');

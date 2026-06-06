@@ -1,4 +1,4 @@
-// infinity/modules/08-config-persistence.js — ConfigPersistence: localStorage read/write/validate/apply
+// infinity/modules/07-config-persistence.js — ConfigPersistence: localStorage read/write/validate/apply
 // This file is part of the Infinity theme. Built via: npm run build
 
 /**
