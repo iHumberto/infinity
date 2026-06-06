@@ -1830,7 +1830,7 @@ const ConfigPage = {
     init() {
         if (this._menuObserver) return; // Already observing
 
-        debugLog('[ConfigPage] Starting dashboard observer for menu injection...');
+        console.log('[Infinity] ConfigPage.init() — starting dashboard observer. Hash:', window.location.hash);
         this._observeDashboard();
     },
 
@@ -1842,6 +1842,12 @@ const ConfigPage = {
     _observeDashboard() {
         // Try immediate injection first
         this._injectMenu();
+
+        // Also listen for hash changes (SPA navigation)
+        window.addEventListener('hashchange', () => {
+            console.log('[Infinity] hashchange detected:', window.location.hash);
+            setTimeout(() => this._injectMenu(), 200);
+        });
 
         // Then observe for changes (SPA navigation recreates DOM)
         this._menuObserver = new MutationObserver(() => {
@@ -1860,15 +1866,29 @@ const ConfigPage = {
      * Idempotent — won't create duplicate menu items.
      */
     _injectMenu() {
+        const hash = window.location.hash;
+
         // Only inject on dashboard routes
-        if (!this._isDashboardRoute()) return;
+        if (!this._isDashboardRoute()) {
+            if (!this._loggedNotDashboard) {
+                console.log('[Infinity] _injectMenu: not a dashboard route. Hash:', hash);
+                this._loggedNotDashboard = true;
+                setTimeout(() => { this._loggedNotDashboard = false; }, 5000);
+            }
+            return;
+        }
+
+        this._loggedNotDashboard = false;
 
         // Check if menu item already exists
         if (document.getElementById('infinity-config-menu-item')) return;
 
         // Try multiple selector strategies for the sidebar list
         const drawer = this._findDrawerList();
-        if (!drawer) return;
+        if (!drawer) {
+            console.log('[Infinity] _injectMenu: drawer not found. Hash:', hash);
+            return;
+        }
 
         console.log('[Infinity] ConfigPage: drawer found, looking for insert point...');
 
