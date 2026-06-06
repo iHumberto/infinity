@@ -30,27 +30,31 @@ const CONFIG = {
     hideLogo: false,
     showTitle: true,
     slideshowItems: 16,
-    enableRandom: false,
+    enableRandom: false,         // Derived from slideshowSource at runtime
     slideAnimationEnabled: true,
+    slideshowSource: 'random',   // 'random' | 'recently_added' | 'prebuilt'
+    slideshowPrebuiltIds: [],    // IDs for 'prebuilt' source mode
 };
 
 /**
- * Reads user-configurable options from CSS custom properties.
- * Users override these via Jellyfin Dashboard > Branding > Custom CSS.
- * Falls back to CONFIG defaults if variables are not set.
+ * Loads stored configuration from localStorage via ConfigPersistence.
+ * Applies theme colors (CSS custom properties) and updates global CONFIG.
+ * Replaces the old readCSSConfig() — configuration is now managed
+ * exclusively through the Infinity config page in the dashboard.
+ *
+ * Chain: localStorage (user-saved) > defaults (shipped with theme).
  */
-const readCSSConfig = () => {
-    const style = getComputedStyle(document.documentElement);
-    const parseBool = (val) => val.trim() === 'true';
-    const parseIntVal = (val, fallback) => parseInt(val.trim()) || fallback;
-
-    CONFIG.slideshowItems        = parseIntVal(style.getPropertyValue('--infinity-slideshow-items'), CONFIG.slideshowItems);
-    CONFIG.shuffleInterval       = (parseFloat(style.getPropertyValue('--infinity-slide-interval')) * 1000) || CONFIG.shuffleInterval;
-    CONFIG.fadeTransitionDuration = parseIntVal(style.getPropertyValue('--infinity-fade-duration'), CONFIG.fadeTransitionDuration);
-    CONFIG.hideLogo              = parseBool(style.getPropertyValue('--infinity-hide-logo'));
-    CONFIG.showTitle             = style.getPropertyValue('--infinity-show-title').trim() !== 'false';
-    CONFIG.enableRandom          = parseBool(style.getPropertyValue('--infinity-enable-random'));
-    CONFIG.slideAnimationEnabled = style.getPropertyValue('--infinity-animation').trim() !== 'false';
+const loadStoredConfig = () => {
+    if (typeof ConfigPersistence === 'undefined') {
+        console.warn('[Infinity] ConfigPersistence not available — slideshow will use defaults.');
+        return;
+    }
+    try {
+        const config = ConfigPersistence.load();
+        ConfigPersistence.apply(config);
+    } catch (e) {
+        console.warn('[Infinity] loadStoredConfig failed:', e.message, '— using defaults');
+    }
 };
 
 const STATE = {

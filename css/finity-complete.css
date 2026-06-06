@@ -45,6 +45,7 @@ body {
   --transparent-bg: #15121A00; /* Fully transparent background */
   --header-bg: rgba(10, 8, 18, 0.7); /* Background for header/action sheet */
   --button-bg: #27242E; /* Background for standard buttons */
+  --input-bg: #27242E; /* Background for text inputs and form fields */
   --button-bg-subtle: rgba(255, 255, 255, 0.08); /* Subtle background for pill buttons, etc. */
   --button-bg-subtle-hover: rgba(255, 255, 255, 0.12); /* Hover background for subtle buttons */
   --button-bg-play: rgba(255, 255, 255, 0.25); /* Background for primary play buttons */

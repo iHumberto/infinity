@@ -341,7 +341,7 @@ body.dashboardDocument .selectContainer,
 body.dashboardDocument .MuiInputBase-root,
 body.dashboardDocument .MuiOutlinedInput-root,
 body.dashboardDocument .MuiFilledInput-root {
-  background-color: #27242E !important;
+  background-color: var(--input-bg, #27242E) !important;
   color: #eee !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
@@ -376,7 +376,7 @@ body.dashboardDocument select,
 body.dashboardDocument .emby-select,
 body.dashboardDocument select:enabled,
 body.dashboardDocument .MuiSelect-select {
-  background-color: #27242E !important;
+  background-color: var(--input-bg, #27242E) !important;
   color: #eee !important;
   border-color: rgba(255, 255, 255, 0.08) !important;
   border-radius: 0.5rem !important;
