@@ -104,7 +104,7 @@ No Jellyfin, vá em **Dashboard > Geral > Branding/Marca** e cole no campo **CSS
 
 ### 3. Configuração do Slideshow
 
-A partir da v1.1.0, o slideshow é configurado diretamente pela interface do Jellyfin. Acesse **Painel de Controle > Servidor > Infinity** e escolha:
+A partir da v1.1.0, o slideshow é configurado diretamente pela interface do Jellyfin. Acesse **Dashboard > Plugins > Infinity** e escolha:
 
 - **Aleatório (Random)**: seleciona filmes e séries aleatórios da biblioteca
 - **Adicionados Recentemente**: usa as mídias mais recentes (ordem de exibição aleatória)
@@ -129,7 +129,7 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 
 A partir da v1.1.0, cores, fonte e comportamento do slideshow são configurados diretamente pela interface do Jellyfin — sem editar CSS manualmente.
 
-Acesse **Painel de Controle > Servidor > Infinity** para:
+Acesse **Dashboard > Plugins > Infinity** para:
 
 - 🎨 **Cores do tema** — 10 seletores de cor com preview em tempo real (hex, rgb, rgba)
 - 🔤 **Fonte customizada** — URL de arquivo `.woff` e nome da família tipográfica
