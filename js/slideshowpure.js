@@ -2144,6 +2144,7 @@ const ConfigPage = {
         console.log('[Infinity] _showConfigPage() called.');
 
         const contentArea =
+            document.querySelector('.content-primary') ||
             document.querySelector('.MuiGrid-container.MuiGrid-spacing-xs-3') ||
             document.querySelector('.dashboardDocument .MuiContainer-root') ||
             document.querySelector('.dashboardContent') ||
