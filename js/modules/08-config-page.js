@@ -60,7 +60,7 @@ const ConfigPage = {
         // Also listen for hash changes (SPA navigation)
         window.addEventListener('hashchange', () => {
             console.log('[Infinity] hashchange detected:', window.location.hash);
-            setTimeout(() => this._injectMenu(), 200);
+            setTimeout(() => this._injectMenu(), 500);
         });
 
         // Then observe for changes (SPA navigation recreates DOM)
@@ -97,16 +97,23 @@ const ConfigPage = {
         }
         this._loggedNotDashboard = false;
 
-        // React may remove our injected element — re-inject if needed
+        // Check existing item: if it's a fallback, remove and re-inject properly
         const existing = document.getElementById('infinity-config-menu-item');
-        if (existing && existing.parentNode) return;
+        if (existing && existing.parentNode) {
+            if (existing.dataset.fallback === 'true') {
+                console.log('[Infinity] Replacing fallback item with proper clone.');
+                existing.remove();
+            } else {
+                return; // Already properly injected
+            }
+        }
 
         // Find "Plugins" item (always present in dashboard sidebar)
         const insertAfter = this._findSidebarItem('Plugins') ||
                             this._findSidebarItem('Geral') ||
                             this._findSidebarItem('General') ||
                             this._findSidebarItem('Dashboard');
-        if (!insertAfter) return; // Sidebar not ready, observer will retry
+        if (!insertAfter) return;
 
         console.log('[Infinity] ConfigPage: inserting after:', insertAfter.textContent.trim());
 
@@ -206,6 +213,7 @@ const ConfigPage = {
     _buildMenuItemFallback() {
         const menuItem = document.createElement('a');
         menuItem.id = 'infinity-config-menu-item';
+        menuItem.dataset.fallback = 'true'; // Mark as fallback for later replacement
         menuItem.href = '#';
         menuItem.style.cssText = 'display:flex; align-items:center; padding:8px 16px; margin:2px 8px; border-radius:4em; color:#eee; text-decoration:none; cursor:pointer;';
         menuItem.innerHTML = `
