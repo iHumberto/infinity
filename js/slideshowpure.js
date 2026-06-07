@@ -29,7 +29,7 @@ const CONFIG = {
     slideshowItems: 16,
     enableRandom: false,         // Derived from slideshowSource at runtime
     slideAnimationEnabled: true,
-    slideshowSource: 'random',   // 'random' | 'recently_added' | 'prebuilt'
+    slideshowSource: 'recently_added',   // 'random' | 'recently_added' | 'prebuilt'
     slideshowPrebuiltIds: [],    // IDs for 'prebuilt' source mode
 };
 
@@ -1450,7 +1450,7 @@ const DEFAULTS = Object.freeze({
         hideLogo: false,
         showTitle: true,
         animation: true,
-        source: 'random',
+        source: 'recently_added',
         prebuiltIds: []
     }
 });
@@ -1808,8 +1808,44 @@ const ConfigPersistence = {
         const t = config.theme || {};
         const f = config.font || {};
         const s = config.slideshow || {};
+        const d = DEFAULTS;
+        const lines = [];
 
-        return `/* ══ INFINITY-CONFIG ══ */\n:root {\n  --theme-background-color: ${t.backgroundColor || ""} !important;\n  --theme-text-color: ${t.textColor || ""} !important;\n  --theme-accent-color: ${t.accentColor || ""} !important;\n  --card-bg: ${t.cardBg || ""} !important;\n  --header-bg: ${t.headerBg || ""} !important;\n  --sidebar-bg: ${t.sidebarBg || ""} !important;\n  --button-bg: ${t.buttonBg || ""} !important;\n  --input-bg: ${t.inputBg || ""} !important;\n  --theme-warning-color: ${t.warningColor || ""} !important;\n  --selection-border-color: ${t.selectionBorder || ""} !important;\n  --font-family-base: "${f.family || "Kodchasan"}", sans-serif !important;\n  --infinity-font-url: "${(f.url || "").replace(/"/g, '\\"')}";\n  --infinity-slideshow-items: ${s.items || 16};\n  --infinity-slide-interval: ${s.interval || 10}s;\n  --infinity-fade-duration: ${s.fadeDuration || 500}ms;\n  --infinity-kenburns-duration: ${s.kenBurnsDuration || 10}s;\n  --infinity-source: ${s.source || "random"};\n}`;
+        // Theme colors — only include if different from default
+        const colorVars = [
+            ['--theme-background-color', t.backgroundColor, d.theme.backgroundColor],
+            ['--theme-text-color', t.textColor, d.theme.textColor],
+            ['--theme-accent-color', t.accentColor, d.theme.accentColor],
+            ['--card-bg', t.cardBg, d.theme.cardBg],
+            ['--header-bg', t.headerBg, d.theme.headerBg],
+            ['--sidebar-bg', t.sidebarBg, d.theme.sidebarBg],
+            ['--button-bg', t.buttonBg, d.theme.buttonBg],
+            ['--input-bg', t.inputBg, d.theme.inputBg],
+            ['--theme-warning-color', t.warningColor, d.theme.warningColor],
+            ['--selection-border-color', t.selectionBorder, d.theme.selectionBorder]
+        ];
+        for (const [name, val, def] of colorVars) {
+            if (val && val !== def) lines.push(`  ${name}: ${val} !important;`);
+        }
+
+        // Font — only if different
+        if (f.url && f.url !== d.font.url) {
+            lines.push(`  --infinity-font-url: "${f.url.replace(/"/g, '\\"')}";`);
+        }
+        if (f.family && f.family !== d.font.family) {
+            lines.push(`  --font-family-base: "${f.family}", sans-serif !important;`);
+        }
+
+        // Slideshow numeric — only if different
+        if (s.items && s.items !== d.slideshow.items) lines.push(`  --infinity-slideshow-items: ${s.items};`);
+        if (s.interval && s.interval !== d.slideshow.interval) lines.push(`  --infinity-slide-interval: ${s.interval}s;`);
+        if (s.fadeDuration && s.fadeDuration !== d.slideshow.fadeDuration) lines.push(`  --infinity-fade-duration: ${s.fadeDuration}ms;`);
+        if (s.kenBurnsDuration && s.kenBurnsDuration !== d.slideshow.kenBurnsDuration) lines.push(`  --infinity-kenburns-duration: ${s.kenBurnsDuration}s;`);
+        if (s.source && s.source !== d.slideshow.source) lines.push(`  --infinity-source: ${s.source};`);
+
+        if (lines.length === 0) return ''; // Nothing changed
+
+        return `/* ══ INFINITY-CONFIG ══ */\n:root {\n${lines.join('\n')}\n}`;
     },
 
     /**
@@ -1865,9 +1901,12 @@ const ConfigPersistence = {
                 css = css.substring(0, start) + css.substring(rootEnd + 1);
             }
             branding.CustomCss = css.trim();
-            branding.CustomCss = branding.CustomCss
-                ? `${branding.CustomCss}\n\n${cssBlock}`
-                : cssBlock;
+            // Only append new block if there's something to save
+            if (cssBlock) {
+                branding.CustomCss = branding.CustomCss
+                    ? `${branding.CustomCss}\n\n${cssBlock}`
+                    : cssBlock;
+            }
 
             // POST updated config
             const postResponse = await fetch(brandingUrl, {

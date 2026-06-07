@@ -32,7 +32,7 @@ const CONFIG = {
     slideshowItems: 16,
     enableRandom: false,         // Derived from slideshowSource at runtime
     slideAnimationEnabled: true,
-    slideshowSource: 'random',   // 'random' | 'recently_added' | 'prebuilt'
+    slideshowSource: 'recently_added',   // 'random' | 'recently_added' | 'prebuilt'
     slideshowPrebuiltIds: [],    // IDs for 'prebuilt' source mode
 };
 
