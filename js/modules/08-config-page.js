@@ -156,34 +156,53 @@ const ConfigPage = {
      * @returns {Element}
      */
     _buildMenuItem() {
-        // Find any existing sidebar item as template for the outer shell
-        const template = document.querySelector('.MuiDrawer-root a, .MuiDrawer-paper a, .mainDrawer a, [class*="MuiListItemButton"]');
+        // Clone the "Plugins" item specifically — it's in the server section
+        // and has the exact styling we want (same as Intro Skipper, etc.)
+        const template = this._findSidebarItem('Plugins') ||
+                         this._findSidebarItem('Geral') ||
+                         document.querySelector('.MuiDrawer-root .MuiListItemButton-root') ||
+                         document.querySelector('.MuiDrawer-root a[href]');
+
         if (!template) {
             console.warn('[Infinity] No sidebar template found — creating item with inline styles.');
             return this._buildMenuItemFallback();
         }
 
-        // Shallow-clone: keep outer element + CSS-in-JS classes, discard complex children
-        const menuItem = template.cloneNode(false);
+        // Deep-clone the template to get exact CSS-in-JS classes
+        const menuItem = template.cloneNode(true);
         menuItem.id = 'infinity-config-menu-item';
-        menuItem.removeAttribute('href');
-        menuItem.setAttribute('tabindex', '0');
+        menuItem.setAttribute('href', '#');
 
-        // Rebuild inner content with clean, simple structure
-        menuItem.innerHTML = `
-            <div class="MuiListItemIcon-root" style="min-width:36px; color:#eee;">
-                <span class="material-icons" style="font-size:20px;">palette</span>
-            </div>
-            <div class="MuiListItemText-root">
-                <span class="MuiTypography-root" style="color:#eee; font-size:0.9rem;">Infinity</span>
-            </div>
-        `;
+        // Clear children and get class names from the template for rebuilding
+        const iconClass = template.querySelector('[class*="MuiListItemIcon"]')?.className || '';
+        const textClass = template.querySelector('[class*="MuiListItemText"]')?.className || '';
+        const spanClass = template.querySelector('[class*="MuiTypography"]')?.className || '';
+        menuItem.replaceChildren();
 
-        // Capture phase + stopImmediatePropagation to beat React's event delegation
+        // Rebuild with standard MUI ListItemButton structure
+        const iconWrapper = document.createElement('div');
+        iconWrapper.className = iconClass;
+        iconWrapper.innerHTML = '<span class="material-icons" style="font-size:20px;">palette</span>';
+
+        const textWrapper = document.createElement('div');
+        textWrapper.className = textClass;
+        const textSpan = document.createElement('span');
+        textSpan.className = spanClass;
+        textSpan.textContent = 'Infinity';
+        textWrapper.appendChild(textSpan);
+
+        menuItem.appendChild(iconWrapper);
+        menuItem.appendChild(textWrapper);
+
         menuItem.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
             e.stopImmediatePropagation();
+            this._showConfigPage();
+        }, { capture: true });
+
+        return menuItem;
+    },
             this._showConfigPage();
         }, { capture: true });
 
