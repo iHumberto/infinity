@@ -1846,7 +1846,7 @@ const ConfigPage = {
         // Also listen for hash changes (SPA navigation)
         window.addEventListener('hashchange', () => {
             console.log('[Infinity] hashchange detected:', window.location.hash);
-            setTimeout(() => this._injectMenu(), 500);
+            setTimeout(() => this._injectMenu(), 200);
         });
 
         // Then observe for changes (SPA navigation recreates DOM)
@@ -1883,23 +1883,16 @@ const ConfigPage = {
         }
         this._loggedNotDashboard = false;
 
-        // Check existing item: if it's a fallback, remove and re-inject properly
+        // React may remove our injected element — re-inject if needed
         const existing = document.getElementById('infinity-config-menu-item');
-        if (existing && existing.parentNode) {
-            if (existing.dataset.fallback === 'true') {
-                console.log('[Infinity] Replacing fallback item with proper clone.');
-                existing.remove();
-            } else {
-                return; // Already properly injected
-            }
-        }
+        if (existing && existing.parentNode) return;
 
         // Find "Plugins" item (always present in dashboard sidebar)
         const insertAfter = this._findSidebarItem('Plugins') ||
                             this._findSidebarItem('Geral') ||
                             this._findSidebarItem('General') ||
                             this._findSidebarItem('Dashboard');
-        if (!insertAfter) return;
+        if (!insertAfter) return; // Sidebar not ready, observer will retry
 
         console.log('[Infinity] ConfigPage: inserting after:', insertAfter.textContent.trim());
 
@@ -1936,9 +1929,8 @@ const ConfigPage = {
     },
 
     /**
-     * Builds the menu item by CLONING the outer shell of an existing sidebar item.
-     * This preserves MUI's CSS-in-JS generated styles (Emotion).
-     * Inner content is rebuilt cleanly to avoid layout issues from the cloned source.
+     * Builds the menu item by CLONING an existing sidebar item.
+     * This preserves MUI's CSS-in-JS generated styles (Emotion class names).
      * @returns {Element}
      */
     _buildMenuItem() {
@@ -1981,30 +1973,6 @@ const ConfigPage = {
 
         return menuItem;
     },
-        const textWrapper = document.createElement('div');
-        textWrapper.className = textClass;
-        const textSpan = document.createElement('span');
-        textSpan.className = spanClass;
-        textSpan.textContent = 'Infinity';
-        textWrapper.appendChild(textSpan);
-
-        menuItem.appendChild(iconWrapper);
-        menuItem.appendChild(textWrapper);
-
-        menuItem.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            e.stopImmediatePropagation();
-            this._showConfigPage();
-        }, { capture: true });
-
-        return menuItem;
-    },
-            this._showConfigPage();
-        }, { capture: true });
-
-        return menuItem;
-    },
 
     /**
      * Fallback: creates menu item from scratch with inline styles.
@@ -2014,7 +1982,6 @@ const ConfigPage = {
     _buildMenuItemFallback() {
         const menuItem = document.createElement('a');
         menuItem.id = 'infinity-config-menu-item';
-        menuItem.dataset.fallback = 'true'; // Mark as fallback for later replacement
         menuItem.href = '#';
         menuItem.style.cssText = 'display:flex; align-items:center; padding:8px 16px; margin:2px 8px; border-radius:4em; color:#eee; text-decoration:none; cursor:pointer;';
         menuItem.innerHTML = `
