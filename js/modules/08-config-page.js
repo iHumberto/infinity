@@ -165,6 +165,10 @@ const ConfigPage = {
      * @returns {Element|null}
      */
     _findServerSection(drawer) {
+        // Jellyfin 10.10+: specific class for the server section header
+        const serverSubheader = drawer.querySelector('.server-subheader');
+        if (serverSubheader) return serverSubheader;
+
         // Section headers can be "Servidor" (PT), "Server" (EN), etc.
         const serverNames = ['Servidor', 'Server'];
 
@@ -210,22 +214,34 @@ const ConfigPage = {
      * @returns {Element|null}
      */
     _findFallbackInsertPoint(drawer) {
+        // Items at the bottom of the drawer (logout, user switch) — skip these
+        const excludeItems = ['Sair', 'Logout', 'Sign out', 'Alternar usuário', 'Switch User'];
+
         // Known items that appear in the server section (multi-language)
         const knownItems = ['Plugins', 'Plugin', 'Catálogo', 'Metadata', 'Atividade', 'Activity',
-                            'Usuários', 'Users', 'Dispositivos', 'Devices', 'Bibliotecas', 'Libraries'];
+                            'Usuários', 'Users', 'Dispositivos', 'Devices', 'Bibliotecas', 'Libraries',
+                            'Reprodução', 'Playback', 'Rede', 'Networking', 'Transcodificação', 'Transcoding'];
 
-        const allLinks = drawer.querySelectorAll('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption');
-        for (const link of allLinks) {
-            const text = link.textContent.trim();
-            if (knownItems.some(item => text.includes(item))) {
-                return link;
+        const allItems = drawer.querySelectorAll('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption');
+
+        // First pass: find the last known server item
+        let lastServerItem = null;
+        for (const item of allItems) {
+            const text = item.textContent.trim();
+            if (excludeItems.some(exc => text === exc)) continue;
+            if (knownItems.some(k => text.includes(k))) {
+                lastServerItem = item;
             }
         }
 
-        // If nothing found, return the last link item in the drawer
-        const allItems = drawer.querySelectorAll('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption');
-        if (allItems.length > 0) {
-            return allItems[allItems.length - 1];
+        if (lastServerItem) return lastServerItem;
+
+        // Second pass: return the last non-excluded item (bottom-up)
+        for (let i = allItems.length - 1; i >= 0; i--) {
+            const text = allItems[i].textContent.trim();
+            if (!excludeItems.some(exc => text === exc)) {
+                return allItems[i];
+            }
         }
 
         return null;
@@ -239,22 +255,31 @@ const ConfigPage = {
     _findLastInSection(serverHeader) {
         let current = serverHeader.nextElementSibling;
 
+        // Items that indicate a different section (bottom: logout, user actions)
+        const sectionEndItems = ['Sair', 'Logout', 'Sign out', 'Alternar usuário', 'Switch User'];
+
         // Walk forward while elements are list items or dividers (not new sections)
         let lastItem = null;
         while (current) {
             // Stop at next section header
             if (current.classList.contains('MuiListSubheader-root') ||
-                current.classList.contains('sectionTitle')) {
+                current.classList.contains('sectionTitle') ||
+                current.classList.contains('server-subheader')) {
                 break;
             }
 
-            if (current.matches('.MuiListItemButton-root, .MuiListItem-root, .navMenuOption, a')) {
+            // Stop if this item belongs to another section (e.g., logout)
+            if (current.matches('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption')) {
+                const text = current.textContent.trim();
+                if (sectionEndItems.some(exc => text === exc)) {
+                    break;
+                }
                 lastItem = current;
             }
             current = current.nextElementSibling;
         }
 
-        // If we found items, return the parent of the last one (for insertion)
+        // Return last found item, or the header itself if no items found
         return lastItem || serverHeader;
     },
 
