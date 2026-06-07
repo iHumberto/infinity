@@ -142,7 +142,7 @@ runTests('Funcional: getDefaults()', [
         assert(defaults.slideshow.items === 16, 'items=16');
         assert(defaults.slideshow.interval === 10, 'interval=10');
         assert(defaults.slideshow.fadeDuration === 500, 'fade=500');
-        assert(defaults.slideshow.source === 'random', 'source=random');
+        assert(defaults.slideshow.source === 'recently_added', 'source=recently_added');
     }],
     ['defaults are frozen (immutable)', () => {
         const defaults = ConfigPersistence.getDefaults();
