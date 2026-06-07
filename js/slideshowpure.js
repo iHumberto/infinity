@@ -1941,6 +1941,7 @@ const ConfigPage = {
     _pageVisible: false,
     _originalContent: null,
     _currentConfig: null,
+    _contentWatcher: null,
     _injectedFontStyleId: 'infinity-custom-font',
 
     /**
@@ -2140,11 +2141,8 @@ const ConfigPage = {
      * Shows the configuration page, replacing dashboard content.
      */
     _showConfigPage() {
-        if (this._pageVisible) return;
+        console.log('[Infinity] _showConfigPage() called.');
 
-        console.log('[Infinity] _showConfigPage() called. Hash:', window.location.hash);
-
-        // Target: MUI Grid container where dashboard/plugin pages render
         const contentArea =
             document.querySelector('.MuiGrid-container.MuiGrid-spacing-xs-3') ||
             document.querySelector('.dashboardDocument .MuiContainer-root') ||
@@ -2156,34 +2154,37 @@ const ConfigPage = {
             document.querySelector('.MuiBox-root');
 
         if (!contentArea) {
-            console.error('[Infinity] Cannot find dashboard content area. Available containers:',
-                [...document.querySelectorAll('[class*="dashboard"], [class*="content"], [class*="admin"], main')]
-                    .map(el => el.className || el.tagName));
+            console.error('[Infinity] Cannot find dashboard content area.');
             return;
         }
 
-        console.log('[Infinity] Content area found:', contentArea.className || contentArea.id || contentArea.tagName);
+        console.log('[Infinity] Content area:', contentArea.className);
 
-        // Save reference to original content for restoration
         if (!this._originalContent) {
             this._originalContent = contentArea.innerHTML;
         }
 
-        // Load current config
+        // Watch for Jellyfin replacing our config page with other dashboard content
+        if (this._contentWatcher) this._contentWatcher.disconnect();
+        this._contentWatcher = new MutationObserver(() => {
+            if (!document.querySelector('.infinity-config-page')) {
+                console.log('[Infinity] Config page removed by Jellyfin — resetting.');
+                this._pageVisible = false;
+                this._contentWatcher.disconnect();
+                this._contentWatcher = null;
+            }
+        });
+        this._contentWatcher.observe(contentArea, { childList: true, subtree: true });
+
         this._currentConfig = ConfigPersistence.load();
 
-        // Render the config page
         contentArea.innerHTML = this._renderPage();
-
-        // Bind events
         this._bindColorPickers();
         this._bindSlideshowControls();
         this._bindSourceSelector();
         this._bindButtons();
 
-        // Apply live preview
         ConfigPersistence.apply(this._currentConfig);
-
         this._pageVisible = true;
         console.log('[Infinity] Configuration page rendered.');
     },
