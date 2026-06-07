@@ -411,21 +411,30 @@ const ConfigPersistence = {
      */
     async saveToServer(config) {
         try {
-            const apiClient = window.ApiClient;
-            if (!apiClient) {
-                console.warn('[Infinity] ApiClient not available — config saved locally only.');
+            const cssBlock = this._buildCssString(config);
+            let serverAddress, authHeader;
+
+            // Try STATE.jellyfinData first (set by initJellyfinData on home page)
+            if (typeof STATE !== 'undefined' && STATE.jellyfinData && STATE.jellyfinData.accessToken && STATE.jellyfinData.accessToken !== 'Not Found') {
+                const d = STATE.jellyfinData;
+                serverAddress = d.serverAddress;
+                authHeader = `MediaBrowser Client="${d.appName}", Device="${d.deviceName}", DeviceId="${d.deviceId}", Version="${d.appVersion}", Token="${d.accessToken}"`;
+            } else if (window.ApiClient && window.ApiClient._serverInfo && window.ApiClient._serverInfo.AccessToken) {
+                // Fallback: use ApiClient directly
+                const api = window.ApiClient;
+                serverAddress = api._serverAddress || api.serverAddress?.();
+                const token = api._serverInfo.AccessToken;
+                authHeader = `MediaBrowser Client="${api._appName || 'Infinity'}", Device="${api._deviceName || 'Browser'}", DeviceId="${api._deviceId || ''}", Version="${api._appVersion || '1.0'}", Token="${token}"`;
+            } else {
+                console.warn('[Infinity] Not authenticated — config saved locally only.');
                 return false;
             }
 
-            const cssBlock = this._buildCssString(config);
-            const serverAddress = apiClient.serverAddress();
-            const authHeader = apiClient.getAuthorizationHeader?.('MediaBrowser') || '';
+            const headers = { 'Authorization': authHeader, 'Content-Type': 'application/json' };
 
             // Fetch current branding config
             const brandingUrl = `${serverAddress}/System/Configuration/branding`;
-            const getResponse = await fetch(brandingUrl, {
-                headers: { 'Authorization': authHeader }
-            });
+            const getResponse = await fetch(brandingUrl, { headers });
 
             if (!getResponse.ok) throw new Error(`GET branding: ${getResponse.status}`);
             const branding = await getResponse.json();
@@ -441,16 +450,13 @@ const ConfigPersistence = {
             // POST updated config
             const postResponse = await fetch(brandingUrl, {
                 method: 'POST',
-                headers: {
-                    'Authorization': authHeader,
-                    'Content-Type': 'application/json'
-                },
+                headers,
                 body: JSON.stringify(branding)
             });
 
             if (!postResponse.ok) throw new Error(`POST branding: ${postResponse.status}`);
 
-            console.log('[Infinity] Config saved to Jellyfin server.');
+            console.log('[Infinity] Config saved to Jellyfin server successfully.');
             return true;
         } catch (e) {
             console.error('[Infinity] Server save failed, using localStorage only:', e.message);
