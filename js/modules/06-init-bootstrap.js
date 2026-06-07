@@ -44,12 +44,13 @@
         nextSlide.classList.add('active');
         if (STATE.slideshow.isPaused) nextSlide.classList.add('slideshow-paused');
         else nextSlide.classList.remove('slideshow-paused');
-        void nextSlide.offsetWidth; // Reflow
-        nextSlide.style.opacity = '1';
-        if (CONFIG.slideAnimationEnabled) {
-             nextSlide.querySelector(".backdrop")?.classList.add("animate");
-             nextSlide.querySelector(".logo")?.classList.add("animate");
-         }
+        requestAnimationFrame(() => {
+            nextSlide.style.opacity = '1';
+            if (CONFIG.slideAnimationEnabled) {
+                 nextSlide.querySelector(".backdrop")?.classList.add("animate");
+                 nextSlide.querySelector(".logo")?.classList.add("animate");
+             }
+        });
         STATE.slideshow.currentSlideIndex = index;
         this.updateDots();
         this.preloadAdjacentSlides(index);
@@ -136,46 +137,75 @@
             }
         });
     },
-    async loadSlideshowData() { // Keep custom logic
+    async loadSlideshowData() {
         try {
-            STATE.slideshow.isLoading = true; const neededCount = CONFIG.slideshowItems; let finalItemIds = [];
-            debugLog(`Loading slideshow data. Target items: ${neededCount}`);
-            let listIds = await ApiUtils.fetchItemIdsFromList();
-            if (listIds?.length > 0) { debugLog(`Got ${listIds.length} from list.txt.`); finalItemIds = [...listIds]; }
-            else debugLog("list.txt empty/not found.");
-            const missingCount = neededCount - finalItemIds.length;
-            debugLog(`Missing ${missingCount} items.`);
-            if (missingCount > 0 && CONFIG.enableRandom) {
-                debugLog(`Fetching random fallback items...`);
-                const fetchLimit = Math.max(missingCount * 3, 30);
-                let serverIds = await ApiUtils.fetchItemIdsFromServer(fetchLimit);
-                if (serverIds?.length > 0) {
-                    const listIdSet = new Set(finalItemIds); const uniqueServerIds = serverIds.filter(id => !listIdSet.has(id));
-                    debugLog(`Got ${uniqueServerIds.length} unique random IDs.`);
-                    const neededServerIds = SlideUtils.shuffleArray(uniqueServerIds).slice(0, missingCount);
-                    debugLog(`Adding ${neededServerIds.length} random IDs.`);
-                    finalItemIds = finalItemIds.concat(neededServerIds);
-                } else debugLog("No random items fetched.");
-            } else if (missingCount > 0) debugLog(`Random fallback disabled. Slideshow has ${finalItemIds.length} items.`);
+            STATE.slideshow.isLoading = true;
+            const neededCount = CONFIG.slideshowItems;
+            let finalItemIds = [];
+
+            debugLog(`Loading slideshow data. Source: ${CONFIG.slideshowSource}, Target: ${neededCount} items.`);
+
+            switch (CONFIG.slideshowSource) {
+                case 'prebuilt':
+                    // Use IDs from config (set via Infinity config page)
+                    if (CONFIG.slideshowPrebuiltIds && CONFIG.slideshowPrebuiltIds.length > 0) {
+                        finalItemIds = [...CONFIG.slideshowPrebuiltIds];
+                        debugLog(`Using ${finalItemIds.length} prebuilt IDs from config.`);
+                    } else {
+                        debugLog('Prebuilt source selected but no IDs configured. Falling back to random.');
+                        finalItemIds = await ApiUtils.fetchItemIdsFromServer(neededCount, 'random');
+                    }
+                    break;
+
+                case 'recently_added':
+                    // Fetch most recently added items
+                    debugLog('Fetching recently added items...');
+                    finalItemIds = await ApiUtils.fetchItemIdsFromServer(neededCount, 'recently_added');
+                    debugLog(`Got ${finalItemIds.length} recently added IDs.`);
+                    break;
+
+                case 'random':
+                default:
+                    // Fetch random items from the server
+                    debugLog('Fetching random items...');
+                    finalItemIds = await ApiUtils.fetchItemIdsFromServer(neededCount, 'random');
+                    debugLog(`Got ${finalItemIds.length} random IDs.`);
+                    break;
+            }
+
+            // Always shuffle for variety in display order
             finalItemIds = SlideUtils.shuffleArray(finalItemIds);
-            if (finalItemIds.length > neededCount) { debugLog(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`); finalItemIds = finalItemIds.slice(0, neededCount); }
+
+            if (finalItemIds.length > neededCount) {
+                debugLog(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`);
+                finalItemIds = finalItemIds.slice(0, neededCount);
+            }
+
             debugLog(`Final item count: ${finalItemIds.length}.`);
-            STATE.slideshow.itemIds = finalItemIds; STATE.slideshow.totalItems = finalItemIds.length;
+            STATE.slideshow.itemIds = finalItemIds;
+            STATE.slideshow.totalItems = finalItemIds.length;
+
             if (STATE.slideshow.totalItems > 0) {
-                 this.createPaginationDots();
-                 await this.updateCurrentSlide(0);
-                 if (!STATE.slideshow.slideInterval) {
-                      STATE.slideshow.slideInterval = new SlideTimer(() => { if (!STATE.slideshow.isPaused) this.nextSlide(); }, CONFIG.shuffleInterval).start();
-                      // Let VisibilityObserver start it initially
-                 } else {
-                     // If interval exists but wasn't running
-                     if (!STATE.slideshow.slideInterval.timerId && !STATE.slideshow.isPaused) {
-                          STATE.slideshow.slideInterval.start();
-                     }
-                 }
-            } else { console.warn("No items for slideshow."); SlideUtils.getOrCreateSlidesContainer().style.display = 'none'; }
-        } catch (error) { console.error("Error loading slideshow data:", error); }
-        finally { STATE.slideshow.isLoading = false; }
+                this.createPaginationDots();
+                await this.updateCurrentSlide(0);
+                if (!STATE.slideshow.slideInterval) {
+                    STATE.slideshow.slideInterval = new SlideTimer(() => {
+                        if (!STATE.slideshow.isPaused) this.nextSlide();
+                    }, CONFIG.shuffleInterval).start();
+                } else {
+                    if (!STATE.slideshow.slideInterval.timerId && !STATE.slideshow.isPaused) {
+                        STATE.slideshow.slideInterval.start();
+                    }
+                }
+            } else {
+                console.warn('No items for slideshow.');
+                SlideUtils.getOrCreateSlidesContainer().style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error loading slideshow data:', error);
+        } finally {
+            STATE.slideshow.isLoading = false;
+        }
     },
 };
 
@@ -227,7 +257,7 @@ const slidesInit = async () => {
     if (STATE.slideshow.hasInitialized) { console.log("⚠️ Slideshow already initialized."); return; }
     STATE.slideshow.hasInitialized = true;
     console.log("🌟 Initializing Slideshow...");
-    readCSSConfig();
+    loadStoredConfig();
     if (typeof marked === 'undefined') console.error("Marked.js not loaded.");
     if (typeof DOMPurify === 'undefined') console.warn("DOMPurify not loaded.");
 

@@ -121,22 +121,31 @@ const ApiUtils = {
             return [];
         }
     },
-    async fetchItemIdsFromServer(limit = CONFIG.maxItems) {
+    async fetchItemIdsFromServer(limit = CONFIG.maxItems, sortBy = 'Random') {
         if (!STATE.jellyfinData.accessToken || STATE.jellyfinData.accessToken === "Not Found" || !STATE.jellyfinData.serverAddress || STATE.jellyfinData.serverAddress === "Not Found") {
-            console.warn("Auth/Server info missing for random item fetch.");
+            console.warn("Auth/Server info missing for item fetch.");
             return [];
         }
-        debugLog(`Fetching up to ${limit} random item IDs...`);
-        const url = `${STATE.jellyfinData.serverAddress}/Users/${STATE.jellyfinData.userId}/Items?IncludeItemTypes=Movie,Series&Recursive=true&HasLogo=true&HasBackdrop=true&sortBy=Random&Limit=${limit}&Fields=Id`;
+        const sortModes = {
+            random: 'Random',
+            recently_added: 'DateCreated',
+            random_desc: 'Random'
+        };
+        const sortField = sortModes[sortBy] || 'Random';
+        const sortOrder = sortBy === 'recently_added' ? 'Descending' : '';
+        const sortParam = sortOrder ? `sortBy=${sortField}&SortOrder=${sortOrder}` : `sortBy=${sortField}`;
+
+        debugLog(`Fetching up to ${limit} item IDs (sort: ${sortBy})...`);
+        const url = `${STATE.jellyfinData.serverAddress}/Users/${STATE.jellyfinData.userId}/Items?IncludeItemTypes=Movie,Series&Recursive=true&HasLogo=true&HasBackdrop=true&${sortParam}&Limit=${limit}&Fields=Id`;
         try {
             const response = await fetch(url, { headers: this.getAuthHeaders() });
             if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
             const data = await response.json();
             const itemIds = (data.Items || []).map(item => item.Id);
-            debugLog(`Fetched ${itemIds.length} random IDs.`);
+            debugLog(`Fetched ${itemIds.length} IDs (${sortBy}).`);
             return itemIds;
         } catch (error) {
-            console.error("Error fetching random IDs:", error);
+            console.error(`Error fetching IDs (${sortBy}):`, error);
             return [];
         }
     },
