@@ -40,7 +40,7 @@ const DEFAULTS = Object.freeze({
         hideLogo: false,
         showTitle: true,
         animation: true,
-        source: 'random',
+        source: 'recently_added',
         prebuiltIds: []
     }
 });
@@ -386,5 +386,132 @@ const ConfigPersistence = {
         }
 
         return { valid: errors.length === 0, errors };
-    }
+    },
+
+    /**
+     * Builds a CSS string from the config for Jellyfin Branding storage.
+     * This makes config server-side — all users see the same theme.
+     * @param {object} config
+     * @returns {string} CSS block
+     */
+    _buildCssString(config) {
+        const t = config.theme || {};
+        const f = config.font || {};
+        const s = config.slideshow || {};
+        const d = DEFAULTS;
+        const lines = [];
+
+        // Theme colors — only include if different from default
+        const colorVars = [
+            ['--theme-background-color', t.backgroundColor, d.theme.backgroundColor],
+            ['--theme-text-color', t.textColor, d.theme.textColor],
+            ['--theme-accent-color', t.accentColor, d.theme.accentColor],
+            ['--card-bg', t.cardBg, d.theme.cardBg],
+            ['--header-bg', t.headerBg, d.theme.headerBg],
+            ['--sidebar-bg', t.sidebarBg, d.theme.sidebarBg],
+            ['--button-bg', t.buttonBg, d.theme.buttonBg],
+            ['--input-bg', t.inputBg, d.theme.inputBg],
+            ['--theme-warning-color', t.warningColor, d.theme.warningColor],
+            ['--selection-border-color', t.selectionBorder, d.theme.selectionBorder]
+        ];
+        for (const [name, val, def] of colorVars) {
+            if (val && val !== def) lines.push(`  ${name}: ${val} !important;`);
+        }
+
+        // Font — only if different
+        if (f.url && f.url !== d.font.url) {
+            lines.push(`  --infinity-font-url: "${f.url.replace(/"/g, '\\"')}";`);
+        }
+        if (f.family && f.family !== d.font.family) {
+            lines.push(`  --font-family-base: "${f.family}", sans-serif !important;`);
+        }
+
+        // Slideshow numeric — only if different
+        if (s.items && s.items !== d.slideshow.items) lines.push(`  --infinity-slideshow-items: ${s.items};`);
+        if (s.interval && s.interval !== d.slideshow.interval) lines.push(`  --infinity-slide-interval: ${s.interval}s;`);
+        if (s.fadeDuration && s.fadeDuration !== d.slideshow.fadeDuration) lines.push(`  --infinity-fade-duration: ${s.fadeDuration}ms;`);
+        if (s.kenBurnsDuration && s.kenBurnsDuration !== d.slideshow.kenBurnsDuration) lines.push(`  --infinity-kenburns-duration: ${s.kenBurnsDuration}s;`);
+        if (s.source && s.source !== d.slideshow.source) lines.push(`  --infinity-source: ${s.source};`);
+
+        if (lines.length === 0) return ''; // Nothing changed
+
+        return `/* ══ INFINITY-CONFIG ══ */\n:root {\n${lines.join('\n')}\n}`;
+    },
+
+    /**
+     * Saves config to the Jellyfin server via Branding API.
+     * Updates Custom CSS field so ALL users see the same config.
+     * Falls back to localStorage if server save fails.
+     * @param {object} config
+     * @returns {Promise<boolean>}
+     */
+    async saveToServer(config) {
+        try {
+            const cssBlock = this._buildCssString(config);
+            let serverAddress, authHeader;
+
+            // Try STATE.jellyfinData first (set by initJellyfinData on home page)
+            if (typeof STATE !== 'undefined' && STATE.jellyfinData && STATE.jellyfinData.accessToken && STATE.jellyfinData.accessToken !== 'Not Found') {
+                const d = STATE.jellyfinData;
+                serverAddress = d.serverAddress;
+                authHeader = `MediaBrowser Client="${d.appName}", Device="${d.deviceName}", DeviceId="${d.deviceId}", Version="${d.appVersion}", Token="${d.accessToken}"`;
+            } else if (window.ApiClient && window.ApiClient._serverInfo && window.ApiClient._serverInfo.AccessToken) {
+                // Fallback: use ApiClient directly
+                const api = window.ApiClient;
+                serverAddress = api._serverAddress || api.serverAddress?.();
+                const token = api._serverInfo.AccessToken;
+                authHeader = `MediaBrowser Client="${api._appName || 'Infinity'}", Device="${api._deviceName || 'Browser'}", DeviceId="${api._deviceId || ''}", Version="${api._appVersion || '1.0'}", Token="${token}"`;
+            } else {
+                console.warn('[Infinity] Not authenticated — config saved locally only.');
+                return false;
+            }
+
+            const headers = { 'Authorization': authHeader, 'Content-Type': 'application/json' };
+
+            // Fetch current branding config
+            const brandingUrl = `${serverAddress}/System/Configuration/branding`;
+            const getResponse = await fetch(brandingUrl, { headers });
+
+            if (!getResponse.ok) throw new Error(`GET branding: ${getResponse.status}`);
+            const branding = await getResponse.json();
+
+            // Remove any existing Infinity blocks using the unique marker
+            const marker = '/* ══ INFINITY-CONFIG ══ */';
+            let css = branding.CustomCss || '';
+            while (true) {
+                const start = css.indexOf(marker);
+                if (start === -1) break;
+                // Find the closing */ that ends the comment on the first line
+                const commentEnd = css.indexOf('*/', start);
+                if (commentEnd === -1) break;
+                // Find the closing } of the :root block
+                const rootEnd = css.indexOf('}', commentEnd);
+                if (rootEnd === -1) break;
+                // Remove from start of marker to end of :root block (inclusive)
+                css = css.substring(0, start) + css.substring(rootEnd + 1);
+            }
+            branding.CustomCss = css.trim();
+            // Only append new block if there's something to save
+            if (cssBlock) {
+                branding.CustomCss = branding.CustomCss
+                    ? `${branding.CustomCss}\n\n${cssBlock}`
+                    : cssBlock;
+            }
+
+            // POST updated config
+            const postResponse = await fetch(brandingUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(branding)
+            });
+
+            if (!postResponse.ok) throw new Error(`POST branding: ${postResponse.status}`);
+
+            console.log('[Infinity] Config saved to Jellyfin server successfully.');
+            return true;
+        } catch (e) {
+            console.error('[Infinity] Server save failed, using localStorage only:', e.message);
+            return false;
+        }
+    },
 };

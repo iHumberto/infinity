@@ -29,17 +29,16 @@ const CONFIG = {
     slideshowItems: 16,
     enableRandom: false,         // Derived from slideshowSource at runtime
     slideAnimationEnabled: true,
-    slideshowSource: 'random',   // 'random' | 'recently_added' | 'prebuilt'
+    slideshowSource: 'recently_added',   // 'random' | 'recently_added' | 'prebuilt'
     slideshowPrebuiltIds: [],    // IDs for 'prebuilt' source mode
 };
 
 /**
- * Loads stored configuration from localStorage via ConfigPersistence.
- * Applies theme colors (CSS custom properties) and updates global CONFIG.
- * Replaces the old readCSSConfig() — configuration is now managed
- * exclusively through the Infinity config page in the dashboard.
+ * Loads stored configuration from localStorage.
+ * If localStorage has saved data → apply it (takes priority).
+ * If localStorage is empty → do nothing, let Branding CSS handle it.
  *
- * Chain: localStorage (user-saved) > defaults (shipped with theme).
+ * Chain: localStorage (admin browser override) > Branding CSS (server-side) > defaults.
  */
 const loadStoredConfig = () => {
     if (typeof ConfigPersistence === 'undefined') {
@@ -47,8 +46,22 @@ const loadStoredConfig = () => {
         return;
     }
     try {
-        const config = ConfigPersistence.load();
-        ConfigPersistence.apply(config);
+        const hasLocalStorage = localStorage.getItem('infinity-config');
+        if (hasLocalStorage) {
+            const config = ConfigPersistence.load();
+            ConfigPersistence.apply(config); // Only apply if user explicitly saved
+        }
+        // If no localStorage, Branding CSS custom properties handle the theme.
+        // But slideshow CONFIG still needs to be read from CSS variables.
+        if (!hasLocalStorage) {
+            const style = getComputedStyle(document.documentElement);
+            const items = parseInt(style.getPropertyValue('--infinity-slideshow-items').trim());
+            const interval = parseFloat(style.getPropertyValue('--infinity-slide-interval'));
+            const fade = parseInt(style.getPropertyValue('--infinity-fade-duration').trim());
+            CONFIG.slideshowItems = items || CONFIG.slideshowItems;
+            CONFIG.shuffleInterval = (interval * 1000) || CONFIG.shuffleInterval;
+            CONFIG.fadeTransitionDuration = fade || CONFIG.fadeTransitionDuration;
+        }
     } catch (e) {
         console.warn('[Infinity] loadStoredConfig failed:', e.message, '— using defaults');
     }
@@ -1437,7 +1450,7 @@ const DEFAULTS = Object.freeze({
         hideLogo: false,
         showTitle: true,
         animation: true,
-        source: 'random',
+        source: 'recently_added',
         prebuiltIds: []
     }
 });
@@ -1783,7 +1796,134 @@ const ConfigPersistence = {
         }
 
         return { valid: errors.length === 0, errors };
-    }
+    },
+
+    /**
+     * Builds a CSS string from the config for Jellyfin Branding storage.
+     * This makes config server-side — all users see the same theme.
+     * @param {object} config
+     * @returns {string} CSS block
+     */
+    _buildCssString(config) {
+        const t = config.theme || {};
+        const f = config.font || {};
+        const s = config.slideshow || {};
+        const d = DEFAULTS;
+        const lines = [];
+
+        // Theme colors — only include if different from default
+        const colorVars = [
+            ['--theme-background-color', t.backgroundColor, d.theme.backgroundColor],
+            ['--theme-text-color', t.textColor, d.theme.textColor],
+            ['--theme-accent-color', t.accentColor, d.theme.accentColor],
+            ['--card-bg', t.cardBg, d.theme.cardBg],
+            ['--header-bg', t.headerBg, d.theme.headerBg],
+            ['--sidebar-bg', t.sidebarBg, d.theme.sidebarBg],
+            ['--button-bg', t.buttonBg, d.theme.buttonBg],
+            ['--input-bg', t.inputBg, d.theme.inputBg],
+            ['--theme-warning-color', t.warningColor, d.theme.warningColor],
+            ['--selection-border-color', t.selectionBorder, d.theme.selectionBorder]
+        ];
+        for (const [name, val, def] of colorVars) {
+            if (val && val !== def) lines.push(`  ${name}: ${val} !important;`);
+        }
+
+        // Font — only if different
+        if (f.url && f.url !== d.font.url) {
+            lines.push(`  --infinity-font-url: "${f.url.replace(/"/g, '\\"')}";`);
+        }
+        if (f.family && f.family !== d.font.family) {
+            lines.push(`  --font-family-base: "${f.family}", sans-serif !important;`);
+        }
+
+        // Slideshow numeric — only if different
+        if (s.items && s.items !== d.slideshow.items) lines.push(`  --infinity-slideshow-items: ${s.items};`);
+        if (s.interval && s.interval !== d.slideshow.interval) lines.push(`  --infinity-slide-interval: ${s.interval}s;`);
+        if (s.fadeDuration && s.fadeDuration !== d.slideshow.fadeDuration) lines.push(`  --infinity-fade-duration: ${s.fadeDuration}ms;`);
+        if (s.kenBurnsDuration && s.kenBurnsDuration !== d.slideshow.kenBurnsDuration) lines.push(`  --infinity-kenburns-duration: ${s.kenBurnsDuration}s;`);
+        if (s.source && s.source !== d.slideshow.source) lines.push(`  --infinity-source: ${s.source};`);
+
+        if (lines.length === 0) return ''; // Nothing changed
+
+        return `/* ══ INFINITY-CONFIG ══ */\n:root {\n${lines.join('\n')}\n}`;
+    },
+
+    /**
+     * Saves config to the Jellyfin server via Branding API.
+     * Updates Custom CSS field so ALL users see the same config.
+     * Falls back to localStorage if server save fails.
+     * @param {object} config
+     * @returns {Promise<boolean>}
+     */
+    async saveToServer(config) {
+        try {
+            const cssBlock = this._buildCssString(config);
+            let serverAddress, authHeader;
+
+            // Try STATE.jellyfinData first (set by initJellyfinData on home page)
+            if (typeof STATE !== 'undefined' && STATE.jellyfinData && STATE.jellyfinData.accessToken && STATE.jellyfinData.accessToken !== 'Not Found') {
+                const d = STATE.jellyfinData;
+                serverAddress = d.serverAddress;
+                authHeader = `MediaBrowser Client="${d.appName}", Device="${d.deviceName}", DeviceId="${d.deviceId}", Version="${d.appVersion}", Token="${d.accessToken}"`;
+            } else if (window.ApiClient && window.ApiClient._serverInfo && window.ApiClient._serverInfo.AccessToken) {
+                // Fallback: use ApiClient directly
+                const api = window.ApiClient;
+                serverAddress = api._serverAddress || api.serverAddress?.();
+                const token = api._serverInfo.AccessToken;
+                authHeader = `MediaBrowser Client="${api._appName || 'Infinity'}", Device="${api._deviceName || 'Browser'}", DeviceId="${api._deviceId || ''}", Version="${api._appVersion || '1.0'}", Token="${token}"`;
+            } else {
+                console.warn('[Infinity] Not authenticated — config saved locally only.');
+                return false;
+            }
+
+            const headers = { 'Authorization': authHeader, 'Content-Type': 'application/json' };
+
+            // Fetch current branding config
+            const brandingUrl = `${serverAddress}/System/Configuration/branding`;
+            const getResponse = await fetch(brandingUrl, { headers });
+
+            if (!getResponse.ok) throw new Error(`GET branding: ${getResponse.status}`);
+            const branding = await getResponse.json();
+
+            // Remove any existing Infinity blocks using the unique marker
+            const marker = '/* ══ INFINITY-CONFIG ══ */';
+            let css = branding.CustomCss || '';
+            while (true) {
+                const start = css.indexOf(marker);
+                if (start === -1) break;
+                // Find the closing */ that ends the comment on the first line
+                const commentEnd = css.indexOf('*/', start);
+                if (commentEnd === -1) break;
+                // Find the closing } of the :root block
+                const rootEnd = css.indexOf('}', commentEnd);
+                if (rootEnd === -1) break;
+                // Remove from start of marker to end of :root block (inclusive)
+                css = css.substring(0, start) + css.substring(rootEnd + 1);
+            }
+            branding.CustomCss = css.trim();
+            // Only append new block if there's something to save
+            if (cssBlock) {
+                branding.CustomCss = branding.CustomCss
+                    ? `${branding.CustomCss}\n\n${cssBlock}`
+                    : cssBlock;
+            }
+
+            // POST updated config
+            const postResponse = await fetch(brandingUrl, {
+                method: 'POST',
+                headers,
+                body: JSON.stringify(branding)
+            });
+
+            if (!postResponse.ok) throw new Error(`POST branding: ${postResponse.status}`);
+
+            console.log('[Infinity] Config saved to Jellyfin server successfully.');
+            return true;
+        } catch (e) {
+            console.error('[Infinity] Server save failed, using localStorage only:', e.message);
+            return false;
+        }
+    },
 };
 /**
  * Dashboard configuration page for the Infinity theme.
@@ -1801,6 +1941,7 @@ const ConfigPage = {
     _pageVisible: false,
     _originalContent: null,
     _currentConfig: null,
+    _contentWatcher: null,
     _injectedFontStyleId: 'infinity-custom-font',
 
     /**
@@ -2000,48 +2141,51 @@ const ConfigPage = {
      * Shows the configuration page, replacing dashboard content.
      */
     _showConfigPage() {
-        if (this._pageVisible) return;
+        console.log('[Infinity] _showConfigPage() called.');
 
-        console.log('[Infinity] _showConfigPage() called. Hash:', window.location.hash);
-
-        // Target: MUI Grid container where dashboard/plugin pages render
         const contentArea =
+            document.querySelector('.content-primary') ||
             document.querySelector('.MuiGrid-container.MuiGrid-spacing-xs-3') ||
             document.querySelector('.dashboardDocument .MuiContainer-root') ||
             document.querySelector('.dashboardContent') ||
             document.getElementById('dashboardContent') ||
             document.querySelector('[class*="dashboardContent"]') ||
-            document.querySelector('.adminContent');
+            document.querySelector('.adminContent') ||
+            document.querySelector('.app-content') ||
+            document.querySelector('.MuiBox-root');
 
         if (!contentArea) {
-            console.error('[Infinity] Cannot find dashboard content area. Available containers:',
-                [...document.querySelectorAll('[class*="dashboard"], [class*="content"], [class*="admin"], main')]
-                    .map(el => el.className || el.tagName));
+            console.error('[Infinity] Cannot find dashboard content area.');
             return;
         }
 
-        console.log('[Infinity] Content area found:', contentArea.className || contentArea.id || contentArea.tagName);
+        console.log('[Infinity] Content area:', contentArea.className);
 
-        // Save reference to original content for restoration
         if (!this._originalContent) {
             this._originalContent = contentArea.innerHTML;
         }
 
-        // Load current config
+        // Watch for Jellyfin replacing our config page with other dashboard content
+        if (this._contentWatcher) this._contentWatcher.disconnect();
+        this._contentWatcher = new MutationObserver(() => {
+            if (!document.querySelector('.infinity-config-page')) {
+                console.log('[Infinity] Config page removed by Jellyfin — resetting.');
+                this._pageVisible = false;
+                this._contentWatcher.disconnect();
+                this._contentWatcher = null;
+            }
+        });
+        this._contentWatcher.observe(contentArea, { childList: true, subtree: true });
+
         this._currentConfig = ConfigPersistence.load();
 
-        // Render the config page
         contentArea.innerHTML = this._renderPage();
-
-        // Bind events
         this._bindColorPickers();
         this._bindSlideshowControls();
         this._bindSourceSelector();
         this._bindButtons();
 
-        // Apply live preview
         ConfigPersistence.apply(this._currentConfig);
-
         this._pageVisible = true;
         console.log('[Infinity] Configuration page rendered.');
     },
@@ -2491,25 +2635,31 @@ const ConfigPage = {
 
         // Save button
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                // Sync all current values from form to config
+            saveBtn.addEventListener('click', async () => {
                 this._syncFormToConfig();
 
-                // Validate
                 const validation = ConfigPersistence.validate(this._currentConfig);
                 if (!validation.valid) {
                     this._showFeedback(feedback, 'error', validation.errors.join('<br>'));
                     return;
                 }
 
-                // Save
+                // Save locally (current browser only)
                 try {
                     ConfigPersistence.save(this._currentConfig);
                     ConfigPersistence.apply(this._currentConfig);
-                    this._showFeedback(feedback, 'success', '✅ Configurações salvas com sucesso!');
                 } catch (e) {
-                    this._showFeedback(feedback, 'error', '❌ Erro ao salvar: ' + this._escapeHtml(e.message));
+                    this._showFeedback(feedback, 'error', '❌ Erro local: ' + this._escapeHtml(e.message));
+                    return;
                 }
+
+                // Save to Jellyfin server (all users see the same config)
+                this._showFeedback(feedback, 'info', '⏳ Salvando no servidor...');
+                const serverOk = await ConfigPersistence.saveToServer(this._currentConfig);
+                this._showFeedback(feedback,
+                    serverOk ? 'success' : 'error',
+                    serverOk ? '✅ Configurações salvas (local + servidor)!' : '⚠️ Salvo localmente. Erro ao salvar no servidor.'
+                );
             });
         }
 
@@ -2596,7 +2746,8 @@ const ConfigPage = {
     _showFeedback(element, type, message) {
         if (!element) return;
 
-        const color = type === 'success' ? '#4caf50' : '#bb4a4a';
+        const colors = { success: '#4caf50', error: '#bb4a4a', info: '#90caf9' };
+        const color = colors[type] || colors.error;
         element.innerHTML = `<span style="color:${color}; font-size:0.85rem;">${message}</span>`;
 
         // Auto-hide after 4 seconds

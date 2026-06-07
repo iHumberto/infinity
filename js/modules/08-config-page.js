@@ -17,6 +17,7 @@ const ConfigPage = {
     _pageVisible: false,
     _originalContent: null,
     _currentConfig: null,
+    _contentWatcher: null,
     _injectedFontStyleId: 'infinity-custom-font',
 
     /**
@@ -216,48 +217,51 @@ const ConfigPage = {
      * Shows the configuration page, replacing dashboard content.
      */
     _showConfigPage() {
-        if (this._pageVisible) return;
+        console.log('[Infinity] _showConfigPage() called.');
 
-        console.log('[Infinity] _showConfigPage() called. Hash:', window.location.hash);
-
-        // Target: MUI Grid container where dashboard/plugin pages render
         const contentArea =
+            document.querySelector('.content-primary') ||
             document.querySelector('.MuiGrid-container.MuiGrid-spacing-xs-3') ||
             document.querySelector('.dashboardDocument .MuiContainer-root') ||
             document.querySelector('.dashboardContent') ||
             document.getElementById('dashboardContent') ||
             document.querySelector('[class*="dashboardContent"]') ||
-            document.querySelector('.adminContent');
+            document.querySelector('.adminContent') ||
+            document.querySelector('.app-content') ||
+            document.querySelector('.MuiBox-root');
 
         if (!contentArea) {
-            console.error('[Infinity] Cannot find dashboard content area. Available containers:',
-                [...document.querySelectorAll('[class*="dashboard"], [class*="content"], [class*="admin"], main')]
-                    .map(el => el.className || el.tagName));
+            console.error('[Infinity] Cannot find dashboard content area.');
             return;
         }
 
-        console.log('[Infinity] Content area found:', contentArea.className || contentArea.id || contentArea.tagName);
+        console.log('[Infinity] Content area:', contentArea.className);
 
-        // Save reference to original content for restoration
         if (!this._originalContent) {
             this._originalContent = contentArea.innerHTML;
         }
 
-        // Load current config
+        // Watch for Jellyfin replacing our config page with other dashboard content
+        if (this._contentWatcher) this._contentWatcher.disconnect();
+        this._contentWatcher = new MutationObserver(() => {
+            if (!document.querySelector('.infinity-config-page')) {
+                console.log('[Infinity] Config page removed by Jellyfin — resetting.');
+                this._pageVisible = false;
+                this._contentWatcher.disconnect();
+                this._contentWatcher = null;
+            }
+        });
+        this._contentWatcher.observe(contentArea, { childList: true, subtree: true });
+
         this._currentConfig = ConfigPersistence.load();
 
-        // Render the config page
         contentArea.innerHTML = this._renderPage();
-
-        // Bind events
         this._bindColorPickers();
         this._bindSlideshowControls();
         this._bindSourceSelector();
         this._bindButtons();
 
-        // Apply live preview
         ConfigPersistence.apply(this._currentConfig);
-
         this._pageVisible = true;
         console.log('[Infinity] Configuration page rendered.');
     },
@@ -707,25 +711,31 @@ const ConfigPage = {
 
         // Save button
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                // Sync all current values from form to config
+            saveBtn.addEventListener('click', async () => {
                 this._syncFormToConfig();
 
-                // Validate
                 const validation = ConfigPersistence.validate(this._currentConfig);
                 if (!validation.valid) {
                     this._showFeedback(feedback, 'error', validation.errors.join('<br>'));
                     return;
                 }
 
-                // Save
+                // Save locally (current browser only)
                 try {
                     ConfigPersistence.save(this._currentConfig);
                     ConfigPersistence.apply(this._currentConfig);
-                    this._showFeedback(feedback, 'success', '✅ Configurações salvas com sucesso!');
                 } catch (e) {
-                    this._showFeedback(feedback, 'error', '❌ Erro ao salvar: ' + this._escapeHtml(e.message));
+                    this._showFeedback(feedback, 'error', '❌ Erro local: ' + this._escapeHtml(e.message));
+                    return;
                 }
+
+                // Save to Jellyfin server (all users see the same config)
+                this._showFeedback(feedback, 'info', '⏳ Salvando no servidor...');
+                const serverOk = await ConfigPersistence.saveToServer(this._currentConfig);
+                this._showFeedback(feedback,
+                    serverOk ? 'success' : 'error',
+                    serverOk ? '✅ Configurações salvas (local + servidor)!' : '⚠️ Salvo localmente. Erro ao salvar no servidor.'
+                );
             });
         }
 
@@ -812,7 +822,8 @@ const ConfigPage = {
     _showFeedback(element, type, message) {
         if (!element) return;
 
-        const color = type === 'success' ? '#4caf50' : '#bb4a4a';
+        const colors = { success: '#4caf50', error: '#bb4a4a', info: '#90caf9' };
+        const color = colors[type] || colors.error;
         element.innerHTML = `<span style="color:${color}; font-size:0.85rem;">${message}</span>`;
 
         // Auto-hide after 4 seconds

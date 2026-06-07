@@ -32,17 +32,16 @@ const CONFIG = {
     slideshowItems: 16,
     enableRandom: false,         // Derived from slideshowSource at runtime
     slideAnimationEnabled: true,
-    slideshowSource: 'random',   // 'random' | 'recently_added' | 'prebuilt'
+    slideshowSource: 'recently_added',   // 'random' | 'recently_added' | 'prebuilt'
     slideshowPrebuiltIds: [],    // IDs for 'prebuilt' source mode
 };
 
 /**
- * Loads stored configuration from localStorage via ConfigPersistence.
- * Applies theme colors (CSS custom properties) and updates global CONFIG.
- * Replaces the old readCSSConfig() — configuration is now managed
- * exclusively through the Infinity config page in the dashboard.
+ * Loads stored configuration from localStorage.
+ * If localStorage has saved data → apply it (takes priority).
+ * If localStorage is empty → do nothing, let Branding CSS handle it.
  *
- * Chain: localStorage (user-saved) > defaults (shipped with theme).
+ * Chain: localStorage (admin browser override) > Branding CSS (server-side) > defaults.
  */
 const loadStoredConfig = () => {
     if (typeof ConfigPersistence === 'undefined') {
@@ -50,8 +49,22 @@ const loadStoredConfig = () => {
         return;
     }
     try {
-        const config = ConfigPersistence.load();
-        ConfigPersistence.apply(config);
+        const hasLocalStorage = localStorage.getItem('infinity-config');
+        if (hasLocalStorage) {
+            const config = ConfigPersistence.load();
+            ConfigPersistence.apply(config); // Only apply if user explicitly saved
+        }
+        // If no localStorage, Branding CSS custom properties handle the theme.
+        // But slideshow CONFIG still needs to be read from CSS variables.
+        if (!hasLocalStorage) {
+            const style = getComputedStyle(document.documentElement);
+            const items = parseInt(style.getPropertyValue('--infinity-slideshow-items').trim());
+            const interval = parseFloat(style.getPropertyValue('--infinity-slide-interval'));
+            const fade = parseInt(style.getPropertyValue('--infinity-fade-duration').trim());
+            CONFIG.slideshowItems = items || CONFIG.slideshowItems;
+            CONFIG.shuffleInterval = (interval * 1000) || CONFIG.shuffleInterval;
+            CONFIG.fadeTransitionDuration = fade || CONFIG.fadeTransitionDuration;
+        }
     } catch (e) {
         console.warn('[Infinity] loadStoredConfig failed:', e.message, '— using defaults');
     }
