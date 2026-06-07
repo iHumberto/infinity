@@ -97,238 +97,71 @@ const ConfigPage = {
         // Check if menu item already exists
         if (document.getElementById('infinity-config-menu-item')) return;
 
-        // Try multiple selector strategies for the sidebar list
-        const drawer = this._findDrawerList();
-        if (!drawer) {
-            console.log('[Infinity] _injectMenu: drawer not found. Hash:', hash);
+        // Strategy: find the server section header (.server-subheader),
+        // walk its siblings to find the last server item before "Sair",
+        // and insert Infinity after it.
+        const serverHeader = document.querySelector('.server-subheader');
+        if (!serverHeader) {
+            console.log('[Infinity] _injectMenu: .server-subheader not found in document.');
             return;
         }
 
-        console.log('[Infinity] ConfigPage: drawer found, looking for insert point...');
+        // Walk forward from serverHeader to find the last menu item before logout
+        let lastServerItem = null;
+        let sibling = serverHeader.nextElementSibling;
+        while (sibling) {
+            // Stop if we hit another section header
+            if (sibling.matches('.server-subheader, .MuiListSubheader-root, .sectionTitle')) break;
 
-        // Find the "Servidor"/"Server" section
-        const serverHeader = this._findServerSection(drawer);
-        let insertAfter = null;
-
-        if (serverHeader) {
-            insertAfter = this._findLastInSection(serverHeader);
-            console.log('[Infinity] ConfigPage: "Servidor" section found, inserting after:', insertAfter?.textContent?.trim() || '(header)');
-        } else {
-            // Fallback: find known dashboard items and insert after them
-            insertAfter = this._findFallbackInsertPoint(drawer);
-            console.log('[Infinity] ConfigPage: "Servidor" not found, fallback insert after:', insertAfter?.textContent?.trim() || '(end of list)');
+            // Collect link items
+            if (sibling.matches('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption, [role="button"]')) {
+                const text = sibling.textContent.trim();
+                // Stop at logout/user-switch items (bottom section)
+                if (['Sair', 'Logout', 'Sign out'].includes(text)) break;
+                lastServerItem = sibling;
+            }
+            sibling = sibling.nextElementSibling;
         }
 
-        this._createMenuItem(drawer, insertAfter);
+        if (!lastServerItem) {
+            // No server items found after the header — insert right after header
+            lastServerItem = serverHeader;
+        }
+
+        console.log('[Infinity] ConfigPage: inserting after:', lastServerItem.textContent.trim());
+
+        // Create and insert the menu item
+        const menuItem = this._buildMenuItem();
+        lastServerItem.insertAdjacentElement('afterend', menuItem);
         console.log('[Infinity] ConfigPage: menu item "Infinity" injected.');
     },
 
     /**
-     * Finds the sidebar list container in the dashboard.
-     * Tries multiple selectors for different Jellyfin versions.
-     * @returns {Element|null}
+     * Builds the menu item element (without inserting it).
+     * @returns {Element}
      */
-    _findDrawerList() {
-        // Jellyfin 10.10+ (MUI v5): Drawer with nav list
-        const muiDrawer = document.querySelector('.MuiDrawer-root .MuiList-root');
-        if (muiDrawer) return muiDrawer;
-
-        // MUI drawer paper directly (some versions)
-        const muiPaper = document.querySelector('.MuiDrawer-paper .MuiList-root');
-        if (muiPaper) return muiPaper;
-
-        // Legacy Jellyfin (10.8/10.9): mainDrawer class
-        const legacy = document.querySelector('.mainDrawer');
-        if (legacy) return legacy;
-
-        // Last resort: any .MuiList-root inside the drawer area
-        const anyMuiList = document.querySelector('.MuiDrawer-root .MuiList-root, .MuiDrawer-paper .MuiList-root');
-        if (anyMuiList) return anyMuiList;
-
-        return null;
-    },
-
-    /**
-     * Checks if current route is a dashboard page.
-     * @returns {boolean}
-     */
-    _isDashboardRoute() {
-        const hash = window.location.hash;
-        // Jellyfin 10.10+ uses #/dashboard, legacy uses #/dashboard.html
-        return hash.includes('/dashboard') || hash.includes('dashboard.html') || hash.includes('configurationpage');
-    },
-
-    /**
-     * Finds the "Servidor" section header in the sidebar.
-     * Works with both MUI ListSubheader and legacy sectionTitle.
-     * @param {Element} drawer
-     * @returns {Element|null}
-     */
-    _findServerSection(drawer) {
-        // Jellyfin 10.10+: specific class for the server section header
-        const serverSubheader = drawer.querySelector('.server-subheader');
-        if (serverSubheader) return serverSubheader;
-
-        // Section headers can be "Servidor" (PT), "Server" (EN), etc.
-        const serverNames = ['Servidor', 'Server'];
-
-        // MUI: MuiListSubheader-root
-        const muiHeaders = drawer.querySelectorAll('.MuiListSubheader-root');
-        for (const header of muiHeaders) {
-            const text = header.textContent.trim();
-            if (serverNames.some(name => text === name)) return header;
-        }
-
-        // MUI v5+: list subheader variants
-        const subHeaders = drawer.querySelectorAll('[class*="MuiListSubheader"]');
-        for (const header of subHeaders) {
-            const text = header.textContent.trim();
-            if (serverNames.some(name => text === name || text.includes(name))) return header;
-        }
-
-        // Legacy: .sectionTitle
-        const legacyHeaders = drawer.querySelectorAll('.sectionTitle');
-        for (const header of legacyHeaders) {
-            const text = header.textContent.trim();
-            if (serverNames.some(name => text === name)) return header;
-        }
-
-        // Broader fallback: any leaf element containing the exact text
-        const allElements = drawer.querySelectorAll('*');
-        for (const el of allElements) {
-            if (el.children.length === 0) {
-                const text = el.textContent.trim();
-                if (serverNames.some(name => text === name)) {
-                    return el.parentElement || el;
-                }
-            }
-        }
-
-        return null;
-    },
-
-    /**
-     * Fallback: finds an insert point when "Servidor" section isn't found.
-     * Looks for known dashboard items like "Plugins", "Atividade", etc.
-     * @param {Element} drawer
-     * @returns {Element|null}
-     */
-    _findFallbackInsertPoint(drawer) {
-        // Items at the bottom of the drawer (logout, user switch) — skip these
-        const excludeItems = ['Sair', 'Logout', 'Sign out', 'Alternar usuário', 'Switch User'];
-
-        // Known items that appear in the server section (multi-language)
-        const knownItems = ['Plugins', 'Plugin', 'Catálogo', 'Metadata', 'Atividade', 'Activity',
-                            'Usuários', 'Users', 'Dispositivos', 'Devices', 'Bibliotecas', 'Libraries',
-                            'Reprodução', 'Playback', 'Rede', 'Networking', 'Transcodificação', 'Transcoding'];
-
-        const allItems = drawer.querySelectorAll('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption');
-
-        // First pass: find the last known server item
-        let lastServerItem = null;
-        for (const item of allItems) {
-            const text = item.textContent.trim();
-            if (excludeItems.some(exc => text === exc)) continue;
-            if (knownItems.some(k => text.includes(k))) {
-                lastServerItem = item;
-            }
-        }
-
-        if (lastServerItem) return lastServerItem;
-
-        // Second pass: return the last non-excluded item (bottom-up)
-        for (let i = allItems.length - 1; i >= 0; i--) {
-            const text = allItems[i].textContent.trim();
-            if (!excludeItems.some(exc => text === exc)) {
-                return allItems[i];
-            }
-        }
-
-        return null;
-    },
-
-    /**
-     * Finds the last list item in the "Servidor" section.
-     * @param {Element} serverHeader
-     * @returns {Element|null}
-     */
-    _findLastInSection(serverHeader) {
-        let current = serverHeader.nextElementSibling;
-
-        // Items that indicate a different section (bottom: logout, user actions)
-        const sectionEndItems = ['Sair', 'Logout', 'Sign out', 'Alternar usuário', 'Switch User'];
-
-        // Walk forward while elements are list items or dividers (not new sections)
-        let lastItem = null;
-        while (current) {
-            // Stop at next section header
-            if (current.classList.contains('MuiListSubheader-root') ||
-                current.classList.contains('sectionTitle') ||
-                current.classList.contains('server-subheader')) {
-                break;
-            }
-
-            // Stop if this item belongs to another section (e.g., logout)
-            if (current.matches('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption')) {
-                const text = current.textContent.trim();
-                if (sectionEndItems.some(exc => text === exc)) {
-                    break;
-                }
-                lastItem = current;
-            }
-            current = current.nextElementSibling;
-        }
-
-        // Return last found item, or the header itself if no items found
-        return lastItem || serverHeader;
-    },
-
-    /**
-     * Creates and inserts the menu item.
-     * @param {Element} drawer — the sidebar container
-     * @param {Element|null} insertAfter — element to insert after (null = append to end)
-     */
-    _createMenuItem(drawer, insertAfter) {
+    _buildMenuItem() {
         const menuItem = document.createElement('a');
-
-        // Try to match MUI list item structure
-        const isMui = drawer.classList.contains('MuiList-root');
-
-        if (isMui) {
-            // Match MUI list item appearance
-            menuItem.className = 'MuiListItemButton-root MuiListItem-root navMenuOption';
-            menuItem.setAttribute('role', 'button');
-            menuItem.setAttribute('tabindex', '0');
-            menuItem.innerHTML = `
-                <div class="MuiListItemIcon-root" style="min-width:36px; color:#eee;">
-                    <span class="material-icons" style="font-size:20px;">palette</span>
-                </div>
-                <div class="MuiListItemText-root">
-                    <span class="MuiTypography-root" style="color:#eee; font-size:0.9rem;">Infinity</span>
-                </div>
-            `;
-        } else {
-            // Legacy Jellyfin style
-            menuItem.className = 'navMenuOption';
-            menuItem.innerHTML = `
-                <span class="material-icons navMenuOptionIcon">palette</span>
-                <span>Infinity</span>
-            `;
-        }
-
         menuItem.id = 'infinity-config-menu-item';
         menuItem.href = '#';
+        menuItem.className = 'MuiButtonBase-root MuiListItemButton-root MuiListItem-root navMenuOption';
+        menuItem.setAttribute('role', 'button');
+        menuItem.setAttribute('tabindex', '0');
+        menuItem.innerHTML = `
+            <div class="MuiListItemIcon-root" style="min-width:36px; color:#eee;">
+                <span class="material-icons" style="font-size:20px;">palette</span>
+            </div>
+            <div class="MuiListItemText-root">
+                <span class="MuiTypography-root" style="color:#eee; font-size:0.9rem;">Infinity</span>
+            </div>
+        `;
         menuItem.addEventListener('click', (e) => {
             e.preventDefault();
             this._showConfigPage();
         });
-
-        if (insertAfter) {
-            insertAfter.insertAdjacentElement('afterend', menuItem);
-        } else {
-            drawer.appendChild(menuItem);
-        }
+        return menuItem;
     },
+
 
     /**
      * Shows the configuration page, replacing dashboard content.
