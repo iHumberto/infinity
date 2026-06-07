@@ -79,10 +79,63 @@ const ConfigPage = {
      * under the "Servidor" section.
      * Idempotent — won't create duplicate menu items.
      */
+
+    /**
+     * Finds the dashboard sidebar and injects the "Infinity" menu item.
+     * React-resistant — re-injects if React removes our element.
+     */
     _injectMenu() {
         const hash = window.location.hash;
 
-        // Only inject on dashboard routes
+        if (!this._isDashboardRoute()) {
+            if (!this._loggedNotDashboard) {
+                console.log('[Infinity] _injectMenu: not dashboard route. Hash:', hash);
+                this._loggedNotDashboard = true;
+                setTimeout(() => { this._loggedNotDashboard = false; }, 5000);
+            }
+            return;
+        }
+        this._loggedNotDashboard = false;
+
+        // React may remove our injected element — re-inject if needed
+        const existing = document.getElementById('infinity-config-menu-item');
+        if (existing && existing.parentNode) return;
+
+        // Find "Plugins" item (always present in dashboard sidebar)
+        const insertAfter = this._findSidebarItem('Plugins') ||
+                            this._findSidebarItem('Geral') ||
+                            this._findSidebarItem('General') ||
+                            this._findSidebarItem('Dashboard');
+        if (!insertAfter) return; // Sidebar not ready, observer will retry
+
+        console.log('[Infinity] ConfigPage: inserting after:', insertAfter.textContent.trim());
+
+        const menuItem = this._buildMenuItem();
+        insertAfter.insertAdjacentElement('afterend', menuItem);
+        console.log('[Infinity] ConfigPage: menu item "Infinity" injected.');
+    },
+
+    /**
+     * Finds a sidebar menu item by its exact text content.
+     * @param {string} text
+     * @returns {Element|null}
+     */
+    _findSidebarItem(text) {
+        // Search within drawer containers first
+        const containers = document.querySelectorAll('.MuiDrawer-root, .MuiDrawer-paper, .mainDrawer');
+        for (const c of containers) {
+            const items = c.querySelectorAll('a, [role="button"], .MuiListItem-root, .MuiListItemButton-root');
+            for (const item of items) {
+                if (item.textContent.trim() === text) return item;
+            }
+        }
+        // Fallback: search entire document
+        const all = document.querySelectorAll('a, [role="button"], .MuiListItem-root, .MuiListItemButton-root');
+        for (const item of all) {
+            if (item.textContent.trim() === text) return item;
+        }
+        return null;
+    },
         if (!this._isDashboardRoute()) {
             if (!this._loggedNotDashboard) {
                 console.log('[Infinity] _injectMenu: not a dashboard route. Hash:', hash);
