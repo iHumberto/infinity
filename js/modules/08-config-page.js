@@ -136,57 +136,10 @@ const ConfigPage = {
         }
         return null;
     },
-        if (!this._isDashboardRoute()) {
-            if (!this._loggedNotDashboard) {
-                console.log('[Infinity] _injectMenu: not a dashboard route. Hash:', hash);
-                this._loggedNotDashboard = true;
-                setTimeout(() => { this._loggedNotDashboard = false; }, 5000);
-            }
-            return;
-        }
 
-        this._loggedNotDashboard = false;
-
-        // Check if menu item already exists
-        if (document.getElementById('infinity-config-menu-item')) return;
-
-        // Strategy: find the server section header (.server-subheader),
-        // walk its siblings to find the last server item before "Sair",
-        // and insert Infinity after it.
-        const serverHeader = document.querySelector('.server-subheader');
-        if (!serverHeader) {
-            console.log('[Infinity] _injectMenu: .server-subheader not found in document.');
-            return;
-        }
-
-        // Walk forward from serverHeader to find the last menu item before logout
-        let lastServerItem = null;
-        let sibling = serverHeader.nextElementSibling;
-        while (sibling) {
-            // Stop if we hit another section header
-            if (sibling.matches('.server-subheader, .MuiListSubheader-root, .sectionTitle')) break;
-
-            // Collect link items
-            if (sibling.matches('a, .MuiListItemButton-root, .MuiListItem-root, .navMenuOption, [role="button"]')) {
-                const text = sibling.textContent.trim();
-                // Stop at logout/user-switch items (bottom section)
-                if (['Sair', 'Logout', 'Sign out'].includes(text)) break;
-                lastServerItem = sibling;
-            }
-            sibling = sibling.nextElementSibling;
-        }
-
-        if (!lastServerItem) {
-            // No server items found after the header — insert right after header
-            lastServerItem = serverHeader;
-        }
-
-        console.log('[Infinity] ConfigPage: inserting after:', lastServerItem.textContent.trim());
-
-        // Create and insert the menu item
-        const menuItem = this._buildMenuItem();
-        lastServerItem.insertAdjacentElement('afterend', menuItem);
-        console.log('[Infinity] ConfigPage: menu item "Infinity" injected.');
+    _isDashboardRoute() {
+        const hash = window.location.hash;
+        return hash.includes("/dashboard") || hash.includes("dashboard.html") || hash.includes("configurationpage");
     },
 
     /**
