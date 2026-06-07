@@ -1283,10 +1283,8 @@ const SlideshowManager = {
                     break;
             }
 
-            // Shuffle for variety (except recently_added which is chronological)
-            if (CONFIG.slideshowSource !== 'recently_added') {
-                finalItemIds = SlideUtils.shuffleArray(finalItemIds);
-            }
+            // Always shuffle for variety in display order
+            finalItemIds = SlideUtils.shuffleArray(finalItemIds);
 
             if (finalItemIds.length > neededCount) {
                 debugLog(`Slicing final list from ${finalItemIds.length} to ${neededCount}.`);
