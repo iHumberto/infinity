@@ -707,25 +707,31 @@ const ConfigPage = {
 
         // Save button
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                // Sync all current values from form to config
+            saveBtn.addEventListener('click', async () => {
                 this._syncFormToConfig();
 
-                // Validate
                 const validation = ConfigPersistence.validate(this._currentConfig);
                 if (!validation.valid) {
                     this._showFeedback(feedback, 'error', validation.errors.join('<br>'));
                     return;
                 }
 
-                // Save
+                // Save locally (current browser only)
                 try {
                     ConfigPersistence.save(this._currentConfig);
                     ConfigPersistence.apply(this._currentConfig);
-                    this._showFeedback(feedback, 'success', '✅ Configurações salvas com sucesso!');
                 } catch (e) {
-                    this._showFeedback(feedback, 'error', '❌ Erro ao salvar: ' + this._escapeHtml(e.message));
+                    this._showFeedback(feedback, 'error', '❌ Erro local: ' + this._escapeHtml(e.message));
+                    return;
                 }
+
+                // Save to Jellyfin server (all users see the same config)
+                this._showFeedback(feedback, 'info', '⏳ Salvando no servidor...');
+                const serverOk = await ConfigPersistence.saveToServer(this._currentConfig);
+                this._showFeedback(feedback,
+                    serverOk ? 'success' : 'error',
+                    serverOk ? '✅ Configurações salvas (local + servidor)!' : '⚠️ Salvo localmente. Erro ao salvar no servidor.'
+                );
             });
         }
 
@@ -812,7 +818,8 @@ const ConfigPage = {
     _showFeedback(element, type, message) {
         if (!element) return;
 
-        const color = type === 'success' ? '#4caf50' : '#bb4a4a';
+        const colors = { success: '#4caf50', error: '#bb4a4a', info: '#90caf9' };
+        const color = colors[type] || colors.error;
         element.innerHTML = `<span style="color:${color}; font-size:0.85rem;">${message}</span>`;
 
         // Auto-hide after 4 seconds

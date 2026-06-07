@@ -1783,7 +1783,77 @@ const ConfigPersistence = {
         }
 
         return { valid: errors.length === 0, errors };
-    }
+    },
+
+    /**
+     * Builds a CSS string from the config for Jellyfin Branding storage.
+     * This makes config server-side — all users see the same theme.
+     * @param {object} config
+     * @returns {string} CSS block
+     */
+    _buildCssString(config) {
+        const t = config.theme || {};
+        const f = config.font || {};
+        const s = config.slideshow || {};
+
+        return `/* Infinity Theme Config — auto-generated */\n:root {\n  --theme-background-color: ${t.backgroundColor || ""};\n  --theme-text-color: ${t.textColor || ""};\n  --theme-accent-color: ${t.accentColor || ""};\n  --card-bg: ${t.cardBg || ""};\n  --header-bg: ${t.headerBg || ""};\n  --sidebar-bg: ${t.sidebarBg || ""};\n  --button-bg: ${t.buttonBg || ""};\n  --input-bg: ${t.inputBg || ""};\n  --theme-warning-color: ${t.warningColor || ""};\n  --selection-border-color: ${t.selectionBorder || ""};\n  --font-family-base: "${f.family || "Kodchasan"}", sans-serif;\n  --infinity-font-url: "${(f.url || "").replace(/"/g, '\\"')}";\n  --infinity-slideshow-items: ${s.items || 16};\n  --infinity-slide-interval: ${s.interval || 10}s;\n  --infinity-fade-duration: ${s.fadeDuration || 500}ms;\n  --infinity-kenburns-duration: ${s.kenBurnsDuration || 10}s;\n  --infinity-source: ${s.source || "random"};\n}`;
+    },
+
+    /**
+     * Saves config to the Jellyfin server via Branding API.
+     * Updates Custom CSS field so ALL users see the same config.
+     * Falls back to localStorage if server save fails.
+     * @param {object} config
+     * @returns {Promise<boolean>}
+     */
+    async saveToServer(config) {
+        try {
+            const apiClient = window.ApiClient;
+            if (!apiClient) {
+                console.warn('[Infinity] ApiClient not available — config saved locally only.');
+                return false;
+            }
+
+            const cssBlock = this._buildCssString(config);
+            const serverAddress = apiClient.serverAddress();
+            const authHeader = apiClient.getAuthorizationHeader?.('MediaBrowser') || '';
+
+            // Fetch current branding config
+            const brandingUrl = `${serverAddress}/System/Configuration/branding`;
+            const getResponse = await fetch(brandingUrl, {
+                headers: { 'Authorization': authHeader }
+            });
+
+            if (!getResponse.ok) throw new Error(`GET branding: ${getResponse.status}`);
+            const branding = await getResponse.json();
+
+            // Remove old Infinity block, append new one
+            branding.CustomCss = (branding.CustomCss || '')
+                .replace(/\/\* Infinity Theme Config[\s\S]*?\*\//g, '')
+                .trim();
+            branding.CustomCss = branding.CustomCss
+                ? `${branding.CustomCss}\n\n${cssBlock}`
+                : cssBlock;
+
+            // POST updated config
+            const postResponse = await fetch(brandingUrl, {
+                method: 'POST',
+                headers: {
+                    'Authorization': authHeader,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(branding)
+            });
+
+            if (!postResponse.ok) throw new Error(`POST branding: ${postResponse.status}`);
+
+            console.log('[Infinity] Config saved to Jellyfin server.');
+            return true;
+        } catch (e) {
+            console.error('[Infinity] Server save failed, using localStorage only:', e.message);
+            return false;
+        }
+    },
 };
 /**
  * Dashboard configuration page for the Infinity theme.
@@ -2491,25 +2561,31 @@ const ConfigPage = {
 
         // Save button
         if (saveBtn) {
-            saveBtn.addEventListener('click', () => {
-                // Sync all current values from form to config
+            saveBtn.addEventListener('click', async () => {
                 this._syncFormToConfig();
 
-                // Validate
                 const validation = ConfigPersistence.validate(this._currentConfig);
                 if (!validation.valid) {
                     this._showFeedback(feedback, 'error', validation.errors.join('<br>'));
                     return;
                 }
 
-                // Save
+                // Save locally (current browser only)
                 try {
                     ConfigPersistence.save(this._currentConfig);
                     ConfigPersistence.apply(this._currentConfig);
-                    this._showFeedback(feedback, 'success', '✅ Configurações salvas com sucesso!');
                 } catch (e) {
-                    this._showFeedback(feedback, 'error', '❌ Erro ao salvar: ' + this._escapeHtml(e.message));
+                    this._showFeedback(feedback, 'error', '❌ Erro local: ' + this._escapeHtml(e.message));
+                    return;
                 }
+
+                // Save to Jellyfin server (all users see the same config)
+                this._showFeedback(feedback, 'info', '⏳ Salvando no servidor...');
+                const serverOk = await ConfigPersistence.saveToServer(this._currentConfig);
+                this._showFeedback(feedback,
+                    serverOk ? 'success' : 'error',
+                    serverOk ? '✅ Configurações salvas (local + servidor)!' : '⚠️ Salvo localmente. Erro ao salvar no servidor.'
+                );
             });
         }
 
@@ -2596,7 +2672,8 @@ const ConfigPage = {
     _showFeedback(element, type, message) {
         if (!element) return;
 
-        const color = type === 'success' ? '#4caf50' : '#bb4a4a';
+        const colors = { success: '#4caf50', error: '#bb4a4a', info: '#90caf9' };
+        const color = colors[type] || colors.error;
         element.innerHTML = `<span style="color:${color}; font-size:0.85rem;">${message}</span>`;
 
         // Auto-hide after 4 seconds
