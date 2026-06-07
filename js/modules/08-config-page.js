@@ -230,16 +230,14 @@ const ConfigPage = {
 
         console.log('[Infinity] _showConfigPage() called. Hash:', window.location.hash);
 
-        // Find dashboard content container — try multiple selectors for Jellyfin 10.10+
+        // Target: MUI Grid container where dashboard/plugin pages render
         const contentArea =
+            document.querySelector('.MuiGrid-container.MuiGrid-spacing-xs-3') ||
             document.querySelector('.dashboardDocument .MuiContainer-root') ||
             document.querySelector('.dashboardContent') ||
             document.getElementById('dashboardContent') ||
             document.querySelector('[class*="dashboardContent"]') ||
-            document.querySelector('.adminContent') ||
-            document.querySelector('.skinBody') ||
-            document.querySelector('#main') ||
-            document.querySelector('main');
+            document.querySelector('.adminContent');
 
         if (!contentArea) {
             console.error('[Infinity] Cannot find dashboard content area. Available containers:',
