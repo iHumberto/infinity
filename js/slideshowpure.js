@@ -1973,12 +1973,13 @@ const ConfigPage = {
             }
         }
 
-        // Remove old click handlers by replacing with a new element's listener
+        // Capture phase + stopImmediatePropagation to beat React's event delegation
         menuItem.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             this._showConfigPage();
-        });
+        }, { capture: true });
 
         return menuItem;
     },
@@ -2000,29 +2001,40 @@ const ConfigPage = {
         menuItem.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
+            e.stopImmediatePropagation();
             this._showConfigPage();
-        });
+        }, { capture: true });
         return menuItem;
     },
 
 
     /**
      * Shows the configuration page, replacing dashboard content.
-     * Saves original content reference to restore on navigation away.
      */
     _showConfigPage() {
         if (this._pageVisible) return;
 
-        // Find dashboard content container
-        const contentArea = document.querySelector('.dashboardContent') ||
-                            document.getElementById('dashboardContent') ||
-                            document.querySelector('.adminContent') ||
-                            document.querySelector('.skinBody');
+        console.log('[Infinity] _showConfigPage() called. Hash:', window.location.hash);
+
+        // Find dashboard content container — try multiple selectors for Jellyfin 10.10+
+        const contentArea =
+            document.querySelector('.dashboardDocument .MuiContainer-root') ||
+            document.querySelector('.dashboardContent') ||
+            document.getElementById('dashboardContent') ||
+            document.querySelector('[class*="dashboardContent"]') ||
+            document.querySelector('.adminContent') ||
+            document.querySelector('.skinBody') ||
+            document.querySelector('#main') ||
+            document.querySelector('main');
 
         if (!contentArea) {
-            console.error('[ConfigPage] Cannot find dashboard content area.');
+            console.error('[Infinity] Cannot find dashboard content area. Available containers:',
+                [...document.querySelectorAll('[class*="dashboard"], [class*="content"], [class*="admin"], main')]
+                    .map(el => el.className || el.tagName));
             return;
         }
+
+        console.log('[Infinity] Content area found:', contentArea.className || contentArea.id || contentArea.tagName);
 
         // Save reference to original content for restoration
         if (!this._originalContent) {
@@ -2045,7 +2057,7 @@ const ConfigPage = {
         ConfigPersistence.apply(this._currentConfig);
 
         this._pageVisible = true;
-        debugLog('[ConfigPage] Configuration page rendered.');
+        console.log('[Infinity] Configuration page rendered.');
     },
 
     /**
