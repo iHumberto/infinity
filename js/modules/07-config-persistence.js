@@ -399,7 +399,7 @@ const ConfigPersistence = {
         const f = config.font || {};
         const s = config.slideshow || {};
 
-        return `/* Infinity Theme Config — auto-generated */\n:root {\n  --theme-background-color: ${t.backgroundColor || ""};\n  --theme-text-color: ${t.textColor || ""};\n  --theme-accent-color: ${t.accentColor || ""};\n  --card-bg: ${t.cardBg || ""};\n  --header-bg: ${t.headerBg || ""};\n  --sidebar-bg: ${t.sidebarBg || ""};\n  --button-bg: ${t.buttonBg || ""};\n  --input-bg: ${t.inputBg || ""};\n  --theme-warning-color: ${t.warningColor || ""};\n  --selection-border-color: ${t.selectionBorder || ""};\n  --font-family-base: "${f.family || "Kodchasan"}", sans-serif;\n  --infinity-font-url: "${(f.url || "").replace(/"/g, '\\"')}";\n  --infinity-slideshow-items: ${s.items || 16};\n  --infinity-slide-interval: ${s.interval || 10}s;\n  --infinity-fade-duration: ${s.fadeDuration || 500}ms;\n  --infinity-kenburns-duration: ${s.kenBurnsDuration || 10}s;\n  --infinity-source: ${s.source || "random"};\n}`;
+        return `/* ══ INFINITY-CONFIG ══ */\n:root {\n  --theme-background-color: ${t.backgroundColor || ""} !important;\n  --theme-text-color: ${t.textColor || ""} !important;\n  --theme-accent-color: ${t.accentColor || ""} !important;\n  --card-bg: ${t.cardBg || ""} !important;\n  --header-bg: ${t.headerBg || ""} !important;\n  --sidebar-bg: ${t.sidebarBg || ""} !important;\n  --button-bg: ${t.buttonBg || ""} !important;\n  --input-bg: ${t.inputBg || ""} !important;\n  --theme-warning-color: ${t.warningColor || ""} !important;\n  --selection-border-color: ${t.selectionBorder || ""} !important;\n  --font-family-base: "${f.family || "Kodchasan"}", sans-serif !important;\n  --infinity-font-url: "${(f.url || "").replace(/"/g, '\\"')}";\n  --infinity-slideshow-items: ${s.items || 16};\n  --infinity-slide-interval: ${s.interval || 10}s;\n  --infinity-fade-duration: ${s.fadeDuration || 500}ms;\n  --infinity-kenburns-duration: ${s.kenBurnsDuration || 10}s;\n  --infinity-source: ${s.source || "random"};\n}`;
     },
 
     /**
@@ -439,10 +439,22 @@ const ConfigPersistence = {
             if (!getResponse.ok) throw new Error(`GET branding: ${getResponse.status}`);
             const branding = await getResponse.json();
 
-            // Remove old Infinity block, append new one
-            branding.CustomCss = (branding.CustomCss || '')
-                .replace(/\/\* Infinity Theme Config[\s\S]*?\*\//g, '')
-                .trim();
+            // Remove any existing Infinity blocks using the unique marker
+            const marker = '/* ══ INFINITY-CONFIG ══ */';
+            let css = branding.CustomCss || '';
+            while (true) {
+                const start = css.indexOf(marker);
+                if (start === -1) break;
+                // Find the closing */ that ends the comment on the first line
+                const commentEnd = css.indexOf('*/', start);
+                if (commentEnd === -1) break;
+                // Find the closing } of the :root block
+                const rootEnd = css.indexOf('}', commentEnd);
+                if (rootEnd === -1) break;
+                // Remove from start of marker to end of :root block (inclusive)
+                css = css.substring(0, start) + css.substring(rootEnd + 1);
+            }
+            branding.CustomCss = css.trim();
             branding.CustomCss = branding.CustomCss
                 ? `${branding.CustomCss}\n\n${cssBlock}`
                 : cssBlock;
