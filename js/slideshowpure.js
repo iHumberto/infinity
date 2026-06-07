@@ -1942,34 +1942,45 @@ const ConfigPage = {
      * @returns {Element}
      */
     _buildMenuItem() {
-        // Clone the "Plugins" item specifically — it's in the server section
-        // and has the exact styling we want (same as Intro Skipper, etc.)
-        const template = this._findSidebarItem('Plugins') ||
-                         this._findSidebarItem('Geral') ||
-                         document.querySelector('.MuiDrawer-root .MuiListItemButton-root') ||
-                         document.querySelector('.MuiDrawer-root a[href]');
-
+        const template = this._findSidebarItem('Plugins');
         if (!template) {
-            console.warn('[Infinity] No sidebar template found — creating item with inline styles.');
+            console.warn('[Infinity] Plugins not found — using fallback.');
             return this._buildMenuItemFallback();
         }
 
-        // Deep-clone the template to get exact CSS-in-JS classes
+        // Deep clone the Plugins item (preserves ALL Emotion CSS-in-JS classes)
         const menuItem = template.cloneNode(true);
         menuItem.id = 'infinity-config-menu-item';
         menuItem.setAttribute('href', '#');
 
-        // Clear children and get class names from the template for rebuilding
-        const iconClass = template.querySelector('[class*="MuiListItemIcon"]')?.className || '';
-        const textClass = template.querySelector('[class*="MuiListItemText"]')?.className || '';
-        const spanClass = template.querySelector('[class*="MuiTypography"]')?.className || '';
-        menuItem.replaceChildren();
+        // Replace the SVG icon inside .MuiListItemIcon-root with material-icons span
+        const iconContainer = menuItem.querySelector('[class*="MuiListItemIcon"]');
+        if (iconContainer) {
+            const svg = iconContainer.querySelector('svg');
+            if (svg) {
+                const iconSpan = document.createElement('span');
+                iconSpan.className = 'material-icons';
+                iconSpan.style.fontSize = '20px';
+                iconSpan.textContent = 'palette';
+                svg.replaceWith(iconSpan);
+            }
+        }
 
-        // Rebuild with standard MUI ListItemButton structure
-        const iconWrapper = document.createElement('div');
-        iconWrapper.className = iconClass;
-        iconWrapper.innerHTML = '<span class="material-icons" style="font-size:20px;">palette</span>';
+        // Replace only the text content, keep all wrapper elements
+        const textSpan = menuItem.querySelector('[class*="MuiTypography"]');
+        if (textSpan) {
+            textSpan.textContent = 'Infinity';
+        }
 
+        menuItem.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            e.stopImmediatePropagation();
+            this._showConfigPage();
+        }, { capture: true });
+
+        return menuItem;
+    },
         const textWrapper = document.createElement('div');
         textWrapper.className = textClass;
         const textSpan = document.createElement('span');
