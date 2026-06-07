@@ -22,7 +22,7 @@ Você pode:
 ### Acessando a página de configuração
 
 1. No Jellyfin, abra o **Painel de Controle** (Dashboard).
-2. No menu lateral, role até a seção **Servidor**.
+2. No menu lateral, role até a seção **Plugins**.
 3. Clique em **🎨 Infinity**.
 
 A página de configuração será carregada no lugar do conteúdo do painel.
@@ -107,11 +107,11 @@ Não. A página de configuração substitui completamente o método antigo de co
 
 ### As configurações são salvas por usuário?
 
-Não. As configurações são salvas no navegador (localStorage) e se aplicam a todos que acessam o Jellyfin por este navegador. Para aplicar as mesmas configurações em outro computador, repita o processo lá.
+Não. Ao clicar em **Salvar Configurações**, o tema grava as alterações no servidor Jellyfin (campo Custom CSS do Branding). Isso significa que **todos os usuários** do servidor verão as mesmas cores e configurações, independente do navegador ou dispositivo que usarem.
 
-### O que acontece se eu trocar de navegador ou limpar os dados?
+### O que acontece se eu trocar de navegador ou dispositivo?
 
-As configurações são salvas no armazenamento local do navegador. Se você limpar os dados do navegador ou usar outro navegador, as configurações voltam aos padrões. Basta acessar a página novamente e reconfigurar.
+Como as configurações ficam salvas no servidor, elas são aplicadas automaticamente em qualquer navegador, computador ou celular (via navegador web). Basta acessar o Jellyfin normalmente — as cores e o slideshow já estarão configurados.
 
 ### Por que as cores ou fonte não mudaram?
 
