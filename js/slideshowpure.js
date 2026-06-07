@@ -2081,7 +2081,9 @@ const ConfigPage = {
             document.querySelector('.dashboardContent') ||
             document.getElementById('dashboardContent') ||
             document.querySelector('[class*="dashboardContent"]') ||
-            document.querySelector('.adminContent');
+            document.querySelector('.adminContent') ||
+            document.querySelector('.app-content') ||
+            document.querySelector('.MuiBox-root');
 
         if (!contentArea) {
             console.error('[Infinity] Cannot find dashboard content area. Available containers:',
