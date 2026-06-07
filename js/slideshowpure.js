@@ -1936,49 +1936,34 @@ const ConfigPage = {
     },
 
     /**
-     * Builds the menu item by CLONING an existing sidebar item.
-     * This preserves MUI's CSS-in-JS generated styles (Emotion class names).
+     * Builds the menu item by CLONING the outer shell of an existing sidebar item.
+     * This preserves MUI's CSS-in-JS generated styles (Emotion).
+     * Inner content is rebuilt cleanly to avoid layout issues from the cloned source.
      * @returns {Element}
      */
     _buildMenuItem() {
-        // Find any existing sidebar item to use as a template for cloning
-        // This ensures we inherit MUI's generated CSS classes (CSS-in-JS)
+        // Find any existing sidebar item as template for the outer shell
         const template = document.querySelector('.MuiDrawer-root a, .MuiDrawer-paper a, .mainDrawer a, [class*="MuiListItemButton"]');
         if (!template) {
-            // Last resort: create from scratch with inline styles
             console.warn('[Infinity] No sidebar template found — creating item with inline styles.');
             return this._buildMenuItemFallback();
         }
 
-        // Deep-clone the template to preserve all attributes and structure
-        const menuItem = template.cloneNode(true);
+        // Shallow-clone: keep outer element + CSS-in-JS classes, discard complex children
+        const menuItem = template.cloneNode(false);
         menuItem.id = 'infinity-config-menu-item';
-        menuItem.href = '#';
-        menuItem.removeAttribute('href'); // Remove navigation
+        menuItem.removeAttribute('href');
         menuItem.setAttribute('tabindex', '0');
 
-        // Replace inner content: icon + text
-        const iconEl = menuItem.querySelector('.MuiListItemIcon-root, .material-icons, svg');
-        const textEl = menuItem.querySelector('.MuiListItemText-root span, .MuiTypography-root, span');
-
-        if (iconEl) {
-            // Replace icon with palette icon
-            if (iconEl.classList.contains('material-icons')) {
-                iconEl.textContent = 'palette';
-            } else {
-                iconEl.innerHTML = '<span class="material-icons" style="font-size:20px;">palette</span>';
-            }
-        }
-
-        if (textEl) {
-            textEl.textContent = 'Infinity';
-        } else {
-            // Try to find any text container
-            const anyText = menuItem.querySelector('[class*="MuiListItemText"]');
-            if (anyText) {
-                anyText.textContent = 'Infinity';
-            }
-        }
+        // Rebuild inner content with clean, simple structure
+        menuItem.innerHTML = `
+            <div class="MuiListItemIcon-root" style="min-width:36px; color:#eee;">
+                <span class="material-icons" style="font-size:20px;">palette</span>
+            </div>
+            <div class="MuiListItemText-root">
+                <span class="MuiTypography-root" style="color:#eee; font-size:0.9rem;">Infinity</span>
+            </div>
+        `;
 
         // Capture phase + stopImmediatePropagation to beat React's event delegation
         menuItem.addEventListener('click', (e) => {
