@@ -1,83 +1,86 @@
+🇧🇷 [Read in Portuguese](README.pt-BR.md)
+
 <div align="center">
 
 ![Project Stage][Static-Badge]
 ![Maintenance][maintenance-shield]
 ![License][license-shield]
 <a href="https://forgejo.humbertof.dev/Humberto/infinity/">![Repository][repo-shield]</a>
+![Tests][tests-shield]
 </div>
 
 # Infinity
 
-Tema customizado para Jellyfin, baseado no [Finity](https://github.com/prism2001/finity) por prism2001.
+Custom theme for Jellyfin, based on [Finity](https://github.com/prism2001/finity) by prism2001.
 
-## O que muda em relação ao Finity
+## What's different from Finity
 
-### 🎨 Tema de cores — Dark Purple
+### 🎨 Color Theme — Dark Purple
 
-Palheta inteira refeita com roxo `#9400D3` como cor primária:
+Entire palette rebuilt with purple `#9400D3` as the primary color:
 
-- Fundo da página com undertone roxo (`#9400D3`)
-- Cards, header, sidebar e botões com tons de roxo escuro
-- Barra de progresso, hover de listas e scrollbar em roxo
-- Borda de seleção (multi-select) em roxo
-- Checkbox de seleção com fundo roxo e checkmark branco
-- Hover de botões com roxo transparente (não mais preto sólido)
-- Botão Play com fade roxo no hover
-- Gradiente do backdrop do slideshow em tons roxos
+- Page background with purple undertone (`#9400D3`)
+- Cards, header, sidebar, and buttons in dark purple tones
+- Progress bar, list hover, and scrollbar in purple
+- Multi-select border in purple
+- Selection checkbox with purple background and white checkmark
+- Button hover with transparent purple (no longer solid black)
+- Play button with purple fade on hover
+- Slideshow backdrop gradient in purple tones
 
-### 🖱️ Feedback visual de hover e foco
+### 🖱️ Hover and Focus Visual Feedback
 
-- Borda roxa ao redor do card no hover do mouse
-- Borda roxa ao navegar com controle remoto/teclado (`.focused`)
-- List items ganham outline roxo sutil + fundo no hover
+- Purple border around cards on mouse hover
+- Purple border when navigating with remote control/keyboard (`.focused`)
+- List items get a subtle purple outline + background on hover
 
-### 📐 Layout e páginas de detalhes
+### 📐 Layout and Detail Pages
 
-- Backdrop ocupa 100% da largura (`--detail-page-backdrop-width: 100vw`, offset 0)
-- Máscara lateral com gradiente escuro sólido (sem blur) para legibilidade do texto
-- Máscara cobre a área de texto (60vw)
-- Temporadas em slider horizontal ocupando 94% da tela
-- Episódios em grid com 94% de largura, navegável por setas e touch
-- Fonte alterada para **Kodchasan**
+- Backdrop spans 100% width (`--detail-page-backdrop-width: 100vw`, offset 0)
+- Side mask with solid dark gradient (no blur) for text readability
+- Mask covers the text area (60vw)
+- Seasons in horizontal slider occupying 94% of the screen
+- Episodes in a grid with 94% width, navigable via arrows and touch
+- Font changed to **Kodchasan**
 
 ### 🎬 Slideshow
 
-- 16 itens (original: 8)
-- Slides clicáveis — direcionam para a página do item
-- Títulos de episódios clicáveis no grid view
-- Intervalo sincronizado com a animação Ken Burns (10s)
-- `will-change` em elementos animados para GPU acceleration
-- Correção dos dots indicadores de posição
-- Correção na inicialização do cronômetro
+- 16 items (original: 8)
+- Clickable slides — navigate to the item's detail page
+- Clickable episode titles in grid view
+- Interval synchronized with Ken Burns animation (10s)
+- `will-change` on animated elements for GPU acceleration
+- Fixed position indicator dots
+- Fixed timer initialization
 
-### 🖥️ Dashboard e páginas de admin
+### 🖥️ Dashboard and Admin Pages
 
-O tema também estiliza a Dashboard de administração (páginas que o CSS customizado do Branding não alcança), usando um arquivo separado (`dashboard.css` carregado no `index.html`):
+The theme also styles the admin Dashboard (pages that Branding Custom CSS cannot reach), using a separate file (`dashboard.css` loaded in `index.html`):
 
-- Fundo roxo escuro em todas as páginas de admin
-- **Painel lateral (sidebar)**: fundo roxo opaco (`#0D0A14`), itens de navegação com formato pill, texto branco, hover roxo com texto preservado, espaçamento entre seções
-- **Cards e painéis**: bordas arredondadas (15px), fundo escuro (`#15121A`), consistente com os cards da Home
-- **Tipografia**: fonte Kodchasan em todos os componentes MUI (Typography, Button, Input, ListItem, Tab, Chip, Select, etc.)
-- **Formulários**: inputs, selects, textareas com fundo escuro e foco roxo
-- **Botões**: formato pill em todos os botões (padrão, submit, warning, outlined, text)
-- **Páginas de plugins, metadata manager e configuração** com o mesmo tema visual
+- Dark purple background on all admin pages
+- **Sidebar**: opaque purple background (`#0D0A14`), pill-shaped navigation items, white text, purple hover with preserved text, spacing between sections
+- **Cards and panels**: rounded corners (15px), dark background (`#15121A`), consistent with Home page cards
+- **Typography**: Kodchasan font in all MUI components (Typography, Button, Input, ListItem, Tab, Chip, Select, etc.)
+- **Forms**: inputs, selects, textareas with dark background and purple focus
+- **Buttons**: pill shape on all buttons (default, submit, warning, outlined, text)
+- **Plugin pages, metadata manager, and configuration pages** share the same visual theme
 
-> Veja a seção [Instalação](#instalação) para configurar o `dashboard.css` corretamente.
+> See the [Installation](#installation) section to set up `dashboard.css` correctly.
 
-## Instalação
+## Installation
 
-O Infinity usa **dois arquivos CSS** com responsabilidades diferentes:
+Infinity uses **two CSS files** with different responsibilities:
 
-| Arquivo | Onde carregar | Páginas que afeta |
+| File | Where to load | Pages affected |
 |---|---|---|
-| `finity-complete.css` | Dashboard > Geral > Branding > CSS Customizado | Home, detalhes, listas, player (páginas do usuário) |
-| `dashboard.css` | No `<head>` do `index.html` | Dashboard, admin, configurações, plugins |
+| `finity-complete.css` | Dashboard > General > Branding > Custom CSS | Home, details, lists, player (user-facing pages) |
+| `dashboard.css` | In the `<head>` of `index.html` | Dashboard, admin, settings, plugins |
 
-> O campo de CSS Customizado do Branding **não** injeta CSS nas páginas de admin/dashboard do Jellyfin — por isso o `dashboard.css` precisa ir no `index.html`.
+> The Branding Custom CSS field does **not** inject CSS into Jellyfin's admin/dashboard pages — that's why `dashboard.css` must go in `index.html`.
 
 ### 1. Index.html
 
-Cole no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
+Paste at the end of `<head>` in Jellyfin's `index.html` (before `</head>`):
 
 ```html
 <!-- Infinity — Dashboard styles (admin/config pages) -->
@@ -92,31 +95,31 @@ Cole no final do `<head>` do `index.html` do Jellyfin (antes de `</head>`):
 <script src="https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/js/clickableSlideshow.js"></script>
 ```
 
-### 2. CSS Customizado (Branding)
+### 2. Custom CSS (Branding)
 
-No Jellyfin, vá em **Dashboard > Geral > Branding/Marca** e cole no campo **CSS Customizado**:
+In Jellyfin, go to **Dashboard > General > Branding** and paste in the **Custom CSS** field:
 
 ```css
 @import url('https://cdn.jsdelivr.net/gh/iHumberto/infinity@main/css/finity-complete.css');
 ```
 
-> **Importante:** O `finity-complete.css` deve ser carregado SOMENTE via campo de CSS customizado, **não** no `index.html`. 
+> **Important:** `finity-complete.css` must be loaded ONLY via the Custom CSS field, **not** in `index.html`.
 
-### 3. Configuração do Slideshow
+### 3. Slideshow Configuration
 
-A partir da v1.1.0, o slideshow é configurado diretamente pela interface do Jellyfin. Acesse **Dashboard > Plugins > Infinity** e escolha:
+Starting from v1.1.0, the slideshow is configured directly through the Jellyfin interface. Go to **Dashboard > Plugins > Infinity** and choose:
 
-- **Aleatório (Random)**: seleciona filmes e séries aleatórios da biblioteca
-- **Adicionados Recentemente**: usa as mídias mais recentes (ordem de exibição aleatória)
-- **Lista Manual**: cole os IDs das mídias que devem aparecer no slideshow
+- **Random**: selects random movies and series from your library
+- **Recently Added**: uses the most recent media (shuffled display order)
+- **Manual List**: paste media IDs that should appear in the slideshow
 
-> O antigo arquivo `list.txt` não é mais necessário. Toda a configuração do slideshow (quantidade de itens, intervalo, animações) é feita na página Infinity do painel de controle.
+> The old `list.txt` file is no longer needed. All slideshow settings (item count, interval, animations) are configured on the Infinity page in the control panel.
 
-👉 [Guia completo de configuração](docs/guia-configuracao.md)
+👉 [Full configuration guide](docs/en-US/CUSTOMIZATION.md)
 
-## Dica — Docker
+## 💡 Docker Tip
 
-Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
+Create a `custom` folder next to your `docker-compose.yaml` and mount the files:
 
 ```
 - ./custom/index.html:/jellyfin/jellyfin-web/index.html
@@ -125,20 +128,20 @@ Crie uma pasta `custom` junto ao `docker-compose.yaml` e monte os arquivos:
 
 <img src="screenshots/Screenshot_07.png" title="Directory tip" width="auto"/>
 
-## ⚙️ Personalização
+## ⚙️ Customization
 
-A partir da v1.1.0, cores, fonte e comportamento do slideshow são configurados diretamente pela interface do Jellyfin — sem editar CSS manualmente.
+Starting from v1.1.0, colors, font, and slideshow behavior are configured directly through the Jellyfin interface — no manual CSS editing needed.
 
-Acesse **Dashboard > Plugins > Infinity** para:
+Go to **Dashboard > Plugins > Infinity** to:
 
-- 🎨 **Cores do tema** — 10 seletores de cor com preview em tempo real (hex, rgb, rgba)
-- 🔤 **Fonte customizada** — URL de arquivo `.woff` e nome da família tipográfica
-- 🖼️ **Slideshow** — quantidade de slides, intervalo, fade, animação Ken Burns
-- 📋 **Origem dos slides** — aleatório, adicionados recentemente ou lista manual de IDs
+- 🎨 **Theme colors** — 10 color pickers with real-time preview (hex, rgb, rgba)
+- 🔤 **Custom font** — `.woff` file URL and font family name
+- 🖼️ **Slideshow** — slide count, interval, fade, Ken Burns animation
+- 📋 **Slide source** — random, recently added, or manual ID list
 
-👉 [Guia completo de configuração](docs/guia-configuracao.md)
+👉 [Full configuration guide](docs/en-US/CUSTOMIZATION.md)
 
-> As variáveis CSS `--infinity-*` usadas em versões anteriores foram descontinuadas. Toda configuração agora é feita na página do painel.
+> The `--infinity-*` CSS variables used in previous versions have been deprecated. All configuration is now done on the panel page.
 
 ## Screenshots
 
@@ -154,12 +157,18 @@ Acesse **Dashboard > Plugins > Infinity** para:
 <img src="screenshots/Screenshot_09.png" title="New Admin dashboard" width="75%"/>
 </div>
 
+## 📚 Documentation
 
-## Licença
+- [Usage Guide](docs/en-US/USAGE.md) — how to install and use the theme
+- [Customization Guide](docs/en-US/CUSTOMIZATION.md) — how to customize colors, fonts, and slideshow
+- [FAQ](docs/en-US/FAQ.md) — frequently asked questions
 
-Este projeto é licenciado sob a [GNU GPL v3](LICENSE).
+## License
+
+This project is licensed under the [GNU GPL v3](LICENSE).
 
 [maintenance-shield]: https://img.shields.io/maintenance/yes/2026.svg
 [Static-Badge]: https://img.shields.io/badge/production-Ready-brightgreen?logo=Forgejo
 [repo-shield]: https://img.shields.io/badge/forgejo-repo-brightgreen?logo=forgejo
 [license-shield]: https://img.shields.io/badge/License-GNU_GPL_v3-brightgreen?style=flat&logo=gnuprivacyguard
+[tests-shield]: https://github.com/iHumberto/infinity/actions/workflows/test.yml/badge.svg
