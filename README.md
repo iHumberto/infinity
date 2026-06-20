@@ -1,4 +1,4 @@
-🇧🇷 [Read in Portuguese](README.pt-BR.md)
+🇧🇷 [Leia em Português](README.pt-BR.md)
 
 <div align="center">
 
